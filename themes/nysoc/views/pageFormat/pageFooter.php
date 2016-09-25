@@ -48,7 +48,7 @@
 				</div>
 				<div id="libInfo" class="col4">
 					<div>
-						{{{library_closing}}}}
+						{{{library_closing}}}
 					</div>
 				</div>
 				<div id="libLinks" class="col5">
