@@ -48,8 +48,7 @@
 				</div>
 				<div id="libInfo" class="col4">
 					<div>
-						<h3>The Library Will Be Closed</h3><div>Sunday October 9 and Monday October 10 for Columbus Day.</div>
-						<div><p><span style="line-height: 1.538em;">All areas except Circulation close 15 minutes prior to building closing time.</span></p></div>
+						{{{library_closing}}}}
 					</div>
 				</div>
 				<div id="libLinks" class="col5">
