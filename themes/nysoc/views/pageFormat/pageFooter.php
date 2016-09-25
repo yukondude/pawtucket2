@@ -44,11 +44,7 @@
 					<img src="https://www.nysoclib.org/sites/all/themes/nysoclib/images/clock.png" alt="">
 				</div>
 				<div id="libHours" class="col3">
-					<h3>Hours of Operation</h3>
-					<div>Monday / Friday<br> 9:00 AM - 5:00 PM</div>
-					<div>Tuesday / Wednesday / Thursday <br> 9:00 AM - 8:00 PM</div>
-					<div>Saturday / Sunday&nbsp;</div>
-					<div>11:00 AM - 5:00 PM</div>
+					{{{hours_of_operation}}}
 				</div>
 				<div id="libInfo" class="col4">
 					<div>
