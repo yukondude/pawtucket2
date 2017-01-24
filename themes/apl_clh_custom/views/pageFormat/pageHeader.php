@@ -31,7 +31,7 @@
 	$ca_browse_link = caNavLink($this->request, _t("Browse"), "", "", "Browse", "Collections", array('view' => 'list'));
 	$ca_search_link = caNavLink($this->request, _t("Search"), "", "", "Search", "advanced/objects");
 
-	$va_lightbox_display_name = caGetSetDisplayName();
+	$va_lightbox_display_name = caGetLightboxDisplayName();
 	$vs_lightbox_display_name = ucFirst($va_lightbox_display_name["singular"]);
 	$vs_lightbox_display_name_plural = $va_lightbox_display_name["plural"];
 	# --- collect the user links - they are output twice - once for toggle menu and once for nav
