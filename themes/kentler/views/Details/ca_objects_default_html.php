@@ -31,13 +31,13 @@
 					$vs_medium = $t_object->get("medium_text");
 				}else{
 					if($t_object->get("category")){
-						$vs_medium = $t_object->get("category");
+						$vs_medium = $t_object->get("category", array("delimiter" => ", ", "convertCodesToDisplayText" => true));
 					}
 					if($t_object->get("category") && $t_object->get("medium")){
 						$vs_medium .= " > ";
 					}
 					if($t_object->get("medium")){
-						$vs_medium .= $t_object->get("medium");
+						$vs_medium .= $t_object->get("medium", array("delimiter" => ", ", "convertCodesToDisplayText" => true));
 					}
 				}
 				if($vs_medium){
