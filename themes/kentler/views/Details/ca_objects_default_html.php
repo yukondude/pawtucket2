@@ -5,8 +5,13 @@
 	if(strtolower($t_object->get("ca_objects.removed.removal_text", array("convertCodesToDisplayText" => true))) == "yes"){
 		$vb_removed = true;
 	}
+	if($t_object->get("ca_objects.is_deaccessioned")){
+		$vb_removed = true;
+	}
+	if($t_object->get("ca_entities.entity_id", array("restrictToRelationshipTypes" => array("sold")))){
+		$vb_removed = true;
+	}
 ?>
-
 <div class="row">
 	<div class='col-xs-12 navTop'><!--- only shown at small screen size -->
 		{{{previousLink}}}{{{resultsLink}}}{{{nextLink}}}
