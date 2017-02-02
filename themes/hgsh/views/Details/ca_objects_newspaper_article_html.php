@@ -26,8 +26,12 @@
 	}
 ?>
 <div class='col-sm-<?php print ($vb_multiple_reps) ? "7" : "8"; ?>'>
-	<div class="detailTitleSmall">{{{ca_objects.preferred_labels.name}}}</div>
+	<div class="detailTitleSmall">{{{^ca_objects.preferred_labels.name}}}</div>
+	
+	
 	{{{representationViewer}}}
+	{{{<ifdef code="ca_objects.author"><strong>by ^ca_objects.author<br/><br/></strong></ifdef>}}}
+	{{{^ca_objects.body_text}}}
 	{{{<ifdef code="ca_objects.description"><br/><p>^ca_objects.description</p></ifdef>}}}
 	{{{<ifdef code="ca_objects.additional_info">
 			<div class="detailMoreInfo" id="additional_info_link"><a href="#" onClick="jQuery('#additional_info').toggle(); jQuery('#additional_info_link').toggle(); return false;">Read More <span class="glyphicon glyphicon-arrow-down small"></span></a></div>
@@ -36,7 +40,12 @@
 	<div class='detailBlueText'>{{{^ca_objects.type_id, }}}{{{^ca_objects.idno}}}</div>
 </div><!-- end col -->
 <div class='col-sm-4'>
-	<div class="detailTitle">{{{ca_objects.preferred_labels.name}}}</div>
+	<div class="detailTitle">{{{^ca_objects.preferred_labels.name}}}</div>
+	<div class='btn btn-default'>Article From</div>
+	{{{<unit relativeTo="ca_objects.parent">
+		<div class='detailRelatedTitle'><l>^ca_objects.preferred_labels.name</l></div>
+		<!--<p>^ca_objects.date.dates_value</p>-->
+	</unit>}}}
 <?php
 	if ($va_links = $t_item->get('ca_objects.external_link', array('returnWithStructure' => true))) {
 		print "<div class='btn btn-default'>Related links</div><div>";
@@ -52,7 +61,7 @@
 		print "</div>";
 	}
 	$t_object_thumb = new ca_objects();
-	$va_entities = $t_item->get("ca_entities", array("returnWithStructure" => true, "checkAccess" => $va_access_values));
+	$va_entities = $t_item->get("ca_entities", array("returnWithStructure" => true, "checkAccess" => $va_access_values, "restrictToRelationshipTypes" => array('article_mention')));
 	if(sizeof($va_entities)){
 		if(sizeof($va_entities) == 1){
 			print "<div class='btn btn-default'>Related person/organisation</div>";

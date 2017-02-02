@@ -37,6 +37,11 @@
 </div><!-- end col -->
 <div class='col-sm-4'>
 	<div class="detailTitle">{{{ca_objects.preferred_labels.name}}}</div>
+	{{{<div class='btn btn-default'>Articles</div>
+		<ul>
+		<unit relativeTo="ca_objects.children" delimiter=" ">
+			<li><p class='detailRelatedTitle'><l>^ca_objects.preferred_labels</l></p></li>
+		</unit></ul>}}}
 <?php
 	if ($va_links = $t_item->get('ca_objects.external_link', array('returnWithStructure' => true))) {
 		print "<div class='btn btn-default'>Related links</div><div>";

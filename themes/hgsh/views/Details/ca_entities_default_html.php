@@ -107,7 +107,29 @@
 			}
 		}
    print "<br/><p class='viewAll'>".caNavLink($this->request, _t("View all related objects"), "btn btn-default", "", "Browse", "objects", array("facet" => "entity_org_facet", "id" => $t_item->get("entity_id")))."</p>";
-?>		
+?>
+<div class='btn btn-default'>News Articles</div>
+{{{<unit relativeTo="ca_objects" delimiter="<hr/>" restrictToRelationshipTypes="article_mention" length="10" sort="ca_objects.parent.date.dates_values" sortDirection="ASC">
+	<div class="row">
+		<div class="col-sm-2 detailRelatedThumb">
+			<case>
+				<ifcount code="ca_object_respresentations" max="0">
+					<div class="thumbnailPlaceholder">
+						<i class="fa fa-picture-o fa-3x"></i>
+					</div>
+				</ifcount>
+				<ifcount code="ca_object_respresentations" max="1">
+					<unit relativeTo="ca_object_representations">^ca_object_representations.media.iconlarge</unit>
+				</ifcount>
+			</case>
+		</div>
+		<div class="col-sm-10">
+			<div class='detailRelatedTitle'><l>^ca_objects.preferred_labels.name</l></div>
+			<unit relativeTo="ca_objects.parent"><p>(<l>^ca_objects.preferred_labels.name</l>)</p></unit>
+		</div>
+	</div>
+</unit>}}}
+<p class='viewAll'><?php print caNavLink($this->request, ''._t('See all Articles'), 'btn btn-default', '', 'Search', 'articles', array('search' => $t_item->get('ca_entities.idno'))); ?></p>
 </div><!-- end col -->
 <div class='col-sm-4'>
 	<div class="detailTitle">{{{^ca_entities.preferred_labels.displayname}}}</div>

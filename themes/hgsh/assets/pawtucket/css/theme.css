@@ -437,6 +437,7 @@ nav, .navbar, .navbar-default{
 	overflow:hidden;
 	height:auto;
 	position:relative;
+	max-height: 266px;
 }
 .bResult a{
 	color:#FFFFFF;
@@ -658,4 +659,13 @@ div.detailRelatedTitle{
 .multisearchResultText a{
 	color:#FFFFFF !important;
 	font-family: 'Gudea', sans-serif !important;
+}
+/* Image Placeholder */
+.thumbnailPlaceholder{
+	color: #ABABAB;
+	
+}
+
+.BookReaderContainer{
+	min-height: 650px !important;
 }

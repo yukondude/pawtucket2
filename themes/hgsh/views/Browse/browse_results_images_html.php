@@ -63,7 +63,8 @@
 	$o_icons_conf = caGetIconsConfig();
 	$va_object_type_specific_icons = $o_icons_conf->getAssoc("placeholders");
 	
-	$vs_default_placeholder = caGetThemeGraphic($this->request, 'placeholder.jpg');
+	$vs_default_placeholder = caGetThemeGraphic($this->request, 'placeholderMultisearch.jpg');
+	#k$vs_default_placeholder_tag = caGetThemeGraphic($this->request, 'placeholderMultisearch.jpg');
 	$va_browse_info = $this->getVar("browseInfo");
 
 		$vn_col_span = 3;
@@ -109,6 +110,7 @@
 					if(!($vs_thumbnail = $qr_res->getMediaTag('ca_object_representations.media', 'resultcrop', array("checkAccess" => $va_access_values)))){
 						$t_list_item->load($qr_res->get("type_id"));
 						$vs_typecode = $t_list_item->get("idno");
+						$vs_thumbnail = $vs_default_placeholder;
 					}
 					$vs_rep_detail_link 	= caDetailLink($this->request, $vs_thumbnail, '', $vs_table, $vn_id);				
 				} else {
