@@ -100,9 +100,23 @@
 					$vs_caption = $vs_artist.", ";
 				}
 				$vs_caption .= "<i>".$qr_results->get("ca_objects.preferred_labels.name")."</i>, ";
-				if($qr_results->get("ca_objects.medium")){
-					$vs_caption .= $qr_results->get("ca_objects.medium", array("delimiter" => ", ", "convertCodesToDisplayText" => true)).", ";
+				$vs_medium = "";
+				if($qr_results->get("medium_text")){
+					$vs_medium = $qr_results->get("medium_text");
+				}else{
+					if($qr_results->get("category")){
+						$vs_medium = $qr_results->get("category", array("delimiter" => ", ", "convertCodesToDisplayText" => true));
+					}
+					if($qr_results->get("category") && $qr_res->get("medium")){
+						$vs_medium .= " > ";
+					}
+					if($qr_results->get("medium")){
+						$vs_medium .= $qr_res->get("medium", array("delimiter" => ", ", "convertCodesToDisplayText" => true));
+					}
 				}
+				if($vs_medium){
+					$vs_caption .= $vs_medium.", ";
+				}					
 				if($qr_results->get("ca_objects.dimensions")){
 					$vs_caption .= $qr_results->get("ca_objects.dimensions.dimensions_height")." X ".$qr_results->get("ca_objects.dimensions.dimensions_width").", ";
 				}
