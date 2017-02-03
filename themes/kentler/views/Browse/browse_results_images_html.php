@@ -114,12 +114,6 @@
 					if($qr_res->get("medium_text")){
 						$vs_medium = $qr_res->get("medium_text");
 					}else{
-						if($qr_res->get("category")){
-							$vs_medium = $qr_res->get("category", array("delimiter" => ", ", "convertCodesToDisplayText" => true));
-						}
-						if($qr_res->get("category") && $qr_res->get("medium")){
-							$vs_medium .= " > ";
-						}
 						if($qr_res->get("medium")){
 							$vs_medium .= $qr_res->get("medium", array("delimiter" => ", ", "convertCodesToDisplayText" => true));
 						}
