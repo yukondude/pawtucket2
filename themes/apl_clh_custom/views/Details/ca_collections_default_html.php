@@ -60,7 +60,7 @@
 				jQuery(document).ready(function() {
 					jQuery("#browseResultsContainer").load("<?php print caNavUrl($this->request, '', 'Search', 'objects', array('search' => 'collection_id:^ca_collections.collection_id'), array('dontURLEncodeParameters' => true)); ?>", function() {
 						jQuery('#browseResultsContainer').jscroll({
-							autoTrigger: false,
+							autoTrigger: true,
 							loadingHtml: 'Loading',
 							padding: 20,
 							nextSelector: 'a.jscroll-next'
