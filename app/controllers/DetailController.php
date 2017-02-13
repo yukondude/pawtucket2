@@ -665,7 +665,7 @@
 				$this->postError(1100, _t('Cannot download media'), 'DetailController->DownloadMedia');
 				return;
 			}
-			$vn_object_id = $this->request->getParameter('object_id', pInteger);
+			$vn_object_id = ($vn_id = $this->request->getParameter('object_id', pInteger)) ? $vn_id : $this->request->getParameter('id', pInteger);
 			$t_object = new ca_objects($vn_object_id);
 			if(sizeof($this->opa_access_values) && (!in_array($t_object->get("access"), $this->opa_access_values))){
   				return;
