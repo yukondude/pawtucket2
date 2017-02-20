@@ -120,6 +120,13 @@ a:hover{
 	width:100%;
 	height:auto;
 }
+.detail .fullWidthImg small, .detail .fullWidthImg small a{
+	line-height:1.1em !important;
+	font-size:85%;
+	padding-top: 3px !important;
+	color:#000 !important;
+	display:inline-block;
+}
 /* darker colors*/
 .darkBlueBg{
 	background-color: #2626af !important;
@@ -591,6 +598,11 @@ a.navbar-brand .line3{
 .detail .repViewerContCont{
 	margin-top:20px;
 	margin-bottom:10px;
+}
+.detail .exhibitGrid{
+	max-height:600px;
+	overflow-y:auto;
+	overflow-x:hidden;
 }
 /* exhibition listing */
 .yearTab{

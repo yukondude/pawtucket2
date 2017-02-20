@@ -21,9 +21,9 @@
 				</div><!-- end col -->
 			</div><!-- end row -->
 			<div class="row">
-				{{{<ifcount code="ca_occurrences" restrictToTypes="exhibition" min="1" max="1"><div class='col-sm-12'><H6>Related exhibition</H6></div></ifcount>}}}
-				{{{<ifcount code="ca_occurrences" restrictToTypes="exhibition" min="2"><div class='col-sm-12'><H6>Related exhibitions</H6></div></ifcount>}}}
-				{{{<unit relativeTo="ca_occurrences" restrictToTypes="exhibition" delimiter=" "><div class='col-sm-6 col-md-4'><l>^ca_occurrences.preferred_labels.name<br/>^ca_occurrences.exhibition_dates</l><br/><br/></div></unit>}}}
+				{{{<ifcount code="ca_occurrences" restrictToTypes="exhibition" restrictToRelationshipTypes="artist" min="1" max="1"><div class='col-sm-12'><H6>Related exhibition</H6></div></ifcount>}}}
+				{{{<ifcount code="ca_occurrences" restrictToTypes="exhibition" restrictToRelationshipTypes="artist" min="2"><div class='col-sm-12'><H6>Related exhibitions</H6></div></ifcount>}}}
+				{{{<unit relativeTo="ca_occurrences" restrictToTypes="exhibition" restrictToRelationshipTypes="artist" delimiter=" " sort="ca_occurrences.exhibition_dates" sortDirection="desc"><div class='col-sm-6 col-md-4'><l>^ca_occurrences.preferred_labels.name<br/>^ca_occurrences.exhibition_dates</l><br/><br/></div></unit>}}}
 			</div>
 			<div class="row">				
 				{{{<ifcount code="ca_occurrences" restrictToTypes="event" min="1" max="1"><div class='col-sm-12'><H6>Related event</H6></div></ifcount>}}}
