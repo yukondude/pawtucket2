@@ -604,6 +604,10 @@ a.navbar-brand .line3{
 	overflow-y:auto;
 	overflow-x:hidden;
 }
+.dontScale img{
+	width:auto;
+	height:auto;
+}
 /* exhibition listing */
 .yearTab{
 	display:none;

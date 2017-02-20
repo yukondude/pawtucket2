@@ -89,7 +89,7 @@
 							$vs_image = "";
 							$vb_no_rep = false;
 							if(!($vs_image = $q_artworks->get('ca_object_representations.media.medium', array("checkAccess" => $va_access_values, "limit" => 1)))){
-								$vs_image = caGetThemeGraphic($this->request, 'KentlerLogoWhiteBG.jpg');
+								$vs_image = "<div class='dontScale'>".caGetThemeGraphic($this->request, 'KentlerLogoWhiteBG.jpg')."</div>";
 								$vb_no_rep = true;
 							}
 							$vs_caption = "";
