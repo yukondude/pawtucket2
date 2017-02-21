@@ -92,9 +92,9 @@
 							$vb_no_rep = false;
 							if(!$vs_image){
 								if($vs_version == "large"){
-									$vs_image = "<div class='dontScale'>".caGetThemeGraphic($this->request, 'KentlerLogoWhiteBG.jpg')."</div>";
+									$vs_image = "<div class='dontScale detailPlaceholder'>".caGetThemeGraphic($this->request, 'KentlerLogoWhiteBG.jpg')."</div>";
 								}else{
-									$vs_image = caGetThemeGraphic($this->request, 'KentlerLogoWhiteBG.jpg');
+									$vs_image = "<div class='detailPlaceholder'>".caGetThemeGraphic($this->request, 'KentlerLogoWhiteBG.jpg')."</div>";
 								}
 								$vb_no_rep = true;
 							}

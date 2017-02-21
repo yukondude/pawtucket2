@@ -615,6 +615,9 @@ a.navbar-brand .line3{
 	width:auto;
 	height:auto;
 }
+.detailPlaceholder img{
+	opacity:.4;
+}
 /* exhibition listing */
 .yearTab{
 	display:none;
