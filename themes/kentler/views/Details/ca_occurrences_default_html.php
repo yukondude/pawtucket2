@@ -56,7 +56,7 @@
 				<div class='col-sm-5'>
 <?php
 					
-					$vn_cap_for_grid = 3;
+					$vn_cap_for_grid = 30;
 					$vs_version = "large";
 					$va_reps = $t_item->getRepresentations(array("large", "small"), null, array("checkAccess" => $va_access_values));
 					$va_object_ids = $t_item->get("ca_objects.object_id", array("returnAsArray" => true, "checkAccess" => $va_access_values));
