@@ -558,6 +558,13 @@ a.navbar-brand .line3{
 	padding:0px !important;
 	margin:0px !important;
 }
+.detail .detailNavBgRight a{
+	float:right;
+	padding-left:15px !important;
+}
+.detailNavBgRight a .small{
+	padding-bottom:10px !important;
+}
 .detail .detailNavBgLeft a .fa, .detail .detailNavBgRight a .fa{
 	color:#f60707 !important;
 }

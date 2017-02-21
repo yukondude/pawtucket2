@@ -74,7 +74,7 @@
 			</div><!-- end col -->
 			<div class='navLeftRight col-sm-2'>
 				<div class="detailNavBgRight">
-					{{{resultsLink}}}{{{previousLink}}}{{{nextLink}}}
+					{{{previousLink}}}{{{resultsLink}}}<div style='clear:right;'>{{{nextLink}}}</div>
 				</div><!-- end detailNavBgLeft -->
 			</div><!-- end col -->
 		</div><!-- end row -->

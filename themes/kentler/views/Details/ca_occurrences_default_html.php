@@ -17,7 +17,7 @@
 				</div><!-- end col -->
 				<div class='navLeftRight col-sm-2'>
 					<div class="detailNavBgRight">
-						{{{resultsLink}}}{{{previousLink}}}{{{nextLink}}}
+						{{{previousLink}}}{{{resultsLink}}}<div style='clear:right;'>{{{nextLink}}}</div>
 					</div><!-- end detailNavBgLeft -->
 				</div><!-- end col -->
 			</div><!-- end row -->
@@ -56,7 +56,7 @@
 				<div class='col-sm-5'>
 <?php
 					
-					$vn_cap_for_grid = 28;
+					$vn_cap_for_grid = 3;
 					$vs_version = "large";
 					$va_reps = $t_item->getRepresentations(array("large", "small"), null, array("checkAccess" => $va_access_values));
 					$va_object_ids = $t_item->get("ca_objects.object_id", array("returnAsArray" => true, "checkAccess" => $va_access_values));
@@ -84,12 +84,18 @@
 							}
 						}
 					}
+					$va_artworks = array();
 					if($q_artworks->numHits()){
 						while($q_artworks->nextHit()){
 							$vs_image = "";
+							$vs_image = $q_artworks->get('ca_object_representations.media.'.$vs_version, array("checkAccess" => $va_access_values));
 							$vb_no_rep = false;
-							if(!($vs_image = $q_artworks->get('ca_object_representations.media.medium', array("checkAccess" => $va_access_values, "limit" => 1)))){
-								$vs_image = "<div class='dontScale'>".caGetThemeGraphic($this->request, 'KentlerLogoWhiteBG.jpg')."</div>";
+							if(!$vs_image){
+								if($vs_version == "large"){
+									$vs_image = "<div class='dontScale'>".caGetThemeGraphic($this->request, 'KentlerLogoWhiteBG.jpg')."</div>";
+								}else{
+									$vs_image = caGetThemeGraphic($this->request, 'KentlerLogoWhiteBG.jpg');
+								}
 								$vb_no_rep = true;
 							}
 							$vs_caption = "";
@@ -115,16 +121,22 @@
 								$vs_caption .= $q_artworks->get("ca_objects.date").".";
 							}
 							$vs_label_detail_link 	= caDetailLink($this->request, $vs_caption, '', 'ca_objects', $q_artworks->get("ca_objects.object_id"));
-							$va_art_installations[] = array("image" => $vs_image, "label" => $vs_label_detail_link, "image_link" => ($vb_no_rep) ? $vs_image : "<a href='#' onclick='caMediaPanel.showPanel(\"".caNavUrl($this->request, '', 'Detail', 'GetMediaOverlay', array('context' => 'objects', 'id' => $q_artworks->get("ca_objects.object_id"), 'representation_id' => $q_artworks->get("ca_object_representations.representation_id", array("checkAccess" => $va_access_values, "limit" => 1)), 'overlay' => 1))."\"); return false;' >".$vs_image."</a>");
+							$tmp = array("image" => $vs_image, "label" => $vs_label_detail_link, "image_link" => ($vb_no_rep) ? $vs_image : "<a href='#' onclick='caMediaPanel.showPanel(\"".caNavUrl($this->request, '', 'Detail', 'GetMediaOverlay', array('context' => 'objects', 'id' => $q_artworks->get("ca_objects.object_id"), 'representation_id' => $q_artworks->get("ca_object_representations.representation_id", array("checkAccess" => $va_access_values, "limit" => 1)), 'overlay' => 1))."\"); return false;' >".$vs_image."</a>");
+							if(!$vb_no_rep){
+								array_unshift($va_artworks, $tmp);
+							}else{
+								$va_artworks[] = $tmp;
+							}
 						}
 					}
-					if(sizeof($va_art_installations)){
+					$va_all_images = array_merge($va_art_installations, $va_artworks);
+					if(sizeof($va_all_images)){
 						print "<H6>"._t("%1 Images", $t_item->get("type_id", array("convertCodesToDisplayText" => true)))."</H6><br/>";
 						if($vn_total_images > $vn_cap_for_grid){
 							# --- grid
 							print "<div class='exhibitGrid'>";
 							$vn_col = 0;
-							foreach($va_art_installations as $va_art_installation){
+							foreach($va_all_images as $va_art_installation){
 								if($vn_col == 0){
 									print "<div class='row'>";
 								}
@@ -146,10 +158,10 @@
 							print "</div>";
 						}else{
 							# --- full width col image
-							foreach($va_art_installations as $va_art_installation){
-								print "<div class='fullWidthImg'>".$va_art_installation["image_link"];
-								if($va_art_installation["label"]){
-									print "<br/><small>".$va_art_installation["label"]."</small>";
+							foreach($va_all_images as $va_image){
+								print "<div class='fullWidthImg'>".$va_image["image_link"];
+								if($va_image["label"]){
+									print "<br/><small>".$va_image["label"]."</small>";
 								}
 								print "</div><br/>";
 							}					
