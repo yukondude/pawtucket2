@@ -616,7 +616,7 @@ a.navbar-brand .line3{
 	height:auto;
 }
 .detailPlaceholder img{
-	opacity:.4;
+	opacity:.3;
 }
 /* exhibition listing */
 .yearTab{
@@ -687,7 +687,21 @@ a.navbar-brand .line3{
 .bResultItemImgPlaceholder img{
 	width: 65%;
 	height:auto;
-	opacity:.6;
+	opacity:.3;
+}
+.multisearchImgPlaceholder {
+    background-color: #fff;
+    border: 0px solid #EDEDED;
+    padding: 0px 20px 0px 20px;
+    margin-bottom:0px;
+}
+.multisearchImgPlaceholder .bResultItemImgPlaceholder{
+	padding:0px;
+	border:0px;
+	margin:0px;
+}
+.multisearchImgPlaceholder .bResultItemImgPlaceholder img{
+	width:70%;
 }
 #bRefine div:last-child {
 	margin-bottom:100px; 
