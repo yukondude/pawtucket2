@@ -59,7 +59,7 @@
 					$vn_cap_for_grid = 30;
 					$vs_version = "large";
 					$va_reps = $t_item->getRepresentations(array("large", "small"), null, array("checkAccess" => $va_access_values));
-					$va_object_ids = $t_item->get("ca_objects.object_id", array("returnAsArray" => true, "checkAccess" => $va_access_values));
+					$va_object_ids = $t_item->get("ca_objects.object_id", array("returnAsArray" => true, "checkAccess" => $va_access_values, "sort" => "ca_entities.preferred_labels.surname"));
 					$q_artworks = caMakeSearchResult("ca_objects", $va_object_ids);
 					$vn_total_images = (sizeof($va_reps) + $q_artworks->numHits());
 					if($vn_total_images > $vn_cap_for_grid){
@@ -85,6 +85,7 @@
 						}
 					}
 					$va_artworks = array();
+					$va_artworks_no_media = array();
 					if($q_artworks->numHits()){
 						while($q_artworks->nextHit()){
 							$vs_image = "";
@@ -123,13 +124,13 @@
 							$vs_label_detail_link 	= caDetailLink($this->request, $vs_caption, '', 'ca_objects', $q_artworks->get("ca_objects.object_id"));
 							$tmp = array("image" => $vs_image, "label" => $vs_label_detail_link, "image_link" => ($vb_no_rep) ? $vs_image : "<a href='#' onclick='caMediaPanel.showPanel(\"".caNavUrl($this->request, '', 'Detail', 'GetMediaOverlay', array('context' => 'objects', 'id' => $q_artworks->get("ca_objects.object_id"), 'representation_id' => $q_artworks->get("ca_object_representations.representation_id", array("checkAccess" => $va_access_values, "limit" => 1)), 'overlay' => 1))."\"); return false;' >".$vs_image."</a>");
 							if(!$vb_no_rep){
-								array_unshift($va_artworks, $tmp);
-							}else{
 								$va_artworks[] = $tmp;
+							}else{
+								$va_artworks_no_media[] = $tmp;
 							}
 						}
 					}
-					$va_all_images = array_merge($va_art_installations, $va_artworks);
+					$va_all_images = array_merge($va_art_installations, $va_artworks, $va_artworks_no_media);
 					if(sizeof($va_all_images)){
 						print "<H6>"._t("%1 Images", $t_item->get("type_id", array("convertCodesToDisplayText" => true)))."</H6><br/>";
 						if($vn_total_images > $vn_cap_for_grid){
