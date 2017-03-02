@@ -78,15 +78,15 @@
 <?php
 		}
 		$vn_count = 0;
-		$t_list_item = new ca_list_items();
+		#$t_list_item = new ca_list_items();
 		while($qr_results->nextHit()) {
 ?>
 			<div class='<?php print $vs_block; ?>Result multisearchResult'>
 <?php 
 				$vs_image = $qr_results->get('ca_object_representations.media.widepreview', array("checkAccess" => $va_access_values));
 				if(!$vs_image){
-					$t_list_item->load($qr_results->get("type_id"));
-					$vs_typecode = $t_list_item->get("idno");
+					#$t_list_item->load($qr_results->get("type_id"));
+					#$vs_typecode = $t_list_item->get("idno");
 					#if($vs_type_placeholder = caGetPlaceholder($vs_typecode, "placeholder_media_icon")){
 					#	$vs_image = "<div class='multisearchImgPlaceholder'>".$vs_type_placeholder."</div>";
 					#}else{
@@ -105,7 +105,7 @@
 					$vs_medium = $qr_results->get("medium_text");
 				}else{
 					if($qr_results->get("medium")){
-						$vs_medium .= $qr_res->get("medium", array("delimiter" => ", ", "convertCodesToDisplayText" => true));
+						$vs_medium .= $qr_results->get("medium", array("delimiter" => ", ", "convertCodesToDisplayText" => true));
 					}
 				}
 				if($vs_medium){
