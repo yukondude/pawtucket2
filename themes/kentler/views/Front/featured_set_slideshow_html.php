@@ -44,6 +44,18 @@
 			foreach($va_reps as $va_rep){
 				$va_current_exhibition_info["images"][]	= caDetailLink($this->request, $va_rep["tags"]["large"], '', 'ca_occurrences', $qr_current_exhibitions->get("occurrence_id"));
 			}
+			# --- are there object artworks related to the exhibit
+			$va_object_ids = $t_exhibit->get("ca_objects.object_id", array("returnAsArray" => true, "checkAccess" => $va_access_values, "sort" => "ca_entities.preferred_labels.surname"));
+			$q_artworks = caMakeSearchResult("ca_objects", $va_object_ids);
+			if($q_artworks->numHits()){
+				while($q_artworks->nextHit()){
+					$vs_image = "";
+					$vs_image = $q_artworks->get('ca_object_representations.media.large', array("checkAccess" => $va_access_values));
+					if($vs_image){
+						$va_current_exhibition_info["images"][]	= caDetailLink($this->request, $vs_image, '', 'ca_occurrences', $qr_current_exhibitions->get("occurrence_id"));
+					}
+				}
+			}
 		}
 	}
 	if(is_array($va_current_exhibition_info) && sizeof($va_current_exhibition_info["images"])){
