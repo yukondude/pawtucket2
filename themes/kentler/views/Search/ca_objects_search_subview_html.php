@@ -29,6 +29,7 @@
 	$qr_results 		= $this->getVar('result');
 	$va_block_info 		= $this->getVar('blockInfo');
 	$vs_block 			= $this->getVar('block');
+	$vs_cache_key 			= $this->getVar('cacheKey');
 	$vn_start		 	= (int)$this->getVar('start');			// offset to seek to before outputting results
 	$vn_hits_per_block 	= (int)$this->getVar('itemsPerPage');
 	$vb_has_more 		= (bool)$this->getVar('hasMore');
@@ -43,8 +44,7 @@
 	if(!($vs_default_placeholder = $o_icons_conf->get("placeholder_media_icon"))){
 		$vs_default_placeholder = "<i class='fa fa-picture-o fa-2x'></i>";
 	}
-	$vs_default_placeholder_tag = "<div class='multisearchImgPlaceholder'>".$vs_default_placeholder."</div>";
-
+	$vs_default_placeholder_tag = "<div class='multisearchImgPlaceholder'><div class='bResultItemImgPlaceholder'>".caGetThemeGraphic($this->request, 'KentlerLogoWhiteBG.jpg')."</div></div>";
 
 	if ($qr_results->numHits() > 0) {
 		if (!$this->request->isAjax()) {
@@ -53,18 +53,18 @@
 <?php
 				if(in_array($vs_block, $va_browse_types)){
 ?>
-				<span class='multisearchFullResults'><?php print caNavLink($this->request, '<span class="glyphicon glyphicon-list"></span> '._t('Full results'), '', '', 'Search', '{{{block}}}', array('search' => $vs_search)); ?></span> | 
+				<span class='multisearchFullResults'><?php print caNavLink($this->request, '<span class="glyphicon glyphicon-list"></span> '._t('Full results'), '', '', 'Search', $vs_block, array('search' => $vs_search)); ?></span> | 
 <?php
 				}
 ?>
 				
-				<span class='multisearchSort'><?php print _t("sort by:"); ?> {{{sortByControl}}}</span>
-				{{{sortDirectionControl}}}
+				<span class='multisearchSort'><?php print _t("sort by:"); ?> <?php print $this->getVar("sortByControl"); ?></span>
+				<?php print $this->getVar("sortDirectionControl"); ?>
 			</small>
 <?php
 			if(in_array($vs_block, $va_browse_types)){
 ?>
-				<?php print '<H3>'.caNavLink($this->request, $va_block_info['displayName'].' ('.$qr_results->numHits().')', '', '', 'Search', '{{{block}}}', array('search' => $vs_search)).'</H3>'; ?>
+				<?php print '<H3>'.caNavLink($this->request, $va_block_info['displayName'].' ('.$qr_results->numHits().')', '', '', 'Search', $vs_block, array('search' => $vs_search)).'</H3>'; ?>
 <?php
 			}else{
 ?>
@@ -72,26 +72,26 @@
 <?php
 			}
 ?>
-			<div class='blockResults'><div id="{{{block}}}scrollButtonPrevious" class="scrollButtonPrevious"><i class="fa fa-angle-left"></i></div><div id="{{{block}}}scrollButtonNext" class="scrollButtonNext"><i class="fa fa-angle-right"></i></div>
-				<div id='{{{block}}}Results' class='multiSearchResults'>
+			<div class='blockResults'><div id="<?php print $vs_block; ?>scrollButtonPrevious" class="scrollButtonPrevious"><i class="fa fa-angle-left"></i></div><div id="<?php print $vs_block; ?>scrollButtonNext" class="scrollButtonNext"><i class="fa fa-angle-right"></i></div>
+				<div id='<?php print $vs_block; ?>Results' class='multiSearchResults'>
 					<div class='blockResultsScroller'>
 <?php
 		}
 		$vn_count = 0;
-		$t_list_item = new ca_list_items();
+		#$t_list_item = new ca_list_items();
 		while($qr_results->nextHit()) {
 ?>
-			<div class='{{{block}}}Result multisearchResult'>
+			<div class='<?php print $vs_block; ?>Result multisearchResult'>
 <?php 
 				$vs_image = $qr_results->get('ca_object_representations.media.widepreview', array("checkAccess" => $va_access_values));
 				if(!$vs_image){
-					$t_list_item->load($qr_results->get("type_id"));
-					$vs_typecode = $t_list_item->get("idno");
-					if($vs_type_placeholder = caGetPlaceholder($vs_typecode, "placeholder_media_icon")){
-						$vs_image = "<div class='multisearchImgPlaceholder'>".$vs_type_placeholder."</div>";
-					}else{
+					#$t_list_item->load($qr_results->get("type_id"));
+					#$vs_typecode = $t_list_item->get("idno");
+					#if($vs_type_placeholder = caGetPlaceholder($vs_typecode, "placeholder_media_icon")){
+					#	$vs_image = "<div class='multisearchImgPlaceholder'>".$vs_type_placeholder."</div>";
+					#}else{
 						$vs_image = $vs_default_placeholder_tag;
-					}
+					#}
 				}
 				print $qr_results->getWithTemplate('<l>'.$vs_image.'</l>', array("checkAccess" => $va_access_values));
 				
@@ -100,9 +100,17 @@
 					$vs_caption = $vs_artist.", ";
 				}
 				$vs_caption .= "<i>".$qr_results->get("ca_objects.preferred_labels.name")."</i>, ";
-				if($qr_results->get("ca_objects.medium")){
-					$vs_caption .= $qr_results->get("ca_objects.medium", array("delimiter" => ", ", "convertCodesToDisplayText" => true)).", ";
+				$vs_medium = "";
+				if($qr_results->get("medium_text")){
+					$vs_medium = $qr_results->get("medium_text");
+				}else{
+					if($qr_results->get("medium")){
+						$vs_medium .= $qr_results->get("medium", array("delimiter" => ", ", "convertCodesToDisplayText" => true));
+					}
 				}
+				if($vs_medium){
+					$vs_caption .= $vs_medium.", ";
+				}					
 				if($qr_results->get("ca_objects.dimensions")){
 					$vs_caption .= $qr_results->get("ca_objects.dimensions.dimensions_height")." X ".$qr_results->get("ca_objects.dimensions.dimensions_width").", ";
 				}
@@ -125,26 +133,26 @@
 			</div><!-- end blockResults -->
 			<script type="text/javascript">
 				jQuery(document).ready(function() {
-					jQuery('#{{{block}}}Results').hscroll({
-						name: '{{{block}}}',
+					jQuery('#<?php print $vs_block; ?>Results').hscroll({
+						name: '<?php print $vs_block; ?>',
 						itemCount: <?php print $qr_results->numHits(); ?>,
 						preloadCount: <?php print $vn_count; ?>,
 						
-						itemWidth: jQuery('.{{{block}}}Result').outerWidth(true),
+						itemWidth: jQuery('.<?php print $vs_block; ?>Result').outerWidth(true),
 						itemsPerLoad: <?php print $vn_hits_per_block; ?>,
 						itemLoadURL: '<?php print caNavUrl($this->request, '*', '*', '*', array('block' => $vs_block, 'search'=> $vs_search)); ?>',
 						itemContainerSelector: '.blockResultsScroller',
 						
-						sortParameter: '{{{block}}}Sort',
-						sortControlSelector: '#{{{block}}}_sort',
+						sortParameter: '<?php print $vs_block; ?>Sort',
+						sortControlSelector: '#<?php print $vs_block; ?>_sort',
 						
-						sortDirection: '{{{sortDirection}}}',
-						sortDirectionParameter: '{{{block}}}SortDirection',
-						sortDirectionSelector: '#{{{block}}}_sort_direction',
+						sortDirection: '<?php print $this->getVar("sortDirection"); ?>',
+						sortDirectionParameter: '<?php print $vs_block; ?>SortDirection',
+						sortDirectionSelector: '#<?php print $vs_block; ?>_sort_direction',
 						
-						scrollPreviousControlSelector: '#{{{block}}}scrollButtonPrevious',
-						scrollNextControlSelector: '#{{{block}}}scrollButtonNext',
-						cacheKey: '{{{cacheKey}}}'
+						scrollPreviousControlSelector: '#<?php print $vs_block; ?>scrollButtonPrevious',
+						scrollNextControlSelector: '#<?php print $vs_block; ?>scrollButtonNext',
+						cacheKey: '<?php print $vs_cache_key; ?>'
 					});
 				});
 			</script>

@@ -120,6 +120,13 @@ a:hover{
 	width:100%;
 	height:auto;
 }
+.detail .fullWidthImg small, .detail .fullWidthImg small a{
+	line-height:1.1em !important;
+	font-size:85%;
+	padding-top: 3px !important;
+	color:#000 !important;
+	display:inline-block;
+}
 /* darker colors*/
 .darkBlueBg{
 	background-color: #2626af !important;
@@ -551,6 +558,13 @@ a.navbar-brand .line3{
 	padding:0px !important;
 	margin:0px !important;
 }
+.detail .detailNavBgRight a{
+	float:right;
+	padding-left:15px !important;
+}
+.detailNavBgRight a .small{
+	padding-bottom:10px !important;
+}
 .detail .detailNavBgLeft a .fa, .detail .detailNavBgRight a .fa{
 	color:#f60707 !important;
 }
@@ -591,6 +605,18 @@ a.navbar-brand .line3{
 .detail .repViewerContCont{
 	margin-top:20px;
 	margin-bottom:10px;
+}
+.detail .exhibitGrid{
+	max-height:600px;
+	overflow-y:auto;
+	overflow-x:hidden;
+}
+.dontScale img{
+	width:auto;
+	height:auto;
+}
+.detailPlaceholder img{
+	opacity:.3;
 }
 /* exhibition listing */
 .yearTab{
@@ -661,7 +687,21 @@ a.navbar-brand .line3{
 .bResultItemImgPlaceholder img{
 	width: 65%;
 	height:auto;
-	opacity:.6;
+	opacity:.3;
+}
+.multisearchImgPlaceholder {
+    background-color: #fff;
+    border: 0px solid #EDEDED;
+    padding: 0px 20px 0px 20px;
+    margin-bottom:0px;
+}
+.multisearchImgPlaceholder .bResultItemImgPlaceholder{
+	padding:0px;
+	border:0px;
+	margin:0px;
+}
+.multisearchImgPlaceholder .bResultItemImgPlaceholder img{
+	width:70%;
 }
 #bRefine div:last-child {
 	margin-bottom:100px; 
