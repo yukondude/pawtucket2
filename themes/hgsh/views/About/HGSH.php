@@ -1,5 +1,2 @@
-<H1>About HGSH</H1>
-
-<p>
-	About text here
-</p>
+<H1>History of the Suburb</H1>
+{{{suburb_history}}}
