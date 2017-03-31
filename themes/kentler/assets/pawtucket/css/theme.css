@@ -610,6 +610,7 @@ a.navbar-brand .line3{
 	max-height:600px;
 	overflow-y:auto;
 	overflow-x:hidden;
+	padding-right: 10px;
 }
 .dontScale img{
 	width:auto;
