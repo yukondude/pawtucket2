@@ -80,10 +80,11 @@
 							if($va_rep["type_id"] == $vn_promo_type_id){
 								$va_promos[] = $va_tmp;
 								}else{
-								$va_art_installations[] = $va_tmp;
+								$va_art_installations[$va_rep["label"]] = $va_tmp;
 							}
 						}
 					}
+					ksort($va_art_installations);
 					$va_artworks = array();
 					$va_artworks_no_media = array();
 					if($q_artworks->numHits()){
@@ -141,7 +142,7 @@
 								if($vn_col == 0){
 									print "<div class='row'>";
 								}
-								print "<div class='col-sm-3'><div class='fullWidthImg'>".$va_art_installation["image_link"];
+								print "<div class='col-sm-4'><div class='fullWidthImg'>".$va_art_installation["image_link"];
 								if($va_art_installation["label"]){
 									print "<br/><small>".$va_art_installation["label"]."</small>";
 								}
@@ -152,7 +153,7 @@
 									$vn_col = 0;
 								}
 							}
-							if(($vn_col > 0) && ($vn_col < 4)){
+							if(($vn_col > 0) && ($vn_col < 3)){
 								# --- trailing row
 								print "</div>";
 							}
