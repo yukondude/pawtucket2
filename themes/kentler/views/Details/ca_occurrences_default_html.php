@@ -148,7 +148,7 @@
 								}
 								print "</div><br/></div>";
 								$vn_col++;
-								if($vn_col == 4){
+								if($vn_col == 3){
 									print "</div>";
 									$vn_col = 0;
 								}
