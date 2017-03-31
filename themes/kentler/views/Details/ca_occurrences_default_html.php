@@ -78,13 +78,14 @@
 							$va_tmp = array("image" => $vs_image, "label" => $va_rep["label"], "image_link" => "<a href='#' onclick='caMediaPanel.showPanel(\"".caNavUrl($this->request, '', 'Detail', 'GetMediaOverlay', array('context' => 'exhibitions', 'id' => $t_item->getPrimaryKey(), 'representation_id' => $va_rep["representation_id"], 'overlay' => 1))."\"); return false;' >".$vs_image."</a>");
 						
 							if($va_rep["type_id"] == $vn_promo_type_id){
-								$va_promos[] = $va_tmp;
+								$va_promos[$va_rep["rank"]] = $va_tmp;
 								}else{
-								$va_art_installations[$va_rep["label"]] = $va_tmp;
+								$va_art_installations[$va_rep["rank"]] = $va_tmp;
 							}
 						}
 					}
 					ksort($va_art_installations);
+					ksort($va_promos);
 					$va_artworks = array();
 					$va_artworks_no_media = array();
 					if($q_artworks->numHits()){
