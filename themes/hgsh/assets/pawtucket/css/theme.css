@@ -43,6 +43,10 @@ H1, h1{
 .detailTool a{
 	padding-right:80px;
 }
+
+.bResultText a:hover{
+	color: #fff;
+}
 a.btn-default{
 	text-decoration:none;
 }
