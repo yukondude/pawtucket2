@@ -32,7 +32,7 @@
 				if ($va_dates = $t_item->get('ca_entities.dates_active')) {
 					print "<div class='unit'><h6>Dates Active</h6>".$va_dates."</div>";
 				}
-				if ($va_lifetime = $t_item->get('ca_entities.lifespan')) {
+				if ($va_lifetime = $t_item->get('ca_entities.life_dates')) {
 					print "<div class='unit'><h6>Lifetime</h6>".$va_lifetime."</div>";
 				}
 				if ($va_address = $t_item->getWithTemplate('<ifcount min="1" code="ca_entities.address"><ifdef code="ca_entities.address.address1">^ca_entities.address.address1<br/></ifdef><ifdef code="ca_entities.address.address2">^ca_entities.address.address2<br/></ifdef><ifdef code="ca_entities.address.city">^ca_entities.address.city, </ifdef><ifdef code="ca_entities.address.stateprovince">^ca_entities.address.stateprovince </ifdef><ifdef code="ca_entities.address.country">^ca_entities.address.country</ifdef></ifcount>')) {

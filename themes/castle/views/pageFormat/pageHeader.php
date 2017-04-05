@@ -64,6 +64,7 @@
     		jQuery('#browse-menu').on('click mouseover mouseout mousemove mouseenter',function(e) { e.stopPropagation(); });
     	});
 	</script>
+	<script type="text/javascript" src="//platform-api.sharethis.com/js/sharethis.js#property=58e54a3021bc4400110fdfdb&product=inline-share-buttons"></script>
 <?php
 	if(Debug::isEnabled()) {		
 		//
@@ -97,7 +98,7 @@
 					<span class="icon-bar"></span>
 				</button>
 <?php
-				print caNavLink($this->request, caGetThemeGraphic($this->request, 'new-logo.png'), "navbar-brand", "", "","");
+				print caNavLink($this->request, caGetThemeGraphic($this->request, 'CHMS_Logo_2017_Stack.png'), "navbar-brand", "", "","");
 ?>
 			</div>
 
