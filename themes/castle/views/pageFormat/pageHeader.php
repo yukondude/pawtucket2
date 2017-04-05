@@ -137,11 +137,11 @@
 					</div>
 				</form>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="https://thecastle.ca/about-the-castle/">About</a></li>
+					<li><a href="https://thecastle.ca/pages/about-the-castle">About</a></li>
 					<?php #print $this->render("pageFormat/browseMenu.php"); ?>	
 					<li <?php print (($this->request->getController() == "Search") && ($this->request->getAction() == "advanced")) ? 'class="active"' : ''; ?>><?php print caNavLink($this->request, _t("Advanced Search"), "", "", "Search", "advanced/objects"); ?></li>
 					<li <?php print ($this->request->getController() == "Gallery") ? 'class="active"' : ''; ?>><?php print caNavLink($this->request, _t("Gallery"), "", "", "Gallery", "Index"); ?></li>
-					<li><a href="https://thecastle.ca/plan-your-visit/">Contact</a></li>
+					<li><a href="https://thecastle.ca/pages/plan-your-visit">Contact</a></li>
 				</ul>
 			</div><!-- /.navbar-collapse -->
 		</div><!-- end container -->
