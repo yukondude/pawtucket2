@@ -76,14 +76,28 @@
 								$vs_image = $va_rep["tags"][$vs_version];
 							}
 							$va_tmp = array("image" => $vs_image, "label" => $va_rep["label"], "image_link" => "<a href='#' onclick='caMediaPanel.showPanel(\"".caNavUrl($this->request, '', 'Detail', 'GetMediaOverlay', array('context' => 'exhibitions', 'id' => $t_item->getPrimaryKey(), 'representation_id' => $va_rep["representation_id"], 'overlay' => 1))."\"); return false;' >".$vs_image."</a>");
-						
-							if($va_rep["type_id"] == $vn_promo_type_id){
-								$va_promos[] = $va_tmp;
+							
+							$vs_sort_key = "";
+							if(trim($va_rep["idno_sort"])){
+								$vs_sort_key = $va_rep["idno_sort"];
+							}else{
+								if($va_rep["label"]){
+									$vs_sort_key = array_shift(explode(" ", $va_rep["label"]));
 								}else{
-								$va_art_installations[] = $va_tmp;
+									$vs_sort_key = $va_rep["representation_id"];
+								}
+							}
+							$vs_sort_key = strtolower($vs_sort_key);
+							if($va_rep["type_id"] == $vn_promo_type_id){
+								$va_promos[$vs_sort_key] = $va_tmp;
+							}else{
+								$va_art_installations[$vs_sort_key] = $va_tmp;
 							}
 						}
 					}
+					ksort($va_art_installations, SORT_NATURAL);
+					ksort($va_promos, SORT_NATURAL);
+					
 					$va_artworks = array();
 					$va_artworks_no_media = array();
 					if($q_artworks->numHits()){
@@ -141,18 +155,18 @@
 								if($vn_col == 0){
 									print "<div class='row'>";
 								}
-								print "<div class='col-sm-3'><div class='fullWidthImg'>".$va_art_installation["image_link"];
+								print "<div class='col-sm-4'><div class='fullWidthImg'>".$va_art_installation["image_link"];
 								if($va_art_installation["label"]){
 									print "<br/><small>".$va_art_installation["label"]."</small>";
 								}
 								print "</div><br/></div>";
 								$vn_col++;
-								if($vn_col == 4){
+								if($vn_col == 3){
 									print "</div>";
 									$vn_col = 0;
 								}
 							}
-							if(($vn_col > 0) && ($vn_col < 4)){
+							if(($vn_col > 0) && ($vn_col < 3)){
 								# --- trailing row
 								print "</div>";
 							}
