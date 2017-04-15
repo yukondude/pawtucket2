@@ -65,6 +65,7 @@
 					}
 					if ($vn_share_enabled) {
 						print '<div class="detailTool"><span class="glyphicon glyphicon-share-alt"></span>'.$this->getVar("shareLink").'</div><!-- end detailTool -->';
+						print "<div class='detailTool'><div class='sharethis-inline-share-buttons'></div></div>";
 					}
 					print '</div><!-- end detailTools -->';
 				}				
@@ -79,14 +80,8 @@
 				if ($va_accession = $t_object->get('ca_objects.idno')) {
 					print "<div class='unit'><h6>Accession Number</h6>".$va_accession."</div>";
 				}
-				if ($va_idno = $t_object->get('ca_objects.object_identifier')) {
-					print "<div class='unit'><h6>Identifier</h6>".$va_idno."</div>";
-				}
 				if ($va_altname = $t_object->get('ca_objects.nonpreferred_labels')) {
 					print "<div class='unit'><h6>Alternate Name</h6>".$va_altname."</div>";
-				}
-				if ($va_component = $t_object->get('ca_objects.component_parts')) {
-					print "<div class='unit'><h6>Component Part Names</h6>".$va_component."</div>";
 				}
 				if ($va_description = $t_object->get('ca_objects.description')) {
 					print "<div class='unit'><h6>Description</h6>".$va_description."</div>";
@@ -103,7 +98,7 @@
 				if ($va_dimensions = $t_object->getWithTemplate('<ifcount min="1" code="ca_objects.dimensions.display_dimensions"><unit><ifdef code="ca_objects.dimensions.display_dimensions">^ca_objects.dimensions.display_dimensions</ifdef><ifdef code="ca_objects.dimensions.dimensions_notes"><br/>^ca_objects.dimensions.dimensions_notes</ifdef></unit></ifcount>')) {
 					print "<div class='unit'><h6>Dimensions</h6>".$va_dimensions."</div>";
 				}	
-				if (($va_material = $t_object->get('ca_objects.material', array('convertCodesToDisplayText' => true, 'delimiter' => ', ')))) {
+				if (($va_material = $t_object->get('ca_objects.material', array('convertCodesToDisplayText' => true, 'delimiter' => '; ')))) {
 					print "<div class='unit'><h6>Material</h6>".$va_material."</div>";
 				}
 				if ($va_artist = $t_object->get('ca_entities.preferred_labels', array('restrictToRelationshipTypes' => array('artist', 'photographer'), 'delimiter' => '<br/>', 'returnAsLink' => true))) {
