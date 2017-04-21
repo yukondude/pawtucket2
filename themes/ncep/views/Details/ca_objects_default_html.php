@@ -94,7 +94,8 @@
 					break;
 					# --------------------------------------
 					case $va_component_types["resource"]:
-						if($vs_ncep_theme = $q_components->get("ca_objects.ncep_theme", array("convertCodesToDisplayText" => true))){
+						$t_comp = new ca_objects($q_components->get("object_id"));
+						if($vs_ncep_theme = $t_comp->getAttributesForDisplay("ncep_theme", null, array("convertCodesToDisplayText" => true))){
 							if(strpos($vs_ncep_theme, ";")){
 								$va_theme_tmp = explode(";", $vs_ncep_theme);
 								$vs_ncep_theme = $va_theme_tmp[0];
