@@ -119,19 +119,19 @@
 				if ($va_title = $t_object->get('ca_objects.title')) {
 					print "<div class='unit'><h6>Artwork Title</h6>".$va_title."</div>";
 				}					
-				if ($va_phototype = $t_object->get('ca_objects.photograph_type', array('convertCodesToDisplayText' => true))) {
+				if ($va_phototype = $t_object->get('ca_objects.photograph_type', array('convertCodesToDisplayText' => true, 'delimiter' => '; '))) {
 					print "<div class='unit'><h6>Photograph Type</h6>".$va_phototype."</div>";
 				}
 				if ($va_subject = $t_object->get('ca_objects.subject_image')) {
 					print "<div class='unit'><h6>Subject/Image</h6>".$va_subject."</div>";
 				}
-				if ($va_medium = $t_object->get('ca_objects.medium', array('convertCodesToDisplayText' => true))) {
+				if ($va_medium = $t_object->get('ca_objects.medium', array('convertCodesToDisplayText' => true, 'delimiter' => '; '))) {
 					print "<div class='unit'><h6>Medium</h6>".$va_medium."</div>";
 				}				
-				if ($va_support = $t_object->get('ca_objects.support', array('convertCodesToDisplayText' => true))) {
+				if ($va_support = $t_object->get('ca_objects.support', array('convertCodesToDisplayText' => true, 'delimiter' => '; '))) {
 					print "<div class='unit'><h6>Support</h6>".$va_support."</div>";
 				}	
-				if ($va_technique = $t_object->get('ca_objects.technique', array('convertCodesToDisplayText' => true))) {
+				if ($va_technique = $t_object->get('ca_objects.technique', array('convertCodesToDisplayText' => true, 'delimiter' => '; '))) {
 					print "<div class='unit'><h6>Technique</h6>".$va_technique."</div>";
 				}	
 				if ($va_school = $t_object->get('ca_objects.school_style')) {
@@ -147,14 +147,20 @@
 				<hr></hr>
 					<div class="row">
 						<div class="col-sm-6">		
-							{{{<ifcount code="ca_entities" excludeRelationshipTypes="source_name" min="1" max="1"><H6>Related person</H6></ifcount>}}}
-							{{{<ifcount code="ca_entities" excludeRelationshipTypes="source_name" min="2"><H6>Related people</H6></ifcount>}}}
-							{{{<unit relativeTo="ca_entities" excludeRelationshipTypes="source_name" delimiter="<br/>"><l>^ca_entities.preferred_labels.displayname</l></unit>}}}
-							
-							
-							{{{<ifcount code="ca_places" min="1" max="1"><H6>Related place</H6></ifcount>}}}
-							{{{<ifcount code="ca_places" min="2"><H6>Related places</H6></ifcount>}}}
-							{{{<unit relativeTo="ca_places" delimiter="<br/>"><l>^ca_places.preferred_labels.name</l></unit>}}}
+							{{{<ifcount code="ca_entities" excludeRelationshipTypes="source_name" min="1" max="1"><H6>Related person/business/organization</H6></ifcount>}}}
+							{{{<ifcount code="ca_entities" excludeRelationshipTypes="source_name" min="2"><H6>Related people/businesses/organizations</H6></ifcount>}}}
+							{{{<unit relativeTo="ca_entities" excludeRelationshipTypes="source_name" delimiter="<br/>"><l>^ca_entities.preferred_labels.displayname</l> (^relationship_typename)</unit>}}}
+<?php
+							if ($va_related_associations = $t_object->get('ca_occurrences.preferred_labels', array('restrictToTypes' => array('associations'), 'returnAsLink' => true, 'delimiter' => '<br/>'))) {
+								print "<div class='unit'><h6>Related Associations</h6>".$va_related_associations."</div>";
+							}
+							if ($va_related_publications = $t_object->get('ca_occurrences.preferred_labels', array('restrictToTypes' => array('publications'), 'returnAsLink' => true, 'delimiter' => '<br/>'))) {
+								print "<div class='unit'><h6>Related Publications</h6>".$va_related_publications."</div>";
+							}
+							if ($va_related_objects = $t_object->get('ca_objects.related.preferred_labels', array('returnAsLink' => true, 'delimiter' => '<br/>'))) {
+								print "<div class='unit'><h6>Related Objects</h6>".$va_related_objects."</div>";
+							}														
+?>
 							
 							{{{<ifcount code="ca_list_items" min="1" max="1"><H6>Related Term</H6></ifcount>}}}
 							{{{<ifcount code="ca_list_items" min="2"><H6>Related Terms</H6></ifcount>}}}
