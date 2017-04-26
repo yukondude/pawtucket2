@@ -463,6 +463,9 @@ a.browseRemoveFacet img {
 #browse-menu {
 	margin-top:-1px;
 }
+.results a btn-default .glyphicon {
+	color:#fff !important;
+}
 
 /* Front */
 
