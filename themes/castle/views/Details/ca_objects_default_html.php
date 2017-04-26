@@ -103,10 +103,10 @@
 				if (($va_material = $t_object->get('ca_objects.material', array('convertCodesToDisplayText' => true, 'delimiter' => '; ')))) {
 					print "<div class='unit'><h6>Material</h6>".$va_material."</div>";
 				}
-				if ($va_artist = $t_object->get('ca_entities.preferred_labels', array('restrictToRelationshipTypes' => array('artist', 'photographer'), 'delimiter' => '<br/>', 'returnAsLink' => true))) {
+				if ($va_artist = $t_object->get('ca_entities.preferred_labels', array('restrictToRelationshipTypes' => array('artist', 'photographer'), 'delimiter' => '<br/>', 'returnAsLink' => true, 'checkAccess' => $va_access_values))) {
 					print "<div class='unit'><h6>Artist/Photographer</h6>".$va_artist."</div>";
 				}
-				if ($va_manufacturer = $t_object->get('ca_entities.preferred_labels', array('restrictToRelationshipTypes' => array('manufacturer'), 'delimiter' => '<br/>', 'returnAsLink' => true))) {
+				if ($va_manufacturer = $t_object->get('ca_entities.preferred_labels', array('restrictToRelationshipTypes' => array('manufacturer'), 'delimiter' => '<br/>', 'returnAsLink' => true, 'checkAccess' => $va_access_values))) {
 					print "<div class='unit'><h6>Manufacturer</h6>".$va_manufacturer."</div>";
 				}
 				if ($va_brand_name = $t_object->get('ca_objects.brand_name')) {
