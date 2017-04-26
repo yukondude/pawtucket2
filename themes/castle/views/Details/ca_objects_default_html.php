@@ -31,6 +31,8 @@
 	$va_tags = 				$this->getVar("tags_array");
 	$vn_comments_enabled = 	$this->getVar("commentsEnabled");
 	$vn_share_enabled = 	$this->getVar("shareEnabled");
+	
+	$va_access_values = caGetUserAccessValues($this->request);
 
 ?>
 <div class="row">
@@ -146,18 +148,18 @@
 ?>
 				<hr></hr>
 					<div class="row">
-						<div class="col-sm-6">		
+						<div class="col-sm-12">		
 							{{{<ifcount code="ca_entities" excludeRelationshipTypes="source_name" min="1" max="1"><H6>Related person/business/organization</H6></ifcount>}}}
 							{{{<ifcount code="ca_entities" excludeRelationshipTypes="source_name" min="2"><H6>Related people/businesses/organizations</H6></ifcount>}}}
 							{{{<unit relativeTo="ca_entities" excludeRelationshipTypes="source_name" delimiter="<br/>"><l>^ca_entities.preferred_labels.displayname</l> (^relationship_typename)</unit>}}}
 <?php
-							if ($va_related_associations = $t_object->get('ca_occurrences.preferred_labels', array('restrictToTypes' => array('associations'), 'returnAsLink' => true, 'delimiter' => '<br/>'))) {
+							if ($va_related_associations = $t_object->get('ca_occurrences.preferred_labels', array('restrictToTypes' => array('associations'), 'returnAsLink' => true, 'delimiter' => '<br/>', 'checkAccess' => $va_access_values))) {
 								print "<div class='unit'><h6>Related Associations</h6>".$va_related_associations."</div>";
 							}
-							if ($va_related_publications = $t_object->get('ca_occurrences.preferred_labels', array('restrictToTypes' => array('publications'), 'returnAsLink' => true, 'delimiter' => '<br/>'))) {
+							if ($va_related_publications = $t_object->get('ca_occurrences.preferred_labels', array('restrictToTypes' => array('publications'), 'returnAsLink' => true, 'delimiter' => '<br/>', 'checkAccess' => $va_access_values))) {
 								print "<div class='unit'><h6>Related Publications</h6>".$va_related_publications."</div>";
 							}
-							if ($va_related_objects = $t_object->get('ca_objects.related.preferred_labels', array('returnAsLink' => true, 'delimiter' => '<br/>'))) {
+							if ($va_related_objects = $t_object->get('ca_objects.related.preferred_labels', array('returnAsLink' => true, 'delimiter' => '<br/>', 'checkAccess' => $va_access_values))) {
 								print "<div class='unit'><h6>Related Objects</h6>".$va_related_objects."</div>";
 							}														
 ?>
@@ -169,7 +171,7 @@
 							{{{<ifcount code="ca_objects.LcshNames" min="1"><H6>LC Terms</H6></ifcount>}}}
 							{{{<unit delimiter="<br/>"><l>^ca_objects.LcshNames</l></unit>}}}
 						</div><!-- end col -->				
-						<div class="col-sm-6 colBorderLeft">
+						<div class="col-sm-12 ">
 							{{{map}}}
 						</div>
 					</div><!-- end row -->

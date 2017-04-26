@@ -97,9 +97,9 @@
 ?>
 				<br/><?php print "<p>".$qr_results->get('ca_objects.preferred_labels.name', array('returnAsLink' => true))."</p>"; ?>
 <?php 
-					if ($vs_entities = $qr_results->get('ca_entities.preferred_labels.displayname', array('returnAsLink' => true))) {
-						print "<p>".$vs_entities."</p>";
-					}
+					#if ($vs_entities = $qr_results->get('ca_entities.preferred_labels.displayname', array('returnAsLink' => true))) {
+					#	print "<p>".$vs_entities."</p>";
+					#}
 ?>
 			</div><!-- end blockResult -->
 <?php
