@@ -463,6 +463,9 @@ a.browseRemoveFacet img {
 #browse-menu {
 	margin-top:-1px;
 }
+.results a btn-default .glyphicon {
+	color:#fff !important;
+}
 
 /* Front */
 
@@ -557,6 +560,7 @@ a.browseRemoveFacet img {
 	padding-bottom:50px;
 	background-color:#fff;
 	border:0px;
+	margin-bottom:0px;
 }
 
 /* Advanced Search */

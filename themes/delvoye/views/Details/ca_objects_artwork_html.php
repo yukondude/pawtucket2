@@ -27,93 +27,62 @@
 				<?php
 				
 				if($t_object->get("ca_objects.date")){
-					print $t_object->get("ca_objects.date")."<br/>";
+					print '<span class="77">'.$t_object->get("ca_objects.date")."<br/></span>";
 				}
-				
-				if($t_object->get("ca_objects.nonpreferred_labels")){
-					print "<H6>Alternative name</H6> ".$t_object->get("ca_objects.nonpreferred_labels.name")."<br/>";
-				}
-?>
-				<HR/>
-<?php				
-				if($t_object->get("ca_objects.work_dimensions")){
-					print "<H6>Dimensions</H6>";?>
-					{{{<table style="text-align: left; display: inline;">
-						<unit relativeTo="ca_objects.work_dimensions">
-							<tr>
-								<td valign="top" style="text-transform: capitalize;">^ca_objects.work_dimensions.dimensions_type : </td>
-								<td><ifdef code="ca_objects.work_dimensions.dimensions_length">Length: ^ca_objects.work_dimensions.dimensions_length<br/></ifdef>
-									<ifdef code="ca_objects.work_dimensions.dimensions_width">Width: ^ca_objects.work_dimensions.dimensions_width<br/></ifdef>
-									<ifdef code="ca_objects.work_dimensions.dimensions_height">Height: ^ca_objects.work_dimensions.dimensions_height<br/></ifdef>
-									<ifdef code="ca_objects.work_dimensions.dimensions_diameter">Diameter: ^ca_objects.work_dimensions.dimensions_diameter<br/></ifdef>
-									<ifdef code="ca_objects.work_dimensions.dimensions_weight">Weight: ^ca_objects.work_dimensions.dimensions_weight </ifdef></td>
-							</tr>
-						</unit>
-						</table>}}}
-		<?php	}
 				
 				$va_collections = $t_object->get("ca_collections", array("returnWithStructure" => true, "restrictToTypes" => array("object_category"), "checkAccess" => $va_access_values, "sort" => "ca_collections.preferred_labels.name"));
 				if(sizeof($va_collections)){
-					print "<H6>Object category</H6>";
 					foreach($va_collections as $va_collection){
-						print caDetailLink($this->request, $va_collection["name"], "", "ca_collections", $va_collection["collection_id"])."<br/>";
+						print caDetailLink($this->request, ucfirst($va_collection["labels"][1]), "", "ca_collections", $va_collection["collection_id"])."<br/>";
 					}
 				}
 				
-				if($t_object->get("ca_objects.alternate_number")){
-					print "<H6>NUMBER</H6>".$t_object->get("ca_objects.alternate_number")."<br/>";
-				}
+				if($t_object->get("ca_objects.work_dimensions")){?>
+					{{{<unit relativeTo="ca_objects.work_dimensions" delimiter=" ">
+						<if rule="^ca_objects.work_dimensions.dimensions_type =~ /object/">
+								<ifdef code="ca_objects.work_dimensions.dimensions_length">L^ca_objects.work_dimensions.dimensions_length</ifdef>
+								<ifdef code="ca_objects.work_dimensions.dimensions_width"> x W^ca_objects.work_dimensions.dimensions_width</ifdef>
+								<ifdef code="ca_objects.work_dimensions.dimensions_height"> x H^ca_objects.work_dimensions.dimensions_height</ifdef>
+							</if>
+						</unit>}}}
+		<?php	}
 				
+				?>
+				<BR/>
+				<BR/>
+				<span style="color:#c0c0c0;">
+				{{{<ifdef code="ca_objects.idno">(^ca_objects.idno)</ifdef>}}}			
+				</span>
+				<HR/>
+				
+				<H6>Collections</H6>
+				{{{<unit relativeTo="ca_collections" restrictToTypes="artwork_category" delimiter=", "><l>^ca_collections.hierarchy.preferred_labels.name%delimiter=_➔_</l></unit>}}}
+				<H6>Keywords</H6>
+				{{{<unit relativeTo="ca_collections" restrictToTypes="keyword" delimiter=", "><l>^ca_collections.preferred_labels.name</l></unit>}}}
+
+				<HR/>
+				
+				
+				{{{<ifcount code="ca_objects.related" restrictToTypes="artwork" min="1" max="1"><H6>Related artwork</H6></ifcount>}}}
+				{{{<ifcount code="ca_objects.related" restrictToTypes="artwork" min="2"><H6>Related artworks</H6></ifcount>}}}
+				{{{<unit relativeTo="ca_objects.related" restrictToTypes="artwork" delimiter="<br/>"><l>^ca_objects.preferred_labels</l> (^ca_objects.date), <unit relativeTo="ca_collections" restrictToTypes="object_category">^ca_collections.preferred_labels.name</unit></unit>}}}
+				
+				
+				{{{<ifcount code="ca_occurrences" min="1" max="1"><H6>Related event</H6></ifcount>}}}
+				{{{<ifcount code="ca_occurrences" min="2"><H6>Related events</H6></ifcount>}}}
+				{{{<unit relativeTo="ca_occurrences" restrictToTypes="event" delimiter="<br/>"><ifdef code="ca_occurrences.preferred_labels"><l>^ca_occurrences.preferred_labels</l>, </ifdef><unit relativeTo="ca_entities">^ca_entities.preferred_labels.displayname, <unit relativeTo="ca_entities.address">^ca_entities.address.city (^ca_entities.address.country),</unit></unit> ^ca_occurrences.date</unit>}}}
+
+				
+				{{{<ifcount code="ca_objects.related" restrictToTypes="publication" min="1" max="1"><H6>Related publication</H6></ifcount>}}}
+				{{{<ifcount code="ca_objects.related" restrictToTypes="publication" min="2"><H6>Related publications</H6></ifcount>}}}
+				{{{<unit relativeTo="ca_objects.related" restrictToTypes="publication" delimiter="<br/>"><unit relativeTo="ca_entities" restrictToRelationshipTypes="author" delimiter=", ">^ca_entities.preferred_labels.displayname</unit> "<l>^ca_objects.preferred_labels</l>", ^ca_objects.date <unit relativeTo="ca_collections" restrictToTypes="publication" delimiter="➔">(^ca_collections.hierarchy.preferred_labels.name)</unit></unit>}}}
+				
+				<HR/>
+<?php							
 				if($t_object->get("ca_objects.edition_c.edition_text")){
-					print "<H6>EDITION</H6>".$t_object->get("ca_objects.edition_c.edition_text")."<br/>";
-				}
-				
-				$va_collections = $t_object->get("ca_collections", array("returnWithStructure" => true, "restrictToTypes" => array("artwork_category"), "checkAccess" => $va_access_values, "sort" => "ca_collections.preferred_labels.name"));
-				if(sizeof($va_collections)){
-					print "<H6>Collections</H6>";
-					foreach($va_collections as $va_collection){
-						print caDetailLink($this->request, $va_collection["name"], "", "ca_collections", $va_collection["collection_id"])."<br/>";
-					}
-				}
-				
-				$va_collections = $t_object->get("ca_collections", array("returnWithStructure" => true, "restrictToTypes" => array("keyword"), "checkAccess" => $va_access_values, "sort" => "ca_collections.preferred_labels.name"));
-				if(sizeof($va_collections)){
-					print "<H6>Keywords</H6>";
-					foreach($va_collections as $va_collection){
-						print caDetailLink($this->request, $va_collection["name"], "", "ca_collections", $va_collection["collection_id"])."<br/>";
-					}
+					print "<H6>Editions</H6>".$t_object->get("ca_objects.edition_c.edition_text")."<br/>";
 				}
 ?>
-				<HR/>
-<?php				
-				$va_artworks = $t_object->get("ca_objects.related", array("returnWithStructure" => true, "restrictToTypes" => array("artwork"), "checkAccess" => $va_access_values, "sort" => "ca_objects.preferred_labels.name"));
-				if(sizeof($va_artworks)){
-					print "<H6>Related Artworks</H6>";
-					foreach($va_artworks as $va_artwork){
-						print caDetailLink($this->request, $va_artwork["name"], "", "ca_objects", $va_artwork["object_id"])."<br/>";
-					}
-				}
-				
-				$va_events = $t_object->get("ca_occurrences", array("returnWithStructure" => true, "restrictToTypes" => array("event"), "checkAccess" => $va_access_values, "sort" => "ca_occurrences.preferred_labels.name"));
-				if(sizeof($va_events)){
-					print "<H6>Related Events</H6>";
-					foreach($va_events as $va_event){
-						print caDetailLink($this->request, $va_event["name"], "", "ca_occurrences", $va_event["occurrence_id"])."<br/>";
-					}
-				}
-				
-				$va_publications = $t_object->get("ca_objects.related", array("returnWithStructure" => true, "restrictToTypes" => array("publication"), "checkAccess" => $va_access_values, "sort" => "ca_objects.preferred_labels.name"));
-				if(sizeof($va_publications)){
-					print "<H6>Related Publications</H6>";
-					foreach($va_publications as $va_publication){
-						print caDetailLink($this->request, $va_publication["name"], "", "ca_objects", $va_publication["object_id"])."<br/>";
-					}
-				}
-?>
-				<HR/>
-
-				{{{<ifdef code="ca_objects.idno"><H6>Object Identifier</H6>^ca_objects.idno</ifdef>}}}			
-
 			</div><!-- end col -->
 		</div><!-- end row --></div><!-- end container -->
 	</div><!-- end col -->

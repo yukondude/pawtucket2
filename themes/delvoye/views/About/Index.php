@@ -4,24 +4,28 @@
 <H1><?php print _t("About"); ?></H1>
 <div class="row aboutContent">
 	<div class="col-sm-12 col-md-10">
-		<span class="thumbnail">
-			<?php print caGetThemeGraphic($this->request, 'bobPew.jpg'); ?>
-			Bob Pew in front of James Rosati's<br/>Ode IV (1983) at Global Headquarters
-		</span>
 		<p>
-			It was the early 1980s and construction for the Steelcase Global Headquarters in Grand Rapids, Michigan was underway. During this expansion Chairman and CEO Bob Pew embraced the opportunity to grow the company’s art collection displayed in Steelcase facilities and plants around the country.
+			Welcome to the frontend of the Wim Delvoye Database. This database is trying to give a complete overview to the oeuvre if the Belgian Artist Wim Delvoye (Wervik, Belgium, 1965).
+			<br/>
 		</p>
 		<p>
-			With the belief that art made “a positive and lasting contribution to the quality of daily work life”, Steelcase purchased hundreds of works to enhance the new building and inspire employees. Functional architecture and beautiful design became integrated with fine and decorative arts from the mid-eighteenth century to the present. Robert Forrest, President of Forrest Designers Ltd and Forrest Fine Arts, and John Lloyd Taylor, Director of The Fine Arts Galleries at the University of Wisconsin, Milwaukee, assisted in the selection and placement of works to create an aesthetically pleasing environment.
+			THREE BIG MODULES are inserted: artworks, publications and events.The artworks are considered the main subject. We relate them to the publications they appeared in (by image) and the events they were displayed.
 		</p>
 		<p>
-			Over the next two decades the Steelcase art collection continued to grow, reflecting a variety of styles and movements, cultures and eras, by artists both local and internationally renowned. Today Steelcase offices and showrooms around the globe exhibit many of these early purchases, from paintings and sculptures to prints, drawings and more. And employee and customer appreciation for the artwork is very much alive, with visitors often tweeting images of artwork experienced during tours.
+			Every ARTWORK has a identifier (a unique number) that is related to a keyword (ex.: every artwork that starts with 19_ is an ‘Etui’). Because keywords can be overlapping you can also search for keywords. If you would be searching for ‘etui’ you would find all ‘etuis’, related publications and events. If you would type in ‘etui artwork’ you would get rid of all the publications and events. If you want information about one object knowing the identifier would be the easiest way to work. With ‘19_0011  artwork’ you find the artwork, with ‘19_0011’ you would find the artwork and all related publications and events. If you are more unfamiliar with the collection browsing would be the easiest way to look around. Artworks can be filtered by the collection they belong to, events they participated in and materials that where used.
 		</p>
 		<p>
-			The Steelcase Art digital collection was born in 2014 with two goals: give access to employees in search of artwork to complement new and redesigned office facilities and showrooms, and offer Steelcase employees a deeper dive into our company’s unique collection. 
+			Every EVENT tries to list all items that have participated in a certain event. This can be an museum exhibition, gallery exhibition, art fair or something else. Easiest way to search the collection is to give the name of the exhibition, the date (year), the place (city or country) or the Institution (official name, ex. S.M.A.K. and not SMAK).Events can be filtered by date.
 		</p>
 		<p>
-			Take a moment to look around. Explore works in storage and on display. Find out what makes Steelcase an innovative organization that continues to place a high value on the role of art in business, and as a vital part of the human experience.
+			Every PUBLICATION tries to list the artworks that have images with this publication. It also mentions related events (ex. all catalogs). Using a combination of words is the most efficient way to search (ex. If you would be looking if there is a catalogue from an exhibition in 1991, search for ‘catalogue 1991’).
+		</p>
+		<p>
+			SEARCHES can be organized by identification number, name (ascending/descending) and date. When you browse in the collection you cannot do this.
+			<br/>			
+		</p>
+		<p>
+			The database is a work in progress and gets updated weekly. We try to be as correct as possible by using several (original and secondary) sources collecting our data but if you find information to be lacking or incorrect, or you have information that can enrich the database, feel free to contact us.Most images used on this website can be requested, in high resolution. Please contact us for more information.
 		</p>
 	</div>
 </div>

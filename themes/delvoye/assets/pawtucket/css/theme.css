@@ -41,9 +41,24 @@ H3, h3{
 	font-weight:bold;
 	color:#333;
 }
+H4, h4{
+	font-weight: 900;
+	color:#333;
+}
+.77 {
+	font-weight:bold;
+	color:#4d4d4d;
+}
+.192 {
+	color:#c0c0c0;
+}
 .detail H6, .detail h6{
 	text-transform:uppercase;
 	color:#666;
+}
+p{
+	font-size:12px;
+	
 }
 .thumbnail {
 	font-style:italic;
@@ -90,7 +105,7 @@ H3, h3{
 		font-size:18px;
 	}
 	.nav > li > a, .nav > li > a:hover, .nav > li > a:focus{
-		font-size:11px;
+		font-size:14px;
 	}
 }
 .navbar .navbar-nav > .active > a, .navbar .navbar-nav > li:hover > a, .navbar .navbar-nav > .active > a:hover{

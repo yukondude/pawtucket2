@@ -25,38 +25,39 @@
 				<div class='col-sm-6 col-md-6 col-lg-5'>
 					<H4>{{{^ca_occurrences.preferred_labels.name}}}</H4>
 					<HR/>
+					{{{<unit relativeTo="ca_entities" delimiter="<br/>">^ca_entities.preferred_labels.displayname (<unit relativeTo="ca_entities.address">^ca_entities.address.city, ^ca_entities.address.country</unit>)</unit>}}}
 					
-					{{{<ifcount code="ca_entities" min="1" max="1"><H6>Related Institution</H6></ifcount>}}}
-					{{{<ifcount code="ca_entities" min="2"><H6>Related Institutions</H6></ifcount>}}}
-					{{{<unit relativeTo="ca_entities" delimiter="<br/>">^ca_entities.preferred_labels.displayname<unit relativeTo="ca_entities.address"><br/>^ca_entities.address.city, ^ca_entities.address.country</unit></unit>}}}
-					
-					{{{<ifdef code="ca_occurrences.place" min="2"><H6>Place</H6><l>^ca_occurrences.place</l></ifdef>}}}
+					{{{<ifdef code="ca_occurrences.place" min="2">^ca_occurrences.place</ifdef>}}}
 <?php
 					if($t_item->get("ca_occurrences.date")){
-						print "<H6>Date</H6>".$t_item->get("ca_occurrences.date")."<br/>";
+						print "<br/>".$t_item->get("ca_occurrences.date")."<br/>";
 					}
 ?>
-					{{{<ifcount code="ca_occurrences.event_category" min="1" max="1"><H6>Event category</H6></ifcount>}}}
-					{{{<ifcount code="ca_occurrences.event_category" min="2"><H6>Event categories</H6></ifcount>}}}
-					{{{<unit relativeTo="ca_occurrences.event_category" delimiter="<br/>"><ifdef code="ca_occurrences.event_category.event_types">^ca_occurrences.event_category.event_types; </ifdef><ifdef code="ca_occurrences.event_category.event_types2">^ca_occurrences.event_category.event_types2</ifdef></unit>}}}
+					{{{<unit relativeTo="ca_occurrences.event_category" delimiter="<br/>"><ifdef code="ca_occurrences.event_category.event_types">^ca_occurrences.event_category.event_types, </ifdef><ifdef code="ca_occurrences.event_category.event_types2">^ca_occurrences.event_category.event_types2</ifdef></unit>}}}
+					
+					<BR/>
+					<BR/>
+					<span style="color:#c0c0c0;">
+					{{{<ifdef code="ca_occurrences.idno">^ca_occurrences.idno</ifdef>}}}
+					</span>
+					<HR/>
+					
+					{{{<ifcount code="ca_objects" restrictToTypes="artwork" min="1" max="1"><H6>Related artwork</H6></ifcount>}}}
+					{{{<ifcount code="ca_objects" restrictToTypes="artwork" min="2"><H6>Related artworks</H6></ifcount>}}}
+					{{{<unit relativeTo="ca_objects.related" restrictToTypes="artwork" delimiter="<br/>"><l>^ca_objects.preferred_labels</l> (^ca_objects.date), <unit relativeTo="ca_collections" restrictToTypes="object_category">^ca_collections.preferred_labels.name</unit></unit>}}}
 					
 					{{{<ifcount code="ca_occurrences.related" min="1" max="1"><H6>Related event</H6></ifcount>}}}
 					{{{<ifcount code="ca_occurrences.related" min="2"><H6>Related events</H6></ifcount>}}}
-					{{{<unit relativeTo="ca_occurrences" delimiter="<br/>"><l>^ca_occurrences.related.preferred_labels.name</l></unit>}}}
-<?php
-					if($t_item->get("ca_occurrences.event_other_object")){
-						print "<H6>Other Related Objects</H6>".$t_item->get("ca_occurrences.event_other_object")."<br/>";
-					}
-?>					
+					{{{<unit relativeTo="ca_occurrences" restrictToTypes="event" delimiter="<br/>"><ifdef code="ca_occurrences.related.preferred_labels"><l>^ca_occurrences.related.preferred_labels.name</l>, </ifdef><unit relativeTo="ca_entities">^ca_entities.preferred_labels.displayname, <unit relativeTo="ca_entities.address">^ca_entities.address.city (^ca_entities.address.country),</unit></unit> ^ca_occurrences.related.date</unit>}}}
+
+					
 					{{{<ifcount code="ca_objects" restrictToTypes="publication" min="1" max="1"><H6>Related publication</H6></ifcount>}}}
 					{{{<ifcount code="ca_objects" restrictToTypes="publication" min="2"><H6>Related publications</H6></ifcount>}}}
-					{{{<unit relativeTo="ca_objects" delimiter=" " restrictToTypes="publication"><l>^ca_objects.preferred_labels.name</l><br/></unit>}}}
-<?php
-					if($t_item->get("ca_occurrences.reference")){
-						print "<H6>Reference</H6>".$t_item->get("ca_occurrences.reference")."<br/>";
-					}
-?>		
-					{{{<ifdef code="ca_occurrences.idno"><H6>Event Identifier</H6>^ca_occurrences.idno</ifdef>}}}
+					{{{<unit relativeTo="ca_objects" restrictToTypes="publication" delimiter="<br/>"><unit relativeTo="ca_entities" restrictToRelationshipTypes="author" delimiter=", ">^ca_entities.preferred_labels.displayname</unit> "<l>^ca_objects.preferred_labels</l>", ^ca_objects.date <unit relativeTo="ca_collections" restrictToTypes="publication" delimiter="➔">(^ca_collections.hierarchy.preferred_labels.name)</unit></unit>}}}
+					
+					<HR/>
+					
+					{{{<unit relativeTo="ca_objects.reference"><if rule="^ca_objects.reference.reference_status =~ /approved/"><H6>Reference</H6>^ca_objects.reference.reference_text</if></unit>}}}
 					
 				</div><!-- end col -->
 			</div><!-- end row -->
