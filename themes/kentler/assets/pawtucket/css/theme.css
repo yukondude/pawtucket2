@@ -127,6 +127,14 @@ a:hover{
 	color:#000 !important;
 	display:inline-block;
 }
+
+.btn-default{
+	background-color:#dedede !important;
+	color:#858585;
+}
+.browseRemoveFacet .btn-default .glyphicon{
+	color:#858585 !important;
+}
 /* darker colors*/
 .darkBlueBg{
 	background-color: #2626af !important;
@@ -322,6 +330,7 @@ a.navbar-brand .line3{
 	width: 100%;
 	/* Set the fixed height of the footer here */
 	min-height: 100px;
+	height:auto;
 	margin:0px;
 	line-height:1.2em;
 	padding-top:20px;
@@ -744,4 +753,8 @@ a.navbar-brand .line3{
 div.caMediaOverlayControls, div.caMediaOverlayControls:hover{
 	opacity:1.0 !important;
 	background-color:rgba(0,0,0,0.5) !important;
+}
+
+.detail .navTop {
+    margin-top: 20px;
 }
