@@ -619,6 +619,13 @@ a.navbar-brand .line3{
 .detailPlaceholder img{
 	opacity:.3;
 }
+.popover{
+    width:auto;
+    max-width: none;
+    height:auto; 
+    max-width: none;
+    z-index:1000000 !important;   
+}
 /* exhibition listing */
 .yearTab{
 	display:none;
@@ -729,6 +736,10 @@ a.navbar-brand .line3{
 	text-shadow: none !important;
 	opacity:1;
 	font-size:20px !important;
+	font-size: 40px !important;
+	top: -3px;
+	position: absolute;
+	right: 20px;
 }
 div.caMediaOverlayControls, div.caMediaOverlayControls:hover{
 	opacity:1.0 !important;

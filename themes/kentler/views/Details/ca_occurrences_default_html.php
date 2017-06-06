@@ -56,14 +56,14 @@
 				<div class='col-sm-5'>
 <?php
 					
-					$vn_cap_for_grid = 30;
+					$vn_cap_for_grid = 5;
 					$vs_version = "large";
-					$va_reps = $t_item->getRepresentations(array("large", "small"), null, array("checkAccess" => $va_access_values));
+					$va_reps = $t_item->getRepresentations(array("large", "mediumlarge"), null, array("checkAccess" => $va_access_values));
 					$va_object_ids = $t_item->get("ca_objects.object_id", array("returnAsArray" => true, "checkAccess" => $va_access_values, "sort" => "ca_entities.preferred_labels.surname"));
 					$q_artworks = caMakeSearchResult("ca_objects", $va_object_ids);
 					$vn_total_images = (sizeof($va_reps) + $q_artworks->numHits());
 					if($vn_total_images > $vn_cap_for_grid){
-						$vs_version = "small";
+						$vs_version = "mediumlarge";
 					}
 					$va_art_installations = array();
 					$va_promos = array();
@@ -155,7 +155,7 @@
 								if($vn_col == 0){
 									print "<div class='row'>";
 								}
-								print "<div class='col-sm-4'><div class='fullWidthImg'>".$va_art_installation["image_link"];
+								print '<div class="col-sm-4"><div class="fullWidthImg" data-toggle="popover" data-trigger="hover" data-placement="right" data-container="body" data-html="true" data-content="'.$va_art_installation["image"].'">'.$va_art_installation["image"];
 								if($va_art_installation["label"]){
 									print "<br/><small>".$va_art_installation["label"]."</small>";
 								}
@@ -171,6 +171,13 @@
 								print "</div>";
 							}
 							print "</div>";
+?>
+							<script>
+							$(document).ready(function(){
+								$('[data-toggle="popover"]').popover();
+							});
+							</script>
+<?php
 						}else{
 							# --- full width col image
 							foreach($va_all_images as $va_image){
