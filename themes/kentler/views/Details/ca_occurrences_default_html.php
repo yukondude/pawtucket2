@@ -155,7 +155,7 @@
 								if($vn_col == 0){
 									print "<div class='row'>";
 								}
-								print '<div class="col-sm-4"><div class="fullWidthImg" data-toggle="popover" data-trigger="hover" data-placement="right" data-container="body" data-html="true" data-content="'.$va_art_installation["image"].'">'.$va_art_installation["image"];
+								print '<div class="col-sm-4"><div class="fullWidthImg" data-toggle="popover" data-trigger="hover" data-placement="right" data-container="body" data-html="true" data-content="'.$va_art_installation["image"].'">'.$va_art_installation["image_link"];
 								if($va_art_installation["label"]){
 									print "<br/><small>".$va_art_installation["label"]."</small>";
 								}
