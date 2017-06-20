@@ -2,7 +2,8 @@
 	$t_item = $this->getVar("item");
 	$va_comments = $this->getVar("comments");
 	$vn_comments_enabled = 	$this->getVar("commentsEnabled");
-	$vn_share_enabled = 	$this->getVar("shareEnabled");	
+	$vn_share_enabled = 	$this->getVar("shareEnabled");
+	$vn_id = $t_item->get('ca_occurrences.occurrence_id');	
 	
 	$va_access_values = caGetUserAccessValues($this->request);
 ?>
@@ -59,6 +60,27 @@
 					
 				</div><!-- end col -->
 				<div class='col-md-6 col-lg-6'>
+<?php
+				$vs_rel_doc = "";
+				if ($va_related_documents = $t_item->get('ca_occurrences.attachment', array('returnWithStructure' => true))) {
+					$o_db = new Db();
+					$vn_media_element_id = ca_metadata_elements::getElementID('attachment');
+					foreach ($va_related_documents as $va_key => $va_related_document_t) {
+						foreach ($va_related_document_t as $vn_doc_id => $va_related_document) {
+							$qr_res = $o_db->query('SELECT value_id FROM ca_attribute_values WHERE attribute_id = ? AND element_id = ?', array($vn_doc_id, $vn_media_element_id)) ;
+							if ($qr_res->nextRow()) {
+								$vs_rel_doc.= "<div class='col-sm-3' style='border:1px solid #eee;'><a href='#' onclick='caMediaPanel.showPanel(\"".caNavUrl($this->request, '', 'Detail', 'GetMediaInfo/ca_occurrences', array('occurrence_id' => $vn_id, 'value_id' => $qr_res->get('value_id')))."\"); return false;'>".$va_related_document['attachment']."</a></div>";
+								#$vs_rel_doc.= "<div><a href='#' onclick='caMediaPanel.showPanel(\"/index.php/Detail/GetRepresentationInfo/object_id/".$vn_id."/representation_id/".$qr_res->get('value_id')."/overlay/1\"); return false;'>".$va_related_document['object_document_file']."</a></div>";
+							}	 		
+						}
+					}
+				}	
+				if ($vs_rel_doc != "") {
+					print "<div class='unit row'><h6>Related Documents</h6>";
+					print $vs_rel_doc;
+					print "</div>";
+				}
+?>				
 					{{{<ifcount code="ca_collections" min="1" max="1"><H6>Related collection</H6></ifcount>}}}
 					{{{<ifcount code="ca_collections" min="2"><H6>Related collections</H6></ifcount>}}}
 					{{{<unit relativeTo="ca_collections" delimiter="<br/>"><l>^ca_collections.preferred_labels.name</l></unit>}}}

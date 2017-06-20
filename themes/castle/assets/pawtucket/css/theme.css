@@ -543,6 +543,9 @@ a.browseRemoveFacet img {
 .multisearchResult p {
 	margin-bottom:4px;
 }
+.multisearchResult small {
+	color:#ABABAB;
+}
 .multisearch .multisearchResult.objectsResult {
 	background-color: #f5f5f5;
 	box-shadow:none;

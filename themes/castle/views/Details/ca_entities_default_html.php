@@ -59,6 +59,7 @@
 					
 				</div><!-- end col -->
 				<div class='col-md-6 col-lg-6'>
+					{{{representationViewer}}}
 					{{{<ifcount code="ca_collections" min="1" max="1"><H6>Related collection</H6></ifcount>}}}
 					{{{<ifcount code="ca_collections" min="2"><H6>Related collections</H6></ifcount>}}}
 					{{{<unit relativeTo="ca_collections" delimiter="<br/>"><l>^ca_collections.preferred_labels.name</l></unit>}}}

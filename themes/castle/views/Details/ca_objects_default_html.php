@@ -152,15 +152,27 @@
 							{{{<ifcount code="ca_entities" excludeRelationshipTypes="source_name" min="1" max="1"><H6>Related person/business/organization</H6></ifcount>}}}
 							{{{<ifcount code="ca_entities" excludeRelationshipTypes="source_name" min="2"><H6>Related people/businesses/organizations</H6></ifcount>}}}
 							{{{<unit relativeTo="ca_entities" excludeRelationshipTypes="source_name" delimiter="<br/>"><l>^ca_entities.preferred_labels.displayname</l> (^relationship_typename)</unit>}}}
+							
+							{{{<ifcount code="ca_occurrences" restrictToTypes="associations" min="1" max="1"><H6>Related Association</H6></ifcount>}}}
+							{{{<ifcount code="ca_occurrences" restrictToTypes="associations" min="2"><H6>Related Associations</H6></ifcount>}}}
+							{{{<unit relativeTo="ca_occurrences" restrictToTypes="associations" delimiter="<br/>"><l>^ca_occurrences.preferred_labels</l> (^relationship_typename)</unit>}}}
+
+							{{{<ifcount code="ca_occurrences" restrictToTypes="publications" min="1" max="1"><H6>Related Publications</H6></ifcount>}}}
+							{{{<ifcount code="ca_occurrences" restrictToTypes="publications" min="2"><H6>Related Publications</H6></ifcount>}}}
+							{{{<unit relativeTo="ca_occurrences" restrictToTypes="publications" delimiter="<br/>"><l>^ca_occurrences.preferred_labels</l> (^relationship_typename)</unit>}}}
 <?php
-							if ($va_related_associations = $t_object->get('ca_occurrences.preferred_labels', array('restrictToTypes' => array('associations'), 'returnAsLink' => true, 'delimiter' => '<br/>', 'checkAccess' => $va_access_values))) {
-								print "<div class='unit'><h6>Related Associations</h6>".$va_related_associations."</div>";
-							}
-							if ($va_related_publications = $t_object->get('ca_occurrences.preferred_labels', array('restrictToTypes' => array('publications'), 'returnAsLink' => true, 'delimiter' => '<br/>', 'checkAccess' => $va_access_values))) {
-								print "<div class='unit'><h6>Related Publications</h6>".$va_related_publications."</div>";
-							}
-							if ($va_related_objects = $t_object->get('ca_objects.related.preferred_labels', array('returnAsLink' => true, 'delimiter' => '<br/>', 'checkAccess' => $va_access_values))) {
-								print "<div class='unit'><h6>Related Objects</h6>".$va_related_objects."</div>";
+							#if ($va_related_associations = $t_object->get('ca_occurrences.preferred_labels', array('restrictToTypes' => array('associations'), 'returnAsLink' => true, 'delimiter' => '<br/>', 'checkAccess' => $va_access_values))) {
+							#	print "<div class='unit'><h6>Related Associations</h6>".$va_related_associations."</div>";
+							#}
+							#if ($va_related_publications = $t_object->get('ca_occurrences.preferred_labels', array('restrictToTypes' => array('publications'), 'returnAsLink' => true, 'delimiter' => '<br/>', 'checkAccess' => $va_access_values))) {
+							#	print "<div class='unit'><h6>Related Publications</h6>".$va_related_publications."</div>";
+							#}
+							if ($va_related_objects = $t_object->get('ca_objects.related', array('returnAsLink' => true, 'delimiter' => '<br/>', 'checkAccess' => $va_access_values, 'returnWithStructure' => true))) {
+								print "<div class='unit'><h6>Related Objects</h6>";
+								foreach ($va_related_objects as $va_id => $va_related_object) {
+									print "<p>".caNavLink($this->request, $va_related_object['name'].', '.$va_related_object['idno'], '', '', 'Detail', 'objects/'.$va_related_object['object_id'])." (".$va_related_object['relationship_typename'].")</p>";
+								}
+								print "</div>";
 							}														
 ?>
 							
