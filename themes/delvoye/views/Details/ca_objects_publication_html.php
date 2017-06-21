@@ -25,7 +25,7 @@
 			<div class='col-sm-6 col-md-6 col-lg-5'>
 				<H4>{{{^ca_objects.preferred_labels.name}}}</H4>
 				
-				{{{<unit relativeTo="ca_entities" restrictToRelationshipTypes="author">^ca_entities.preferred_labels.displayname</unit> <unit relativeTo="ca_objects_x_entities">(^relationship_typename)</unit>}}}
+				{{{<unit relativeTo="ca_entities" restrictToRelationshipTypes="author">^ca_entities.preferred_labels.displayname (^relationship_typename)</unit>}}}
 				<br/>
 				<?php
 				
@@ -37,14 +37,15 @@
 				{{{<unit relativeTo="ca_collections" restrictToTypes="publication" delimiter=", "><l>^ca_collections.hierarchy.preferred_labels.name%delimiter=_➔_</l></unit>}}}
 				
 				<BR/>
+				<BR/>
 				<span style="color:#c0c0c0;">
 				{{{<ifdef code="ca_objects.idno">(^ca_objects.idno)</ifdef>}}}			
 				</span>
-				<HR/>
 				
-				{{{<unit relativeTo="ca_objects"><ifdef code="ca_objects.publication_issue"><H6>Issue</H6></ifdef><unit relativeTo="ca_objects.publication_issue"><ifdef code="ca_objects.publication_issue.issue_title">^ca_objects.publication_issue.issue_title, </ifdef><ifdef code="ca_objects.publication_issue.issue_month">^ca_objects.publication_issue.issue_month, </ifdef><ifdef code="ca_objects.publication_issue.issue_volume">^ca_objects.publication_issue.issue_volume, </ifdef><ifdef code="ca_objects.publication_issue.issue_number">^ca_objects.publication_issue.issue_number</ifdef></unit></unit>}}}
 				
-				{{{<unit relativeTo="ca_entities" restrictToRelationshipTypes="publisher"><ifdef code="ca_entities.type_id"><H6>Publisher</H6></ifdef>^ca_entities.preferred_labels.displayname <unit relativeTo="ca_objects_x_entities" restrictToRelationshipTypes="publisher">(^relationship_typename)</unit></unit>}}}
+				{{{<unit relativeTo="ca_objects"><ifdef code="ca_objects.publication_issue"><H6>Issue</H6></ifdef><unit relativeTo="ca_objects.publication_issue"><ifdef code="ca_objects.publication_issue.issue_title">^ca_objects.publication_issue.issue_title, </ifdef><ifdef code="ca_objects.publication_issue.issue_month">^ca_objects.publication_issue.issue_month, </ifdef><ifdef code="ca_objects.publication_issue.issue_volume">vol. ^ca_objects.publication_issue.issue_volume, </ifdef><ifdef code="ca_objects.publication_issue.issue_number">n° ^ca_objects.publication_issue.issue_number</ifdef></unit></unit>}}}
+				
+				{{{<unit relativeTo="ca_entities" restrictToRelationshipTypes="publisher"><ifdef code="ca_entities.type_id"><H6>Publisher</H6></ifdef>^ca_entities.preferred_labels.displayname (^relationship_typename)</unit>}}}
 				
 				{{{<unit relativeTo="ca_objects"><ifdef code="ca_objects.publication_number"><H6>ISBN / ISSN</H6></ifdef><unit relativeTo="ca_objects.publication_number">^ca_objects.publication_number.isbn<ifdef code="ca_objects.publication_number.issn">, ^ca_objects.publication_number.issn</ifdef><ifdef code="ca_objects.publication_number.other">, ^ca_objects.publication_number.other</ifdef></unit></unit>}}}
 				<?php
@@ -66,9 +67,8 @@
 				
 				{{{<ifcount code="ca_objects.related" restrictToTypes="publication" min="1" max="1"><H6>Related publication</H6></ifcount>}}}
 				{{{<ifcount code="ca_objects.related" restrictToTypes="publication" min="2"><H6>Related publications</H6></ifcount>}}}
-				{{{<unit relativeTo="ca_objects.related" restrictToTypes="publication" delimiter="<br/>"><unit relativeTo="ca_entities" restrictToRelationshipTypes="author" delimiter=", ">^ca_entities.preferred_labels.displayname</unit> "<l>^ca_objects.preferred_labels</l>", ^ca_objects.date <unit relativeTo="ca_collections" restrictToTypes="publication" delimiter="➔">(^ca_collections.hierarchy.preferred_labels.name)</unit></unit>}}}
+				{{{<unit relativeTo="ca_objects.related" restrictToTypes="publication" delimiter="<br/>"><unit relativeTo="ca_entities" restrictToRelationshipTypes="author" delimiter=", ">^ca_entities.preferred_labels.displayname, </unit>"<l>^ca_objects.preferred_labels</l>", ^ca_objects.date <unit relativeTo="ca_collections" restrictToTypes="publication" delimiter=" ➔ ">(^ca_collections.hierarchy.preferred_labels.name)</unit></unit>}}}
 				
-				<HR/>
 				
 				{{{<unit relativeTo="ca_objects.reference"><if rule="^ca_objects.reference.reference_status =~ /approved/"><H6>Reference</H6>^ca_objects.reference.reference_text</if></unit>}}}
 <?php							
