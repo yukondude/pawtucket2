@@ -128,17 +128,19 @@
 									if (!empty($e['dimensions_length'])) {
 										$ps_value = caConvertFractionalNumberToDecimal(trim($e['dimensions_length']), $g_ui_locale);
 										$length = caParseLengthDimension($ps_value);
-										$vs_dimensions .= "L".$length->convertTo('METER', 2);
+										$vs_dimensions .= "L".$length->convertTo('CENTIMETER', 0);
+										if (!empty($e['dimensions_width']) || !empty($e['dimensions_height'])) $vs_dimensions .= " x ";
 									}
 									if (!empty($e['dimensions_width'])) {
 										$ps_value = caConvertFractionalNumberToDecimal(trim($e['dimensions_width']), $g_ui_locale);
 										$width = caParseLengthDimension($ps_value);
-										$vs_dimensions .= " x W".$width->convertTo('METER', 2);
+										$vs_dimensions .= "W".$width->convertTo('CENTIMETER', 0);
+										if (!empty($e['dimensions_height'])) $vs_dimensions .= " x ";
 									}
 									if (!empty($e['dimensions_height'])) {
 										$ps_value = caConvertFractionalNumberToDecimal(trim($e['dimensions_height']), $g_ui_locale);
 										$height = caParseLengthDimension($ps_value);
-										$vs_dimensions .= " x H".$height->convertTo('METER', 2);
+										$vs_dimensions .= "H".$height->convertTo('CENTIMETER', 0);
 									}
 								}
 							}
