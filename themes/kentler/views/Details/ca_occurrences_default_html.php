@@ -120,6 +120,8 @@
 								$vb_no_rep = true;
 							}
 							$vs_caption = "";
+							$vs_sort_key = "";
+							$vs_sort_key = array_shift(explode(" ", $q_artworks->get('ca_entities.preferred_labels.surname', array("restrictToRelationshipTypes" => array("artist"), 'checkAccess' => $va_access_values))));
 							if($vs_artist = $q_artworks->get('ca_entities.preferred_labels.displayname', array("restrictToRelationshipTypes" => array("artist"), 'checkAccess' => $va_access_values))){
 								$vs_caption = $vs_artist.", ";
 							}
@@ -144,12 +146,20 @@
 							$vs_label_detail_link 	= caDetailLink($this->request, $vs_caption, '', 'ca_objects', $q_artworks->get("ca_objects.object_id"));
 							$tmp = array("image" => $vs_image, "label" => $vs_label_detail_link, "image_link" => ($vb_no_rep) ? $vs_image : "<a href='#' onclick='caMediaPanel.showPanel(\"".caNavUrl($this->request, '', 'Detail', 'GetMediaOverlay', array('context' => 'objects', 'id' => $q_artworks->get("ca_objects.object_id"), 'representation_id' => $q_artworks->get("ca_object_representations.representation_id", array("checkAccess" => $va_access_values)), 'overlay' => 1))."\"); return false;' >".$vs_image."</a>");
 							if(!$vb_no_rep){
-								$va_artworks[] = $tmp;
+								if($va_artworks[$vs_sort_key]){
+									$vs_sort_key .= $q_artworks->get("ca_objects.object_id");
+								}
+								$va_artworks[$vs_sort_key] = $tmp;
 							}else{
-								$va_artworks_no_media[] = $tmp;
+								if($va_artworks_no_media[$vs_sort_key]){
+									$vs_sort_key .= $q_artworks->get("ca_objects.object_id");
+								}
+								$va_artworks_no_media[$vs_sort_key] = $tmp;
 							}
 						}
 					}
+					ksort($va_artworks, SORT_NATURAL);
+					ksort($va_artworks_no_media, SORT_NATURAL);
 					$va_all_images = array_merge($va_art_installations, $va_artworks, $va_artworks_no_media);
 					if(sizeof($va_all_images)){
 						print "<H6>"._t("%1 Images", $t_item->get("type_id", array("convertCodesToDisplayText" => true)))."</H6><br/>";
