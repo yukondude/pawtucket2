@@ -89,8 +89,14 @@
 							}
 							$vs_sort_key = strtolower($vs_sort_key);
 							if($va_rep["type_id"] == $vn_promo_type_id){
+								if($va_promos[$vs_sort_key]){
+									$vs_sort_key .= $va_rep["representation_id"];
+								}
 								$va_promos[$vs_sort_key] = $va_tmp;
 							}else{
+								if($va_art_installations[$vs_sort_key]){
+									$vs_sort_key .= $va_rep["representation_id"];
+								}
 								$va_art_installations[$vs_sort_key] = $va_tmp;
 							}
 						}
