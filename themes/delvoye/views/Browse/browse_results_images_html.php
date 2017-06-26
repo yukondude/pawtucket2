@@ -25,6 +25,7 @@
  *
  * ----------------------------------------------------------------------
  */
+ 	require_once(__CA_LIB_DIR__.'/core/Zend/Measure/Length.php');	
  
 	$qr_res 			= $this->getVar('result');				// browse results (subclass of SearchResult)
 	$va_facets 			= $this->getVar('facets');				// array of available browse facets
@@ -115,24 +116,33 @@
 						//Artworks - START
 						//var_dump($qr_res);
 						$vs_publication_purpose = "";
-						$va_collections = $qr_res->get("ca_collections", array("returnWithStructure" => true, "restrictToTypes" => array("object_category"), "checkAccess" => 
-						$va_access_values, "sort" => "ca_collections.preferred_labels.name"));
-						if(sizeof($va_collections)){
-							foreach($va_collections as $va_collection){
-								$vs_publication_purpose .=  "<br/>".caDetailLink($this->request, $va_collection["labels"][1], "", "ca_collections", $va_collection["collection_id"]);
-							}
-						}
-						
+						$va_collections = $qr_res->get("ca_collections", array("returnWithStructure" => false, "restrictToTypes" => array("object_category"), "checkAccess" => $va_access_values, "sort" => "ca_collections.preferred_labels.name"));
+						$vs_publication_purpose .=  "<br/>".$va_collections;
+												
 						//dimensions
 						$vs_dimensions = "";
 						$vs_dim = $qr_res->get('ca_objects.work_dimensions', array("returnWithStructure" => true, convertCodesToDisplayText=>true));
 						foreach ($vs_dim as $d){
 							foreach ($d as $e){
-								if ($e['dimensions_type']=='objects'){
-									if (!empty($e['dimensions_length'])) $vs_dimensions .= "L".$e['dimensions_length'];
-									if (!empty($e['dimensions_width'])) $vs_dimensions .= " x W".$e['dimensions_width'];
-									if (!empty($e['dimensions_height'])) $vs_dimensions .= " x H".$e['dimensions_height'];
+								if (stristr($e['dimensions_type'],'object')){
+									if (!empty($e['dimensions_length'])) {
+										$ps_value = caConvertFractionalNumberToDecimal(trim($e['dimensions_length']), $g_ui_locale);
+										$length = caParseLengthDimension($ps_value);
+										$vs_dimensions .= "L".$length->convertTo('CENTIMETER', 0);
+										if (!empty($e['dimensions_width']) || !empty($e['dimensions_height'])) $vs_dimensions .= " x ";
 									}
+									if (!empty($e['dimensions_width'])) {
+										$ps_value = caConvertFractionalNumberToDecimal(trim($e['dimensions_width']), $g_ui_locale);
+										$width = caParseLengthDimension($ps_value);
+										$vs_dimensions .= "W".$width->convertTo('CENTIMETER', 0);
+										if (!empty($e['dimensions_height'])) $vs_dimensions .= " x ";
+									}
+									if (!empty($e['dimensions_height'])) {
+										$ps_value = caConvertFractionalNumberToDecimal(trim($e['dimensions_height']), $g_ui_locale);
+										$height = caParseLengthDimension($ps_value);
+										$vs_dimensions .= "H".$height->convertTo('CENTIMETER', 0);
+									}
+								}
 							}
 						}
 						//Artworks - END
@@ -140,23 +150,14 @@
 					if ($type==24) {
 					//Publications - START
 						$vs_author = "";
-						$va_entities = $qr_res->get("ca_entities", array("returnWithStructure" => true, "restrictToRelationshipTypes" => array("author"), "checkAccess" => 
+						$va_entities = $qr_res->get("ca_entities", array("returnWithStructure" => false, "restrictToRelationshipTypes" => array("author"), "checkAccess" => 
 						$va_access_values, "sort" => "ca_entities.preferred_labels.name"));
-						if(sizeof($va_entities)){
-							foreach($va_entities as $va_entity){
-								$vs_author .=  caDetailLink($this->request, $va_entity["labels"][1], "", "ca_entities", $va_entity["entity_id"]);
-							}
-						}
+						$vs_author .= $va_entities;
 						
 						$vs_publication_type = "";
-						$va_collections = $qr_res->get("ca_collections", array("returnWithStructure" => true, "restrictToTypes" => array("publication"), "checkAccess" => 
+						$va_collections = $qr_res->get("ca_collections", array("returnWithStructure" => false, "restrictToTypes" => array("publication"), "checkAccess" => 
 						$va_access_values, "sort" => "ca_collections.preferred_labels.name"));
-						if(sizeof($va_collections)){
-							foreach($va_collections as $va_collection){
-								$vs_publication_type .=  caDetailLink($this->request, $va_collection["labels"][1], "", "ca_collections", $va_collection["collection_id"]);
-							}
-						}
-
+						$vs_publication_type .= $va_collections;
 
 					//Publications - END
 					}
@@ -168,14 +169,9 @@
 					}
 					
 					$vs_institution = "";
-					$va_entities = $qr_res->get("ca_entities", array("returnWithStructure" => true, "checkAccess" => 
+					$va_entities = $qr_res->get("ca_entities", array("returnWithStructure" => false, "checkAccess" => 
 					$va_access_values, "sort" => "ca_entities.preferred_labels.name"));
-					if(sizeof($va_entities)){
-						foreach($va_entities as $va_entity){
-							
-							$vs_institution .=  caDetailLink($this->request, $va_entity["labels"][1], "", "ca_entities", $va_entity["entity_id"]);
-						}
-					}
+					$vs_institution .= $va_entities;
 					
 					if($va_images[$vn_id]){
 						$vs_thumbnail = $va_images[$vn_id];

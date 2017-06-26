@@ -37,15 +37,36 @@
 					}
 				}
 				
-				if($t_object->get("ca_objects.work_dimensions")){?>
-					{{{<unit relativeTo="ca_objects.work_dimensions" delimiter=" ">
-						<if rule="^ca_objects.work_dimensions.dimensions_type =~ /object/">
-								<ifdef code="ca_objects.work_dimensions.dimensions_length">L^ca_objects.work_dimensions.dimensions_length</ifdef>
-								<ifdef code="ca_objects.work_dimensions.dimensions_width"> x W^ca_objects.work_dimensions.dimensions_width</ifdef>
-								<ifdef code="ca_objects.work_dimensions.dimensions_height"> x H^ca_objects.work_dimensions.dimensions_height</ifdef>
-							</if>
-						</unit>}}}
-		<?php	}
+				if($t_object->get("ca_objects.work_dimensions")){
+					//dimensions
+					$vs_dimensions = "";
+					//print_r($t_object->get("ca_objects.work_dimensions", array("returnWithStructure" => true, convertCodesToDisplayText=>true)));
+					$vs_dim = $t_object->get('ca_objects.work_dimensions', array("returnWithStructure" => true, convertCodesToDisplayText=>true));
+					foreach ($vs_dim as $d){
+						foreach ($d as $e){
+							if (stristr($e['dimensions_type'],'object')){
+								if (!empty($e['dimensions_length'])) {
+									$ps_value = caConvertFractionalNumberToDecimal(trim($e['dimensions_length']), $g_ui_locale);
+									$length = caParseLengthDimension($ps_value);
+									$vs_dimensions .= "L".$length->convertTo('CENTIMETER', 0);
+									if (!empty($e['dimensions_width']) || !empty($e['dimensions_height'])) $vs_dimensions .= " x ";
+								}
+								if (!empty($e['dimensions_width'])) {
+									$ps_value = caConvertFractionalNumberToDecimal(trim($e['dimensions_width']), $g_ui_locale);
+									$width = caParseLengthDimension($ps_value);
+									$vs_dimensions .= "W".$width->convertTo('CENTIMETER', 0);
+									if (!empty($e['dimensions_height'])) $vs_dimensions .= " x ";
+								}
+								if (!empty($e['dimensions_height'])) {
+									$ps_value = caConvertFractionalNumberToDecimal(trim($e['dimensions_height']), $g_ui_locale);
+									$height = caParseLengthDimension($ps_value);
+									$vs_dimensions .= "H".$height->convertTo('CENTIMETER', 0);
+								}
+							}
+						}
+					}
+					echo $vs_dimensions;
+				}
 				
 				?>
 				<BR/>
@@ -53,14 +74,12 @@
 				<span style="color:#c0c0c0;">
 				{{{<ifdef code="ca_objects.idno">(^ca_objects.idno)</ifdef>}}}			
 				</span>
-				<HR/>
 				
 				<H6>Collections</H6>
 				{{{<unit relativeTo="ca_collections" restrictToTypes="artwork_category" delimiter=", "><l>^ca_collections.hierarchy.preferred_labels.name%delimiter=_➔_</l></unit>}}}
 				<H6>Keywords</H6>
 				{{{<unit relativeTo="ca_collections" restrictToTypes="keyword" delimiter=", "><l>^ca_collections.preferred_labels.name</l></unit>}}}
 
-				<HR/>
 				
 				
 				{{{<ifcount code="ca_objects.related" restrictToTypes="artwork" min="1" max="1"><H6>Related artwork</H6></ifcount>}}}
@@ -75,9 +94,9 @@
 				
 				{{{<ifcount code="ca_objects.related" restrictToTypes="publication" min="1" max="1"><H6>Related publication</H6></ifcount>}}}
 				{{{<ifcount code="ca_objects.related" restrictToTypes="publication" min="2"><H6>Related publications</H6></ifcount>}}}
-				{{{<unit relativeTo="ca_objects.related" restrictToTypes="publication" delimiter="<br/>"><unit relativeTo="ca_entities" restrictToRelationshipTypes="author" delimiter=", ">^ca_entities.preferred_labels.displayname</unit> "<l>^ca_objects.preferred_labels</l>", ^ca_objects.date <unit relativeTo="ca_collections" restrictToTypes="publication" delimiter="➔">(^ca_collections.hierarchy.preferred_labels.name)</unit></unit>}}}
+				{{{<unit relativeTo="ca_objects.related" restrictToTypes="publication" delimiter="<br/>"><unit relativeTo="ca_entities" restrictToRelationshipTypes="author" delimiter=", ">^ca_entities.preferred_labels.displayname, </unit>"<l>^ca_objects.preferred_labels</l>", ^ca_objects.date <unit relativeTo="ca_collections" restrictToTypes="publication" delimiter=" ➔ ">(^ca_collections.hierarchy.preferred_labels.name)</unit></unit>}}}
 				
-				<HR/>
+				
 <?php							
 				if($t_object->get("ca_objects.edition_c.edition_text")){
 					print "<H6>Editions</H6>".$t_object->get("ca_objects.edition_c.edition_text")."<br/>";
