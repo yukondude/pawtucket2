@@ -29,6 +29,7 @@
 	$vs_lightbox_sectionHeading = ucFirst($va_lightboxDisplayName["section_heading"]);
 	$va_classroomDisplayName = caGetClassroomDisplayName();
 	$vs_classroom_sectionHeading = ucFirst($va_classroomDisplayName["section_heading"]);
+	$va_access_values = caGetUserAccessValues($this->request);
 	
 	# Collect the user links: they are output twice, once for toggle menu and once for nav
 	$va_user_links = array();
@@ -48,12 +49,27 @@
 		if (!$this->request->config->get('dont_allow_registration_and_login')) { $va_user_links[] = "<li><a href='#' onclick='caMediaPanel.showPanel(\"".caNavUrl($this->request, '', 'LoginReg', 'RegisterForm', array())."\"); return false;' >"._t("Register")."</a></li>"; }
 	}
 	$vb_has_user_links = (sizeof($va_user_links) > 0);
+	if (($this->request->getController() == "Detail") && ($this->request->getAction() == "objects")){
+		$vn_object_meta_id = $this->request->getActionExtra();
+		$t_meta_object = new ca_objects($vn_object_meta_id);
+		$va_reps = $t_meta_object->getPrimaryRepresentation(array('large'), null, array('return_with_access' => $va_access_values));
+		$va_og_tag = $va_reps['urls']['large']; 
+		$va_og_url = caNavUrl($this->request, 'Detail', 'objects', $vn_object_meta_id, array(), array('absolute' => 1));
+		$va_og_title = $t_meta_object->get('ca_objects.preferred_labels');
+	}
 
 ?><!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:fb="http://ogp.me/ns/fb#">
 	<head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0"/>
+	<meta property="og:image" content="<?php print $va_og_tag;?>"/>
+	<meta property="og:url" content="<?php print $va_og_url;?>"/>
+	<meta property="og:title" content="<?php print $va_og_title;?>"/>
+	<meta property="og:site_name" content="Craigdarroch Castle Collection"/>
+	<meta property="og:type" content="website"/> 
+
 	<?php print MetaTagManager::getHTML(); ?>
 	<?php print AssetLoadManager::getLoadHTML($this->request); ?>
 
