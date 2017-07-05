@@ -133,6 +133,7 @@
  				$va_set_item = array_shift(array_shift($t_set->getFirstItemsFromSets(array($pn_set_id), array("version" => "large", "checkAccess" => $this->opa_access_values))));
  			}
  			$this->view->setVar("set_item", $va_set_item);
+
  			$this->render("Gallery/set_info_html.php");
  		}
 		# -------------------------------------------------------
