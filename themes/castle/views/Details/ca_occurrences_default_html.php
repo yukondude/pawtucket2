@@ -60,6 +60,7 @@
 					
 				</div><!-- end col -->
 				<div class='col-md-6 col-lg-6'>
+				{{{representationViewer}}}
 <?php
 				$vs_rel_doc = "";
 				if ($va_related_documents = $t_item->get('ca_occurrences.attachment', array('returnWithStructure' => true))) {
