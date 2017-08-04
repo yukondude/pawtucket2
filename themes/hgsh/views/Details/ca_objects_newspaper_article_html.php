@@ -78,7 +78,7 @@
 	if(is_array($va_detail_collections) && sizeof($va_detail_collections)){
 		$q_detail_collections = caMakeSearchResult('ca_collections', $va_detail_collections);
 		if($q_detail_collections->numHits()){
-			print "<div class='row'><div class='col-sm-12'><div class='btn btn-default'>"._t("Detailed History")."</div></div></div><!-- end row -->\n";
+			print "<div class='btn btn-default'>Detailed Histor".((sizeof($va_detail_collections) > 1) ? "ies" : "y")."</div>";
 			$i = 0;
 			while($q_detail_collections->nextHit()){
 				if($i > 0){
@@ -112,7 +112,7 @@
 		}
 		print "</div>";
 	}
-	$va_collections = $t_item->get("ca_collections", array("returnWithStructure" => true, "checkAccess" => $va_access_values));
+	$va_collections = $t_item->get("ca_collections", array("returnWithStructure" => true, 'excludeRelationshipTypes' => array('featured', 'history'),"checkAccess" => $va_access_values));
 	if(sizeof($va_collections)){
 		print "<div class='btn btn-default'>Related collection".((sizeof($va_collections) > 1) ? "s" : "")."</div>";
 		$t_rel_collection = new ca_collections();

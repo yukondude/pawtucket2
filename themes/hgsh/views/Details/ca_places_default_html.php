@@ -94,7 +94,6 @@
 				}
 			}
 		}
-   # print "<br/><p class='viewAll'>".caNavLink($this->request, _t("View all related objects"), "btn btn-default", "", "Browse", "objects", array("facet" => "entity_org_facet", "id" => $t_item->get("entity_id")))."</p>";
 ?>
 </div><!-- end col -->
 <div class='col-sm-4'>
@@ -139,7 +138,7 @@
 		if(is_array($va_detail_collections) && sizeof($va_detail_collections)){
 			$q_detail_collections = caMakeSearchResult('ca_collections', $va_detail_collections);
 			if($q_detail_collections->numHits()){
-				print "<div class='row'><div class='col-sm-12'><div class='btn btn-default'>"._t("Detailed History")."</div></div></div><!-- end row -->\n";
+				print "<div class='btn btn-default'>Detailed Histor".((sizeof($va_detail_collections) > 1) ? "ies" : "y")."</div>";
 				$i = 0;
 				while($q_detail_collections->nextHit()){
 					if($i > 0){

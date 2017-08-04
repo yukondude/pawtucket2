@@ -106,7 +106,7 @@
 	if(is_array($va_featured_collections) && sizeof($va_featured_collections)){
 		$q_featured_collections = caMakeSearchResult('ca_collections', $va_featured_collections);
 		if($q_featured_collections->numHits()){
-			print "<div class='btn btn-default'>".((sizeof($q_featured_collections) > 1) ? "s" : "")."</div>";
+			print "<div class='btn btn-default'>Featured Collection".((sizeof($va_featured_collections) > 1) ? "s" : "")."</div>";
 			$i = 0;
 			while($q_featured_collections->nextHit()){
 				if($i > 0){
@@ -131,7 +131,7 @@
 	if(is_array($va_detail_collections) && sizeof($va_detail_collections)){
 		$q_detail_collections = caMakeSearchResult('ca_collections', $va_detail_collections);
 		if($q_detail_collections->numHits()){
-			print "<div class='row'><div class='col-sm-12'><div class='btn btn-default'>"._t("Detailed History")."</div></div></div><!-- end row -->\n";
+			print "<div class='btn btn-default'>Detailed Histor".((sizeof($va_detail_collections) > 1) ? "ies" : "y")."</div>";
 			$i = 0;
 			while($q_detail_collections->nextHit()){
 				if($i > 0){
@@ -154,9 +154,9 @@
 	}
 	$t_object_thumb = new ca_objects();
 	# Related Collections
-	$va_collections = $t_item->get("ca_collections", array("returnWithStructure" => true, 'excludeRelationshipTypes' => array('featured'),"checkAccess" => $va_access_values));
+	$va_collections = $t_item->get("ca_collections", array("returnWithStructure" => true, 'excludeRelationshipTypes' => array('featured', 'history'),"checkAccess" => $va_access_values));
 	if(sizeof($va_collections)){
-		print "<div class='btn btn-default'>Related collection".((sizeof($va_collections) > 1) ? "s" : "")."</div>";
+		print "<div class='btn btn-default'>Related Collection".((sizeof($va_collections) > 1) ? "s" : "")."</div>";
 		$t_rel_collection = new ca_collections();
 		$i = 0;
 		foreach($va_collections as $va_collection){
