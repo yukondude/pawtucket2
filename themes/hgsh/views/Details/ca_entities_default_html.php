@@ -6,6 +6,7 @@
 	$va_featured_items = $t_item->get("ca_objects.object_id", array("returnWithStructure" => true, "checkAccess" => $va_access_values));
 	$va_featured_collections = $t_item->get("ca_collections.collection_id", array("returnWithStructure" => true, "restrictToRelationshipTypes" => array("featured"), "checkAccess" => $va_access_values));
 	$va_detail_collections = $t_item->get("ca_collections.collection_id", array("returnWithStructure" => true, "restrictToRelationshipTypes" => array("history"), "checkAccess" => $va_access_values));
+	$vs_additional_info = $t_item->get('ca_entities.additional_info');
 
 ?>
 <div class="row">
@@ -32,10 +33,10 @@
 ?>
 	{{{<ifdef code="ca_entities.history"><p>^ca_entities.history</p></ifdef>}}}
 	{{{<ifdef code="ca_entities.biography"><p>^ca_entities.biography</p></ifdef>}}}
-	{{{<ifdef code="ca_entities.additional_info">
+	<!--{{{<ifdef code="ca_entities.additional_info">
 			<div class="detailMoreInfo" id="additional_info_link"><a href="#" onClick="jQuery('#additional_info').toggle(); jQuery('#additional_info_link').toggle(); return false;">Read More <span class="glyphicon glyphicon-arrow-down small"></span></a></div>
 			<p id='additional_info' style='display:none;'>^ca_entities.additional_info<br/><a href="#" onClick="jQuery('#additional_info').toggle(); jQuery('#additional_info_link').toggle(); return false;" class="detailMoreInfo">Hide <span class="glyphicon glyphicon-arrow-up"></span></a></p>
-	</ifdef>}}}
+	</ifdef>}}}-->
 {{{<ifcount code="ca_objects" restrictToRelationshipTypes="article_mention" min="1"><div class='btn btn-default'>News Articles</div></ifcount>
 <unit relativeTo="ca_objects" delimiter="<hr/>" restrictToRelationshipTypes="article_mention" length="10" sort="ca_objects.parent.date.dates_values" sortDirection="ASC">
 	<div class="row">
@@ -102,6 +103,11 @@
 <div class='col-sm-4'>
 	<div class="detailTitle">{{{^ca_entities.preferred_labels.displayname}}}</div>
 <?php
+	#Additional Information
+	if(strlen($vs_additional_info) > 0){
+		print "<div class='btn btn-default'>Additional Info</div>";
+		print $vs_additional_info;
+	}
 	#featured collections
 	if(is_array($va_featured_collections) && sizeof($va_featured_collections)){
 		$q_featured_collections = caMakeSearchResult('ca_collections', $va_featured_collections);

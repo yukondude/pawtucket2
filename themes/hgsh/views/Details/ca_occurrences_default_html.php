@@ -34,8 +34,8 @@
 			<div class="detailMoreInfo" id="additional_info_link"><a href="#" onClick="jQuery('#additional_info').toggle(); jQuery('#additional_info_link').toggle(); return false;">Read More <span class="glyphicon glyphicon-arrow-down small"></span></a></div>
 			<p id='additional_info' style='display:none;'>^ca_occurrences.additional_info<br/><a href="#" onClick="jQuery('#additional_info').toggle(); jQuery('#additional_info_link').toggle(); return false;" class="detailMoreInfo">Hide <span class="glyphicon glyphicon-arrow-up"></span></a></p>
 	</ifdef>}}}
-{{{<ifcount code="ca_objects" restrictToRelationshipTypes="article_mention" min="1"><div class='btn btn-default'>News Articles</div></ifcount>
-<unit relativeTo="ca_objects" delimiter="<hr/>" restrictToRelationshipTypes="article_mention" length="10" sort="ca_objects.parent.date.dates_values" sortDirection="ASC">
+{{{<ifcount code="ca_objects" restrictToRelationshipTypes="article_mention" min="1"><div class='btn btn-default'>News Articles</div></ifcount>}}}
+{{{<unit relativeTo="ca_objects" delimiter="<hr/>" restrictToRelationshipTypes="article_mention" length="10" sort="ca_objects.parent.date.dates_values" sortDirection="ASC">
 	<div class="row">
 		<div class="col-sm-2 detailRelatedThumb">
 			<case>
@@ -54,8 +54,8 @@
 			<unit relativeTo="ca_objects.parent"><p>(<l>^ca_objects.preferred_labels.name</l>)</p></unit>
 		</div>
 	</div>
-</unit>
-<ifcount code="ca_objects" restrictToRelationshipTypes="article_mention" min="1"><p class='viewAll'><?php print caNavLink($this->request, ''._t('See all Articles'), 'btn btn-default', '', 'Search', 'articles', array('search' => $t_item->get('ca_entities.idno'))); ?></p></ifcount>}}}
+</unit>}}}
+{{{<ifcount code="ca_objects" restrictToRelationshipTypes="article_mention" min="1"><p class='viewAll'><?php print caNavLink($this->request, ''._t('See all Articles'), 'btn btn-default', '', 'Search', 'articles', array('search' => $t_item->get('ca_entities.idno'))); ?></p></ifcount>}}}
 <?php
 		#featured objects
 		if(is_array($va_featured_items) && sizeof($va_featured_items)){
@@ -153,14 +153,14 @@
 	$va_collections = $t_item->get("ca_collections", array("returnWithStructure" => true, 'excludeRelationshipTypes' => array('featured', 'history'),"checkAccess" => $va_access_values));
 	if(sizeof($va_collections)){
 		print "<div class='btn btn-default'>Related collection".((sizeof($va_collections) > 1) ? "s" : "")."</div>";
-		$t_rel_collection = new ca_collections();
+		//$t_rel_collection = new ca_collections();
 		$i = 0;
 		foreach($va_collections as $va_collection){
 			if($i > 0){
 				print "<HR/>";
 			}
-			$t_rel_collection->load($va_collection["collection_id"]);
-			$t_object_thumb->load($t_rel_collection->get("ca_objects.object_id", array("restrictToRelationshipTypes" => array("cover"), "checkAccess" => $va_access_values)));
+			$t_rel_collection = new ca_collections($va_collection["collection_id"]);
+			$t_object_thumb = new ca_objects($t_rel_collection->get("ca_objects.object_id", array("restrictToRelationshipTypes" => array("cover"), "checkAccess" => $va_access_values)));
 			$vs_thumb = $t_object_thumb->get("ca_object_representations.media.iconlarge", array("checkAccess" => $va_access_values, "limit" => 1));
 			print "<div class='row'><div class='col-sm-4 col-md-4 col-lg-4 detailRelatedThumb'>".$vs_thumb."</div>\n";
 			print "<div class='col-sm-8 col-md-8 col-lg-8'>\n";
@@ -185,7 +185,7 @@
 		}
 		print "</div>";
 	}
-	$t_object_thumb = new ca_objects();
+	//$t_object_thumb = new ca_objects();
 	$va_entities = $t_item->get("ca_entities", array("returnWithStructure" => true, "checkAccess" => $va_access_values));
 	if(sizeof($va_entities)){
 		if(sizeof($va_entities) == 1){
@@ -193,14 +193,14 @@
 		}else{
 			print "<div class='btn btn-default'>Related people/organisations</div>";
 		}
-		$t_rel_entity = new ca_entities();
+		//$t_rel_entity = new ca_entities();
 		$i = 0;
 		foreach($va_entities as $va_entity){
 			if($i > 0){
 				print "<HR/>";
 			}
-			$t_rel_entity->load($va_entity["entity_id"]);
-			$t_object_thumb->load($t_rel_entity->get("ca_objects.object_id", array("restrictToRelationshipTypes" => array("cover"), "checkAccess" => $va_access_values)));
+			$t_rel_entity = new ca_entities($va_entity["entity_id"]);
+			$t_object_thumb = new ca_objects($t_rel_entity->get("ca_objects.object_id", array("restrictToRelationshipTypes" => array("cover"), "checkAccess" => $va_access_values)));
 			$vs_thumb = $t_object_thumb->get("ca_object_representations.media.iconlarge", array("checkAccess" => $va_access_values, "limit" => 1));
 			print "<div class='row'><div class='col-sm-4 col-md-4 col-lg-4 detailRelatedThumb'>".$vs_thumb."</div>\n";
 			print "<div class='col-sm-8 col-md-8 col-lg-8'>\n";
