@@ -36,7 +36,7 @@
 			<div class="row">
 			<div class="col-xs-6">
 				<div class="hpBrowseImage">
-					<?php print caNavLink($this->request, caGetThemeGraphic($this->request, 'hp_images/history.jpg')."<div class='hpBrowseTitle'>History</div>", "", "", "Detail", "collections/64"); ?>
+					<?php print caNavLink($this->request, caGetThemeGraphic($this->request, 'hp_images/history.jpg')."<div class='hpBrowseTitle'>History of the Suburb</div>", "", "", "Detail", "collections/64"); ?>
 				</div>
 			</div>			
 			<div class="col-xs-6">
@@ -77,6 +77,11 @@
 			</div>
 		</div>
 -->		
+		<div class="col-xs-6 col-sm-3">
+			<div class="hpBrowseImage">
+				<?php print caNavLink($this->request, caGetThemeGraphic($this->request, 'hp_images/suburb_news.png')."<div class='hpBrowseTitle'>Suburb News</div>", "", "", "Browse", "newspapers"); ?>
+			</div>
+		</div>
 		<div class="col-xs-6 col-sm-3">
 			<div class="hpBrowseImage">
 				<?php print caNavLink($this->request, caGetThemeGraphic($this->request, 'hp_images/collections.jpg')."<div class='hpBrowseTitle'>Collections</div>", "", "", "Browse", "collections"); ?>

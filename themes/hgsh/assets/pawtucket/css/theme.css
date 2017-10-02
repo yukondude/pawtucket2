@@ -391,7 +391,7 @@ nav, .navbar, .navbar-default{
 }
 /* footer */
 #footer{
-	margin:15px 0px 65px 0px;
+	margin:15px 0px 0px 0px;
 	padding-top:20px;
 	border-top: 1px solid #717B67;
 	font-size:11px;
