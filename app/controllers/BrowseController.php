@@ -93,6 +93,13 @@
  			
 			$vb_is_nav = (bool)$this->request->getParameter('isNav', pString);
 			
+			if(ExternalCache::contains("{$vs_class}totalRecordsAvailable")) {
+				$this->view->setVar('totalRecordsAvailable', ExternalCache::fetch("{$vs_class}totalRecordsAvailable"));
+			} else {
+				ExternalCache::save("{$vs_class}totalRecordsAvailable", $vn_count = $vs_class::find(['deleted' => 0], ['checkAccess' => $this->opa_access_values, 'returnAs' => 'count', 'restrictToTypes' => (sizeof($va_types)) ? $va_types : null]));
+				$this->view->setVar('totalRecordsAvailable', $vn_count);
+			}
+			
 			# --- row id passed when click back button on detail page - used to load results to and jump to last viewed item
 			$this->view->setVar('row_id', $pn_row_id = $this->request->getParameter('row_id', pInteger));
  			
@@ -125,7 +132,7 @@
  				$ps_view = array_shift(array_keys($va_views));
  			}
  			# --- only set the current view if it's not an export format
- 			if(!in_array($ps_view, array("pdf", "xlsx", "pptx"))){
+ 			if(!in_array($ps_view, array("pdf", "xlsx", "pptx", "timelineData"))){
  				$this->opo_result_context->setCurrentView($ps_view);
  			}
  			
@@ -183,7 +190,7 @@
 			$va_base_criteria = caGetOption('baseCriteria', $va_browse_info, null);
 			
 			if ($vs_facet = $this->request->getParameter('facet', pString)) {
-				$o_browse->addCriteria($vs_facet, array($this->request->getParameter('id', pString)));
+				$o_browse->addCriteria($vs_facet, explode('|', $this->request->getParameter('id', pString)));
 			} else { 
 				if ($o_browse->numCriteria() == 0) {
 					if (is_array($va_base_criteria)) {
@@ -200,9 +207,10 @@
 			// Sorting
 			//
 			$vb_sort_changed = false;
- 			if (!($ps_sort = $this->request->getParameter("sort", pString))) {
- 				if (!($ps_sort = $this->opo_result_context->getCurrentSort())) {
- 					if(is_array(($va_sorts = caGetOption('sortBy', $va_browse_info, null)))) {
+ 			if (!($ps_sort = urldecode($this->request->getParameter("sort", pString)))) {
+ 				$ps_sort = $this->opo_result_context->getCurrentSort();
+ 				if(is_array($va_sorts = caGetOption('sortBy', $va_browse_info, null))) {
+ 					if (!$ps_sort || (!in_array($ps_sort, array_keys($va_sorts)))) {
  						$ps_sort = array_shift(array_keys($va_sorts));
  						$vb_sort_changed = true;
  					}
@@ -245,7 +253,10 @@
 				unset($va_criteria['_search']);
 			} 
 
-			$o_browse->execute(array('checkAccess' => $this->opa_access_values, 'showAllForNoCriteriaBrowse' => true));
+
+ 			$vb_expand_results_hierarchically = caGetOption('expandResultsHierarchically', $va_browse_info, array(), array('castTo' => 'bool'));
+ 			
+			$o_browse->execute(array('checkAccess' => $this->opa_access_values, 'showAllForNoCriteriaBrowse' => true, 'expandResultsHierarchically' => $vb_expand_results_hierarchically));
 			
 			//
 			// Facets
@@ -293,15 +304,17 @@
 				$ps_sort_direction = 'asc';
 			}
 			$qr_res = $o_browse->getResults(array('sort' => $vs_sort_fld, 'sort_direction' => $ps_sort_direction));
-			
-			if ($vs_letter_bar_field = caGetOption('showLetterBarFrom', $va_browse_info, null)) { // generate letter bar
-				$va_letters = array();
-				while($qr_res->nextHit()) {
-					$va_letters[caRemoveAccents(mb_strtolower(mb_substr(trim(trim($qr_res->get($vs_letter_bar_field), "0")), 0, 1)))]++;
+			$va_show_letter_bar_sorts = caGetOption('showLetterBarSorts', $va_browse_info, null);
+			if(is_array($va_show_letter_bar_sorts) && in_array($vs_sort_fld, $va_show_letter_bar_sorts)){
+				if ($vs_letter_bar_field = caGetOption('showLetterBarFrom', $va_browse_info, null)) { // generate letter bar
+					$va_letters = array();
+					while($qr_res->nextHit()) {
+						$va_letters[caRemoveAccents(mb_strtolower(mb_substr(trim(trim($qr_res->get($vs_letter_bar_field), "0")), 0, 1)))]++;
+					}
+					ksort($va_letters, SORT_STRING);
+					$this->view->setVar('letterBar', $va_letters);
+					$qr_res->seek(0);
 				}
-				ksort($va_letters, SORT_STRING);
-				$this->view->setVar('letterBar', $va_letters);
-				$qr_res->seek(0);
 			}
 			$this->view->setVar('showLetterBar', (bool)$vs_letter_bar_field);
 			if($this->request->getParameter('l', pString)){
@@ -344,9 +357,9 @@
 			$this->opo_result_context->setParameter('key', $vs_key);
 			
 			if (!$this->request->isAjax()) {
-				if (($vn_key_start = $vn_start - 5000) < 0) { $vn_key_start = 0; }
+				if (($vn_key_start = (int)$vn_start - 1000) < 0) { $vn_key_start = 0; }
 				$qr_res->seek($vn_key_start);
-				$this->opo_result_context->setResultList($qr_res->getPrimaryKeyValues(5000));
+				$this->opo_result_context->setResultList($qr_res->getPrimaryKeyValues(1000));
 				$qr_res->seek($vn_start);
 			}
 				
@@ -358,14 +371,14 @@
  			
  			// map
 			if ($ps_view === 'map') {
-				$va_opts = array('renderLabelAsLink' => false, 'request' => $this->request, 'color' => '#cc0000');
+				$va_opts = array('renderLabelAsLink' => false, 'request' => $this->request, 'color' => '#cc0000', 'label' => 'ca_places.preferred_labels.name', 'content' => 'ca_places.preferred_labels.name');
 		
 				$va_opts['ajaxContentUrl'] = caNavUrl($this->request, '*', '*', 'AjaxGetMapItem', array('browse' => $ps_function,'view' => $ps_view));
 			
 				$o_map = new GeographicMap(caGetOption("width", $va_view_info, "100%"), caGetOption("height", $va_view_info, "600px"));
 				$qr_res->seek(0);
 				$o_map->mapFrom($qr_res, $va_view_info['data'], $va_opts);
-				$this->view->setVar('map', $o_map->render('HTML', array()));
+				$this->view->setVar('map', $o_map->render('HTML', array('circle' => 0, 'minZoomLevel' => 2, 'maxZoomLevel' => 11, 'request' => $this->request)));
 			}
  			
  			switch($ps_view) {

@@ -32,6 +32,7 @@
 	$vn_share_enabled = 	$this->getVar("shareEnabled");
 	$va_access_values = $this->getVar('access_values');
 	$vn_object_id = 		$t_object->get('ca_objects.object_id');
+	$va_access_values = 	$this->getVar('access_values');
 	
 	$vs_home = caNavLink($this->request, "Home", '', '', '', '');
 	$vs_type = $t_object->get('ca_objects.type_id', array('convertCodesToDisplayText' => true));
@@ -140,7 +141,7 @@
 					$vs_rights_text.= "<h8>Rights Holder</h8>";
 					$vs_rights_text.= "<div>".$vs_rights_statement."</div>";
 				}	
-				if ($vs_licensing = caNavLink($this->request, 'Licensing', '', '', 'About', 'licensing')) {
+				if ($vs_licensing = caNavLink($this->request, 'Licensing', '', '', 'About', 'use')) {
 					$vs_rights = true;
 					$vs_rights_text.= "<div class='unit'><h8>".$vs_licensing."</h8></div>";
 				}
@@ -274,7 +275,7 @@
 			#Entities
 			$vs_related_entities = "";
 			$va_ents_by_type = array();
-			if ($va_related_entities = $t_object->get('ca_entities', array('checkAccess' => $va_access_values, 'returnWithStructure' => true))) {
+			if ($va_related_entities = $t_object->get('ca_entities', array('checkAccess' => $va_access_values, 'returnWithStructure' => true, 'excludeRelationshipTypes' => array('donor')))) {
 				foreach ($va_related_entities as $va_key => $va_related_entity) {
 					$va_ents_by_type[$va_related_entity['item_type_id']][$va_related_entity['entity_id']] = "<div class='col-sm-4'><div class='entityThumb'><p>".caNavLink($this->request, $va_related_entity['label'], '', '', 'Detail', 'entities/'.$va_related_entity['entity_id'])." (".$va_related_entity['relationship_typename'].")</p></div></div>";
 				}

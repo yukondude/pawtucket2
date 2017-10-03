@@ -532,10 +532,11 @@
 			$va_sql_params = [];
 			
 			$vs_type_restriction_sql = '';
+			$va_type_restriction_params = [];
 			if ($va_restrict_to_types = caGetOption('restrictToTypes', $pa_options, null)) {
 				if (is_array($va_restrict_to_types = caMakeTypeIDList($vs_table, $va_restrict_to_types)) && sizeof($va_restrict_to_types)) {
-					$vs_type_restriction_sql = " {$vs_table}.".$t_instance->getTypeFieldName()." IN (?) AND ";
-					$va_sql_params[] = $va_restrict_to_types;
+					$vs_type_restriction_sql = "{$vs_table}.".$t_instance->getTypeFieldName()." IN (?)";
+					$va_type_restriction_params[] = $va_restrict_to_types;
 				}
 			}
 			
@@ -599,29 +600,37 @@
 			//
 			// Begin query building
 			//
-			$va_joins = $va_sql_wheres = $va_label_sql = [];
+			$va_joins = $va_label_sql = [];
 			
 			if ($vb_has_simple_fields) {				
 				//
 				// Convert type id
 				//
 				if ($t_instance->ATTRIBUTE_TYPE_LIST_CODE) {
-					if (isset($pa_values[$t_instance->ATTRIBUTE_TYPE_ID_FLD]) && !is_numeric($pa_values[$t_instance->ATTRIBUTE_TYPE_ID_FLD])) {
+					if (isset($pa_values[$vs_type_field_name = $t_instance->getTypeFieldName()]) && !is_numeric($pa_values[$vs_type_field_name])) {
 						
-						$va_field_values = $pa_values[$t_instance->ATTRIBUTE_TYPE_ID_FLD];
+						$va_field_values = $pa_values[$vs_type_field_name];
 						foreach($va_field_values as $vn_i => $va_field_value) {
 							$vs_op = strtolower($va_field_value[0]);
 							$vm_value = $va_field_value[1];
 				
 							if (!is_numeric($vm_value)) {
-								if ($vn_id = ca_lists::getItemID($t_instance->ATTRIBUTE_TYPE_LIST_CODE, $vm_value)) {
-									$pa_values[$t_instance->ATTRIBUTE_TYPE_ID_FLD][$vn_i] = ['=', $vn_id];
+								if (is_array($vm_value)) {
+									$va_trans_vals = [];
+									foreach($vm_value as $vn_j => $vs_value) {
+										if ($vn_id = ca_lists::getItemID($t_instance->getTypeListCode(), $vs_value)) {
+											$va_trans_vals[] = $vn_id;
+										}
+										$pa_values[$vs_type_field_name][$vn_i] = [$vs_op, $va_trans_vals];
+									}
+								} elseif ($vn_id = ca_lists::getItemID($t_instance->getTypeListCode(), $vm_value)) {
+									$pa_values[$vs_type_field_name][$vn_i] = [$vs_op, $vn_id];
 								}
 							}
 						}
 					}
 				}
-			
+				
 				//
 				// Convert other intrinsic list references
 				//
@@ -741,6 +750,8 @@
 				$va_joins[] = " INNER JOIN ca_attributes ON ca_attributes.row_id = {$vs_table}.{$vs_table_pk} AND ca_attributes.table_num = {$vn_table_num} ";
 				$va_joins[] = " INNER JOIN ca_attribute_values ON ca_attribute_values.attribute_id = ca_attributes.attribute_id ";
 
+                $vn_attr_count = 0;
+                $va_attr_sql = $va_attr_params = [];
 				foreach($pa_values as $vs_field => $va_field_values) {
 					foreach ($va_field_values as $vs_key => $va_field_values_by_key) {
 						if (is_array($va_field_values_by_key) && isset($va_field_values_by_key[0]) && !is_array($va_field_values_by_key[0]) && caIsValidSqlOperator($va_field_values_by_key[0], ['nullable' => true, 'isList' => true])) {
@@ -754,6 +765,7 @@
 					
 							$va_q = [];
 							if (($vn_element_id = array_search($vs_field, $va_element_codes)) !== false) {
+							    $vn_attr_count++;
 								switch($vn_datatype = ca_metadata_elements::getElementDatatype($vs_field)) {
 									case __CA_ATTRIBUTE_VALUE_CONTAINER__:
 										$va_subelement_codes = $t_instance->getApplicableElementCodes($vn_element_id, true, true);
@@ -782,7 +794,7 @@
 												$va_q[] = "{$vs_q} (ca_attribute_values.{$vs_subfld} {$vs_op} ?)";
 											}
 									
-											$va_sql_params[] = $vm_value;
+											$va_attr_params[] = $vm_value;
 								
 										}
 										break;
@@ -794,7 +806,7 @@
 									case __CA_ATTRIBUTE_VALUE_DATERANGE__:
 										if(is_array($va_date = caDateToHistoricTimestamps($vm_value))) {
 											$va_q[] = "(ca_attribute_values.element_id = {$vn_element_id}) AND ((ca_attribute_values.value_decimal1 BETWEEN ? AND ?) OR (ca_attribute_values.value_decimal2 BETWEEN ? AND ?))";
-											array_push($va_sql_params, $va_date['start'], $va_date['end'], $va_date['start'], $va_date['end']);
+											array_push($va_attr_params, $va_date['start'], $va_date['end'], $va_date['start'], $va_date['end']);
 										} else {
 											continue(2);
 										}
@@ -802,7 +814,7 @@
 									case __CA_ATTRIBUTE_VALUE_CURRENCY__:
 										if (is_array($va_parsed_value = caParseCurrencyValue($vm_value))) {
 											$va_q[] = "(ca_attribute_values.element_id = {$vn_element_id}) AND ((ca_attribute_values.value_longtext1 = ?) OR (ca_attribute_values.value_decimal1 {$vs_op} ?))";
-											array_push($va_sql_params, $va_parsed_value['currency'], $va_parsed_value['value']);
+											array_push($va_attr_params, $va_parsed_value['currency'], $va_parsed_value['value']);
 										} else {
 											continue(2);
 										}
@@ -836,30 +848,63 @@
 											$va_q[] = "{$vs_q} (ca_attribute_values.{$vs_fld} {$vs_op} ?)";
 										}
 								
-										$va_sql_params[] = $vm_value;
+										$va_attr_params[] = $vm_value;
 										break;
 								}
 						
 						
-								$va_label_sql[] = join(" AND ", $va_q);
+								$va_attr_sql[] = join(" AND ", $va_q);
 							}
 						}
 					}
 				}
 			}
 			
-			if (!sizeof($va_label_sql)) { return null; }
+			if (($vn_attr_count == 1) || (($vn_attr_count > 0) && strtolower($ps_boolean) !== 'and')) {
+			    $va_label_sql = array_merge($va_label_sql, $va_attr_sql);
+			    $va_sql_params = array_merge($va_sql_params, $va_attr_params);
+			} 
+			
+			if (!sizeof($va_label_sql) && ($vn_attr_count == 0)) { return null; }
 			
 			
 			if (is_array($pa_check_access) && sizeof($pa_check_access) && $t_instance->hasField('access')) {
 				$va_label_sql[] = "({$vs_table}.access IN (?))";
 				$va_sql_params[] = $pa_check_access;
 			}
+						
+			$vs_deleted_sql = ($t_instance->hasField('deleted')) ? "({$vs_table}.deleted = 0)" : '';
 			
-			$vs_deleted_sql = ($t_instance->hasField('deleted')) ? "({$vs_table}.deleted = 0) AND " : '';
-			$vs_sql = "SELECT * FROM {$vs_table}";
-			$vs_sql .= join("\n", $va_joins);
-			$vs_sql .=" WHERE {$vs_deleted_sql} {$vs_type_restriction_sql} (".join(" {$ps_boolean} ", $va_label_sql).")";
+			$va_sql = [];
+			if ($vs_wheres = join(" {$ps_boolean} ", $va_label_sql)) { $va_sql[] = $vs_wheres; }
+			if ($vs_type_restriction_sql) { $va_sql[] = $vs_type_restriction_sql; }
+			if ($vs_deleted_sql) { $va_sql[] = $vs_deleted_sql; }			
+
+
+			if (isset($pa_options['transaction']) && ($pa_options['transaction'] instanceof Transaction)) {
+				$o_db = $pa_options['transaction']->getDb();
+			} else {
+				$o_db = new Db();
+			}
+			
+			if (($vn_attr_count > 1) && (strtolower($ps_boolean) == 'and')) {
+			    $va_ids = null;
+			    foreach($va_attr_sql as $i => $vs_attr_sql) {
+			        $qr_p = $o_db->query("SELECT t.{$vs_table_pk} FROM {$vs_table} t INNER JOIN ca_attributes ON ca_attributes.table_num = {$vn_table_num} AND ca_attributes.row_id = t.{$vs_table_pk} INNER JOIN ca_attribute_values ON ca_attribute_values.attribute_id = ca_attributes.attribute_id WHERE {$vs_attr_sql}", [$va_attr_params[$i]]);
+			        if (is_null($va_ids)) { 
+			            $va_ids = array_unique($qr_p->getAllFieldValues($vs_table_pk));
+			        } else {
+			            $va_ids = array_intersect(array_unique($va_ids), $qr_p->getAllFieldValues($vs_table_pk)); 
+			        }  
+			    }
+			    if (!is_array($va_ids) || !sizeof($va_ids)) { $va_ids = [0]; }
+			    
+                $va_sql[] = "({$vs_table}.{$vs_table_pk} IN (?))";
+                $va_sql_params[] = $va_ids;
+			} 
+            $vs_sql = "SELECT DISTINCT {$vs_table}.* FROM {$vs_table}";
+            $vs_sql .= join("\n", $va_joins);
+            $vs_sql .= ((sizeof($va_sql) > 0) ? " WHERE (".join(" AND ", $va_sql).")" : "");
 			
 			$vs_orderby = '';
 			if ($vs_sort_proc) {
@@ -881,16 +926,10 @@
 				}
 				if ($vs_orderby) { $vs_sql .= $vs_orderby; }
 			}
-
-			if (isset($pa_options['transaction']) && ($pa_options['transaction'] instanceof Transaction)) {
-				$o_db = $pa_options['transaction']->getDb();
-			} else {
-				$o_db = new Db();
-			}
 		
 			$vn_limit = (isset($pa_options['limit']) && ((int)$pa_options['limit'] > 0)) ? (int)$pa_options['limit'] : null;
 	
-			$qr_res = $o_db->query($vs_sql, $va_sql_params);
+			$qr_res = $o_db->query($vs_sql, array_merge($va_sql_params, $va_type_restriction_params));
 
 			if ($vb_purify_with_fallback && ($qr_res->numRows() == 0)) {
 				return self::find($pa_values, array_merge($pa_options, ['purifyWithFallback' => false, 'purify' => false]));
@@ -1526,6 +1565,16 @@
 		}
 		# ------------------------------------------------------------------
 		/**
+		 * Returns list of names of fields that may be used to generate the display field. For most labels this will be empty. For ca_entities this will be a list on constituent name fields.
+		 *
+		 * @return array
+		 */
+		public function getSecondaryLabelDisplayFields() {
+			if (!($t_label = $this->_DATAMODEL->getInstanceByTableName($this->getLabelTableName(), true))) { return null; }
+			return $t_label->getSecondaryDisplayFields();
+		}
+		# ------------------------------------------------------------------
+		/**
 		 * Returns the name of the field that is used to sort label content
 		 *
 		 * @return string Name of sort field
@@ -1616,7 +1665,7 @@
  		public function getLabels($pa_locale_ids=null, $pn_mode=__CA_LABEL_TYPE_ANY__, $pb_dont_cache=true, $pa_options=null) {
  			if(isset($pa_options['restrictToTypes']) && (!isset($pa_options['restrict_to_types']) || !$pa_options['restrict_to_types'])) { $pa_options['restrict_to_types'] = $pa_options['restrictToTypes']; }
 	 	
- 			if (!($vn_id = $this->getPrimaryKey()) && !(isset($pa_options['row_id']) && ($vn_id = $pa_options['row_id']))) { return null; }
+ 			if (!($vn_id = caGetOption('row_id', $pa_options, $this->getPrimaryKey())) ) { return null; }
  			if (isset($pa_options['forDisplay']) && $pa_options['forDisplay']) {
  				$pa_options['extractValuesByUserLocale'] = true;
  			}
@@ -1783,9 +1832,10 @@
 		 * Returns number of preferred or nonpreferred labels for the current row
 		 *
 		 * @param bool $pb_preferred
+		 * @param int $pn_locale_id
 		 * @return int Number of labels
 		 */
- 		public function getLabelCount($pb_preferred=true) {
+ 		public function getLabelCount($pb_preferred=true, $pn_locale_id=null) {
  			if (!$this->getPrimaryKey()) { return null; }
 			if (!($t_label = $this->_DATAMODEL->getInstanceByTableName($this->getLabelTableName(), true))) { return null; }
 			if ($this->inTransaction()) {
@@ -1793,24 +1843,31 @@
 				$t_label->setTransaction($o_trans);
 			}
 			$o_db = $this->getDb();
+			
+			$vn_is_preferred = ($pb_preferred ? 1 : 0);
+			$va_params = [$vn_is_preferred, $this->getPrimaryKey()];
+			$vs_locale_sql = '';
+			if ((int)$pn_locale_id > 0) { 
+				$vs_locale_sql = ' AND (l.locale_id = ?)';
+				$va_params[] = (int)$pn_locale_id;
+			}
  			
  			if (!$t_label->hasField('is_preferred')) { 
+ 				array_shift($va_params);
  				$qr_res = $o_db->query("
 					SELECT l.label_id 
 					FROM ".$this->getLabelTableName()." l
 					WHERE 
-						(l.".$this->primaryKey()." = ?)
-				", $this->getPrimaryKey());
+						(l.".$this->primaryKey()." = ?) {$vs_locale_sql}
+				", $va_params);
  			} else {
-				$vn_is_preferred = ($pb_preferred ? 1 : 0);
-				$qr_res = $o_db->query("
+				$qr_res = $o_db->query($x="
 					SELECT l.label_id 
 					FROM ".$this->getLabelTableName()." l
 					WHERE 
-						(l.is_preferred = ?) AND (l.".$this->primaryKey()." = ?)
-				", $vn_is_preferred, $this->getPrimaryKey());
+						(l.is_preferred = ?) AND (l.".$this->primaryKey()." = ?) {$vs_locale_sql}
+				", $va_params);
 			}
- 			
  			return $qr_res->numRows();
 		}
 		# ------------------------------------------------------------------

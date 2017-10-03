@@ -627,7 +627,7 @@ class WLPlugSearchEngineSqlSearch extends BaseSearchPlugin implements IWLPlugSea
 						case 'NOT':
 							$qr_res = $this->opo_db->query("SELECT row_id FROM ca_sql_search_temp_{$pn_level}");
 							
-							if (is_array($va_ids = $qr_res->getAllFieldValues()) && sizeof($va_ids)) {
+							if (is_array($va_ids = $qr_res->getAllFieldValues('row_id')) && sizeof($va_ids)) {
 								$vs_sql = "
 									DELETE FROM {$ps_dest_table} WHERE row_id IN (?)
 								";
@@ -658,17 +658,37 @@ class WLPlugSearchEngineSqlSearch extends BaseSearchPlugin implements IWLPlugSea
 
 					$vs_access_point = '';
 					$va_raw_terms = $va_raw_terms_escaped = array();
-					
 					$vs_fld_num = $vs_table_num = $t_table = null;
 					switch(get_class($o_lucene_query_element)) {
 						case 'Zend_Search_Lucene_Search_Query_Range':
 							$va_lower_term = $o_lucene_query_element->getLowerTerm();
 							$va_upper_term = $o_lucene_query_element->getUpperTerm();
+
+							$va_tmp = explode('.', $va_lower_term->field);							
+							$va_indexed_fields = $o_base->getFieldsToIndex($pn_subject_tablenum, $va_tmp[0]);
+							if(is_array($va_tmp) && (sizeof($va_tmp) > 1) && is_array($va_indexed_fields) && isset($va_indexed_fields[$va_tmp[1]])) {
+							    // is intrinsic
+							    $vn_lower_val = intval($va_lower_term->text);
+                                $vn_upper_val = intval($va_upper_term->text);
+                                
+                                if ($t_instance = $this->opo_datamodel->getInstanceByTableNum($pn_subject_tablenum, true)) {
+                                
+                                    $vs_direct_sql_query = "
+                                        SELECT ".$t_instance->primaryKey()." AS row_id, 1
+                                        FROM ".$t_instance->tableName()."
+                                        WHERE
+                                            (".$va_lower_term->field." BETWEEN ".floatval($vn_lower_val)." AND ".floatval($vn_upper_val).")
+                                        
+                                    ";
+                                }
+                                break;
+							}
+							
 							$va_element = $this->_getElementIDForAccessPoint($pn_subject_tablenum, $va_lower_term->field);
 							
-							$vn_direct_sql_target_table_num = $va_element['table_num'];
-							
+							$vn_direct_sql_target_table_num = $va_element['table_num'];							
 							$va_indexed_fields = $o_base->getFieldsToIndex($pn_subject_tablenum, $vn_direct_sql_target_table_num);
+							
 							$vn_root_element_id = $va_element['element_info']['hier_element_id'];
 							if (($va_element['datatype'] !== 'COUNT') && !isset($va_indexed_fields['_ca_attribute_'.$va_element['element_id']]) && (!$vn_root_element_id || ($vn_root_element_id && !isset($va_indexed_fields['_ca_attribute_'.$vn_root_element_id])))) { break(2); } // skip if not indexed
 										
@@ -838,7 +858,7 @@ class WLPlugSearchEngineSqlSearch extends BaseSearchPlugin implements IWLPlugSea
 							if(sizeof($va_ap_tmp) >= 2) {
 								$va_element = $this->_getElementIDForAccessPoint($pn_subject_tablenum, $vs_access_point);
 								
-								if ($va_element) {
+								if (isset($va_element['field_num'],$va_element['table_num'])) {
 									$vs_fld_num = $va_element['field_num'];
 									$vs_fld_table_num = $va_element['table_num'];
 									$vs_fld_limit_sql = " AND (swi.field_table_num = {$vs_fld_table_num} AND swi.field_num = '{$vs_fld_num}')";
@@ -910,7 +930,7 @@ class WLPlugSearchEngineSqlSearch extends BaseSearchPlugin implements IWLPlugSea
 								//$vs_term = preg_replace("%((?<!\d)[".$this->ops_search_tokenizer_regex."]+|[".$this->ops_search_tokenizer_regex."]+(?!\d))%u", '', $vs_raw_term);
 								$vs_term = join(' ', $this->_tokenize($vs_raw_term, true));
 								
-								if ($vs_access_point && (mb_strtoupper($vs_raw_term) == _t('[BLANK]'))) {
+								if ($vs_access_point && (mb_strtoupper($vs_raw_term) == '['._t('BLANK').']')) {
 									$t_ap = $this->opo_datamodel->getInstanceByTableNum($va_access_point_info['table_num'], true);
 									if (is_a($t_ap, 'BaseLabel')) {	// labels have the literal text "[Blank]" indexed to "blank" to indicate blank-ness 
 										$vb_is_blank_search = false;
@@ -921,7 +941,7 @@ class WLPlugSearchEngineSqlSearch extends BaseSearchPlugin implements IWLPlugSea
 										$vs_fld_num = $va_access_point_info['field_num'];
 										break;
 									} 
-								} elseif ($vs_access_point && (mb_strtoupper($vs_raw_term) == _t('[SET]'))) {
+								} elseif ($vs_access_point && (mb_strtoupper($vs_raw_term) == '['._t('SET').']')) {
 									$vb_is_not_blank_search = true;
 									$vs_table_num = $va_access_point_info['table_num'];
 									$vs_fld_num = $va_access_point_info['field_num'];
@@ -1587,7 +1607,7 @@ class WLPlugSearchEngineSqlSearch extends BaseSearchPlugin implements IWLPlugSea
 
 						
 						if ((($vn_num_terms = (sizeof($va_ft_terms) + sizeof($va_ft_like_terms) + sizeof($va_ft_stem_terms))) > 1) && (!$vs_direct_sql_query)){
-							$vs_sql .= " HAVING count(distinct sw.word_id) = {$vn_num_terms}";
+							$vs_sql .= " HAVING count(distinct sw.stem) >= {$vn_num_terms}";
 						}
 						
 						$t = new Timer();
@@ -1626,9 +1646,9 @@ class WLPlugSearchEngineSqlSearch extends BaseSearchPlugin implements IWLPlugSea
 								";
 								
 								if (($vn_num_terms = (sizeof($va_ft_terms) + sizeof($va_ft_like_terms) + sizeof($va_ft_stem_terms))) > 1) {
-									$vs_sql .= " HAVING count(distinct sw.word_id) = {$vn_num_terms}";
+									$vs_sql .= " HAVING count(distinct sw.stem) >= {$vn_num_terms}";
 								}
-							
+								
 								$t = new Timer();
 								
 								$pa_direct_sql_query_params = is_array($pa_direct_sql_query_params) ? $pa_direct_sql_query_params : array((int)$pn_subject_tablenum);
@@ -1850,7 +1870,20 @@ class WLPlugSearchEngineSqlSearch extends BaseSearchPlugin implements IWLPlugSea
 	# ------------------------------------------------
 	public function getWordID($ps_word) {
 		$ps_word = (string)$ps_word;
-		$ps_word =  preg_replace('/[[:^print:]]/', '', $ps_word);
+		//$ps_word =  preg_replace('/[[:^print:]]/', '', $ps_word);
+		
+		//reject overly long 2 byte sequences, as well as characters above U+10000 and replace with ?
+		$ps_word = preg_replace('/[\x00-\x08\x10\x0B\x0C\x0E-\x19\x7F]'.
+		 '|[\x00-\x7F][\x80-\xBF]+'.
+		 '|([\xC0\xC1]|[\xF0-\xFF])[\x80-\xBF]*'.
+		 '|[\xC2-\xDF]((?![\x80-\xBF])|[\x80-\xBF]{2,})'.
+		 '|[\xE0-\xEF](([\x80-\xBF](?![\x80-\xBF]))|(?![\x80-\xBF]{2})|[\x80-\xBF]{3,})/S',
+		 '?', $ps_word);
+
+		//reject overly long 3 byte sequences and UTF-16 surrogates and replace with ?
+		$ps_word = preg_replace('/\xE0[\x80-\x9F][\x80-\xBF]'.
+		 '|\xED[\xA0-\xBF][\x80-\xBF]/S','?', $ps_word);
+		 
 		if (!strlen($ps_word = trim(mb_strtolower($ps_word, "UTF-8")))) { return null; }
 		if (mb_strlen($ps_word) > 255) { $ps_word = mb_substr($ps_word, 0, 255); }
 		if (isset(WLPlugSearchEngineSqlSearch::$s_word_cache[$ps_word])) { return (int)WLPlugSearchEngineSqlSearch::$s_word_cache[$ps_word]; } 

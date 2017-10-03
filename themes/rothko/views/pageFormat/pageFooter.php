@@ -49,30 +49,25 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-5 col-md-7 col-lg-8">
-					<p >© 2016 National Gallery of Art, Washington</p>
+					<p><a href='http://www.nga.gov'>© 2016 National Gallery of Art, Washington</a></p>
 				</div>
-				<div class="col-sm-7 col-md-5 col-lg-4">
+				<div class="col-sm-7 col-md-5 col-lg-4" style="text-align:right;">
 
 					<div class="footerlink">
-						Credits
-					</div>
+<?php					
+						print caNavLink($this->request, 'About the Project', '', '', 'About', 'project');
+?>
+					</div> | 
 					<div class="footerlink">
-						Note to User
-					</div>	
+<?php					
+						print caNavLink($this->request, 'Guide to the Catalog', '', '', 'About', 'notes');
+?>						
+					</div> | 
 					<div class="footerlink">
-						Press
-					</div>
-					<div class="footerlink">
-						Contact
-					</div>
-					<div style="clear:both; height:1px;"><!-- empty --></div>
-					<div class="footerlink">
-						Notices
-					</div>
-					<div class="footerlink">
-						<a href='http://www.nga.gov'>http://www.nga.gov</a>
-					</div>																																		
-		
+<?php					
+						print caNavLink($this->request, 'Contact', '', '', 'About', 'contact');
+?>
+					</div>																																	
 				</div>
 			</div>
 		</div>
@@ -107,7 +102,7 @@
 				}
 				
 				var loadComparisonListSummary;
-				$('#comparison_list, #browseResultsContainer').on('click', '.compare_link, .comparison_list_remove', loadComparisonListSummary = function(e) {
+				$('#comparison_list, #pageArea').on('click', '.compare_link, .comparison_list_remove', loadComparisonListSummary = function(e) {
 					var id = this ? $(this).data('id') : null;
 					var remove_id = this ? $(this).data('remove_id') : null;
 		
@@ -157,8 +152,8 @@
 			});
 			function checkOffset() {
 				if($('#comparison_list').offset().top + $('#comparison_list').height() 
-													   >= $('#footer').offset().top - 100)
-					$('#comparison_list').css({"position": "absolute", "bottom": "100px"});
+													   >= $('#footer').offset().top - 60)
+					$('#comparison_list').css({"position": "absolute", "bottom": "60px"});
 				if($(document).scrollTop() + window.innerHeight < $('#footer').offset().top)
 					$('#comparison_list').css({"position": "fixed", "bottom": "0px"}); // restore when you scroll up
 			}
