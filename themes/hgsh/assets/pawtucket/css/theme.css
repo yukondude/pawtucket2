@@ -595,6 +595,11 @@ div.detailRelatedTitle{
 	width:100%;
 	height:auto;
 }
+.placeDetailImage img{
+	width: 100%;
+	height: auto;
+}
+
 
 /* multisearch */
 .multisearch H3{
