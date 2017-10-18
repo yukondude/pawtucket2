@@ -9,12 +9,9 @@
 	}
 	$va_featured_collections = $t_item->get("ca_collections.collection_id", array("returnWithStructure" => true, "restrictToRelationshipTypes" => array("featured"), "checkAccess" => $va_access_values));
 	$va_detail_collections = $t_item->get("ca_collections.collection_id", array("returnWithStructure" => true, "restrictToRelationshipTypes" => array("history"), "checkAccess" => $va_access_values));
+	$qr_res = ca_objects::find(['parent_id' => $t_item->get('ca_objects.object_id'), 'access' => 1], ['returnAs' => 'searchResult']);
+	$vs_default_placeholder = caGetThemeGraphic($this->request, 'placeholder.jpg');
 ?>
-<div class="row">
-	<div class='col-xs-12'>
-		{{{previousLink}}}{{{resultsLink}}}{{{nextLink}}}
-	</div>
-</div><!-- end row -->
 <div class="row">
 <?php
 	if($vb_multiple_reps){
@@ -35,15 +32,35 @@
 			<div class="detailMoreInfo" id="additional_info_link"><a href="#" onClick="jQuery('#additional_info').toggle(); jQuery('#additional_info_link').toggle(); return false;">Read More <span class="glyphicon glyphicon-arrow-down small"></span></a></div>
 			<p id='additional_info' style='display:none;'>^ca_objects.additional_info<br/><a href="#" onClick="jQuery('#additional_info').toggle(); jQuery('#additional_info_link').toggle(); return false;" class="detailMoreInfo">Hide <span class="glyphicon glyphicon-arrow-up"></span></a></p>
 	</ifdef>}}}
-	<div class='detailBlueText'>{{{^ca_objects.type_id, }}}{{{^ca_objects.idno}}}</div>
+	<div class="row">
+		<div id="browsePlaceResultsContainer">
+<?php
+		while($qr_res->nextHit()){
+			$vn_id = $qr_res->get('ca_objects.object_id');
+			$t_rel_object = new ca_objects($vn_id);
+			
+			$vs_thumb = $t_rel_object->get("ca_object_representations.media.iconlarge", array("checkAccess" => $va_access_values, "limit" => 1));
+			if($vs_thumb){
+				$vs_rep_detail_link = caDetailLink($this->request, $vs_thumb, '', 'ca_objects', $vn_id);		
+			} else {
+				$vs_rep_detail_link = caDetailLink($this->request, $vs_default_placeholder, '', 'ca_objects', $vn_id);
+			}
+			$vs_label_detail_link = $t_rel_object->getWithTemplate("<l>^ca_objects.preferred_labels</l>");
+			print "<div class='bResultItemCol col-xs-6 col-sm-4 col-md-4'>
+				<div class='bResult'>
+					{$vs_rep_detail_link}
+					<div class='bResultText'>
+						{$vs_label_detail_link}
+					</div>
+				</div>
+			</div>";
+		}
+?>
+		</div><!-- end browseResultsContainer -->
+	</div>
 </div><!-- end col -->
 <div class='col-sm-4'>
 	<div class="detailTitle">{{{ca_objects.preferred_labels.name}}}</div>
-	{{{<div class='btn btn-default'>Articles</div>
-		<ul>
-		<unit relativeTo="ca_objects.children" delimiter=" ">
-			<li><p class='detailRelatedTitle'><l>^ca_objects.preferred_labels</l></p></li>
-		</unit></ul>}}}
 <?php
 	# Featured Collections
 	if(is_array($va_featured_collections) && sizeof($va_featured_collections)){

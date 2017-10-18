@@ -1,83 +1,56 @@
 <?php
 	$t_item = $this->getVar("item");
 	$va_comments = $this->getVar("comments");
-	$qr_res = ca_places::find(['parent_id' => $t_item->get('ca_places.place_id'), 'access' => 1], ['returnAs' => 'searchResult']);
-	$vs_default_placeholder = caGetThemeGraphic($this->request, 'placeholder.jpg');
-	while($qr_res->nextHit()){
-			$vn_ids[] = $qr_res->get('ca_places.place_id');
-			
+	$va_access_values = $this->getVar("access_values");
+	$va_rep_ids = $t_item->getRepresentationIds(array("checkAccess" => $va_access_values));
+	$vb_multiple_reps = false;
+	if(is_array($va_rep_ids) && (sizeof($va_rep_ids) > 1)){
+		$vb_multiple_reps = true;
 	}
-	$vn_place_id = $t_item->get('ca_places.place_id');
-	$vn_place_parent_id = $t_item->get('ca_places.parent.place_id');
-	$vn_ids[] = $vn_place_id;
-	$va_images = caGetDisplayImagesForAuthorityItems('ca_places', $vn_ids, array('version' => 'resultcrop', 'relationshipTypes' => caGetOption('selectMediaUsingRelationshipTypes', $va_options, null), 'checkAccess' => $va_access_values));
-	$va_detail_image = caGetDisplayImagesForAuthorityItems('ca_places', [$vn_place_id], array('version' => 'large', 'relationshipTypes' => caGetOption('selectMediaUsingRelationshipTypes', $va_options, null), 'checkAccess' => $va_access_values));
-	$va_parent_detail_image = caGetDisplayImagesForAuthorityItems('ca_places', [$vn_place_parent_id], array('version' => 'thumbnail', 'relationshipTypes' => caGetOption('selectMediaUsingRelationshipTypes', $va_options, null), 'checkAccess' => $va_access_values));
-	
-	# related items
-	$va_related_objects = $t_item->get("ca_objects.object_id", array("returnWithStructure" => true, "checkAccess" => $va_access_values));
 	$va_featured_collections = $t_item->get("ca_collections.collection_id", array("returnWithStructure" => true, "restrictToRelationshipTypes" => array("featured"), "checkAccess" => $va_access_values));
 	$va_detail_collections = $t_item->get("ca_collections.collection_id", array("returnWithStructure" => true, "restrictToRelationshipTypes" => array("history"), "checkAccess" => $va_access_values));
+	$qr_res = ca_objects::find(['parent_id' => $t_item->get('ca_objects.object_id'), 'access' => 1], ['returnAs' => 'searchResult']);
+	$vs_default_placeholder = caGetThemeGraphic($this->request, 'placeholder.jpg');
 ?>
 <div class="row">
-</div><!-- end row -->
-<div class="row">		
-<div class='col-sm-8'>
+<?php
+	if($vb_multiple_reps){
+?>
+<div class='col-sm-1'>
 	<div class="row">
-		<div class="col-sm-10 col-sm-offset-1 placeDetailImage">
-			<?php print $va_detail_image[$t_item->get('ca_places.place_id')]; ?>
-			<p>{{{<ifdef code="ca_places.description">^ca_places.description</ifdef>}}}</p>
+<?php print caObjectRepresentationThumbnails($this->request, $this->getVar("representation_id"), $t_item, array("returnAs" => "bsCols", "linkTo" => "carousel", "bsColClasses" => "smallpadding col-md-12 col-xs-4")); ?>
+	</div>
+</div>
+<?php
+	}
+?>
+<div class='col-sm-<?php print ($vb_multiple_reps) ? "7" : "8"; ?>'>
+	<div class="detailTitleSmall">{{{ca_objects.preferred_labels.name}}}</div>
+	{{{representationViewer}}}
+	<div class="row">
+		<div class="col-xs-12">
+			<p><em>To display in FULL SCREEN hover the cursor over the black box above ​and click the top left <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span> zoom button</em></p>
 		</div>
 	</div>
-	<div class="row">
-		<div id="browsePlaceResultsContainer">
-<?php
-		$vn_ids = [];
-		while($qr_res->nextHit()){
-			$vn_ids[] = $qr_res->get('ca_places.place_id');
-		}
-		$qr_res->seek(0);
-		while($qr_res->nextHit()){
-			$vn_id = $qr_res->get('ca_places.place_id');
-			
-			if($va_images[$vn_id]){
-				$vs_rep_detail_link = caDetailLink($this->request, $va_images[$vn_id], '', 'ca_places', $vn_id);		
-			} else {
-				$vs_rep_detail_link = caDetailLink($this->request, $vs_default_placeholder, '', 'ca_places', $vn_id);
-			}
-			$vs_label_detail_link = caDetailLink($this->request, $qr_res->get('ca_places.preferred_labels'), '', 'ca_places', $vn_id);
-			print "<div class='bResultItemCol col-xs-6 col-sm-4 col-md-4'>
-				<div class='bResult'>
-					{$vs_rep_detail_link}
-					<div class='bResultText'>
-						{$vs_label_detail_link}
-					</div>
-				</div>
-			</div>";
-		}
-?>
-		</div><!-- end browseResultsContainer -->
-	</div>
+	{{{<ifdef code="ca_objects.description"><br/><p>^ca_objects.description</p></ifdef>}}}
+	{{{<ifdef code="ca_objects.additional_info">
+			<div class="detailMoreInfo" id="additional_info_link"><a href="#" onClick="jQuery('#additional_info').toggle(); jQuery('#additional_info_link').toggle(); return false;">Read More <span class="glyphicon glyphicon-arrow-down small"></span></a></div>
+			<p id='additional_info' style='display:none;'>^ca_objects.additional_info<br/><a href="#" onClick="jQuery('#additional_info').toggle(); jQuery('#additional_info_link').toggle(); return false;" class="detailMoreInfo">Hide <span class="glyphicon glyphicon-arrow-up"></span></a></p>
+	</ifdef>}}}
 </div><!-- end col -->
 <div class='col-sm-4'>
-	<div class="detailTitle">{{{^ca_places.preferred_labels}}}</div>
-	<?php
-	# Parent Place
-	$vn_parent_id = $t_item->get("ca_places.parent.place_id");
-	$vn_parent_label = $t_item->get('ca_places.parent.preferred_labels');
-	$t_parent = new ca_places($vn_parent_id);
-	if($t_parent && $vn_parent_label != "Root node for dc"){	
-		print "<div class='btn btn-default'>Part of</div>";
-		print "<div class='row'><div class='col-sm-12 text-center'>";
-		print $t_parent->getWithTemplate("<div class='detailRelatedTitle'><l>^ca_places.preferred_labels</l></div>");
-		print "</div><div class='col-sm-12 detailRelatedThumb'>".$va_parent_detail_image[$t_item->get('ca_places.parent.place_id')]."</div>";
-		print "</div><!-- end row -->";
-	}
-	#featured collections
+	<div class="detailTitle">{{{ca_objects.preferred_labels.name}}}</div>
+	{{{<div class='btn btn-default'>Articles</div>
+		<ul>
+		<unit relativeTo="ca_objects.children" delimiter=" ">
+			<li><p class='detailRelatedTitle'><l>^ca_objects.preferred_labels</l></p></li>
+		</unit></ul>}}}
+<?php
+	# Featured Collections
 	if(is_array($va_featured_collections) && sizeof($va_featured_collections)){
 		$q_featured_collections = caMakeSearchResult('ca_collections', $va_featured_collections);
 		if($q_featured_collections->numHits()){
-			print "<div class='btn btn-default'>Featured Collection".((sizeof($va_featured_collections) > 1) ? "s" : "")."</div>";
+			print "<div class='row'><div class='col-sm-12'><div class='btn btn-default'>"._t("Featured Collections")."</div></div></div><!-- end row -->\n";
 			$i = 0;
 			while($q_featured_collections->nextHit()){
 				if($i > 0){
@@ -98,7 +71,7 @@
 			}
 		}
 	}
-	# Detail collections
+	# Detailed History
 	if(is_array($va_detail_collections) && sizeof($va_detail_collections)){
 		$q_detail_collections = caMakeSearchResult('ca_collections', $va_detail_collections);
 		if($q_detail_collections->numHits()){
@@ -123,11 +96,9 @@
 			}
 		}
 	}
-	$t_object_thumb = new ca_objects();
-	# Related Collections
 	$va_collections = $t_item->get("ca_collections", array("returnWithStructure" => true, 'excludeRelationshipTypes' => array('featured', 'history'),"checkAccess" => $va_access_values));
 	if(sizeof($va_collections)){
-		print "<div class='btn btn-default'>Related Collection".((sizeof($va_collections) > 1) ? "s" : "")."</div>";
+		print "<div class='btn btn-default'>Related collection".((sizeof($va_collections) > 1) ? "s" : "")."</div>";
 		$t_rel_collection = new ca_collections();
 		$i = 0;
 		foreach($va_collections as $va_collection){
@@ -135,7 +106,8 @@
 				print "<HR/>";
 			}
 			$t_rel_collection->load($va_collection["collection_id"]);
-			$t_object_thumb->load($t_rel_collection->get("ca_objects.object_id", array("restrictToRelationshipTypes" => array("cover"), "checkAccess" => $va_access_values)));
+			$vn_thumb_id = $t_rel_collection->get("ca_objects.object_id", array("restrictToRelationshipTypes" => array("cover"), "checkAccess" => $va_access_values));
+			$t_object_thumb = new ca_objects($vn_thumb_id);
 			$vs_thumb = $t_object_thumb->get("ca_object_representations.media.iconlarge", array("checkAccess" => $va_access_values, "limit" => 1));
 			print "<div class='row'><div class='col-sm-4 col-md-4 col-lg-4 detailRelatedThumb'>".$vs_thumb."</div>\n";
 			print "<div class='col-sm-8 col-md-8 col-lg-8'>\n";
@@ -160,34 +132,6 @@
 		}
 		print "</div>";
 	}
-	
-	# related objects
-	$t_object_thumb = new ca_objects();
-	if(sizeof($va_related_objects)){
-		if(sizeof($va_related_objects) == 1){
-			print "<div class='btn btn-default'>Related Object</div>";
-		}else{
-			print "<div class='btn btn-default'>Related Objects</div>";
-		}
-		$t_rel_object = new ca_objects();
-		$i = 0;
-		foreach($va_related_objects as $vn_object_id){
-			if($i > 0){
-				print "<HR/>";
-			}
-			$t_rel_object->load($vn_object_id);
-			$vs_thumb = $t_rel_object->get("ca_object_representations.media.iconlarge", array("checkAccess" => $va_access_values, "limit" => 1));
-			print "<div class='row'><div class='col-sm-4 col-md-4 col-lg-4 detailRelatedThumb'>".$vs_thumb."</div>";
-			print "<div class='col-sm-8 col-md-8 col-lg-8'>";
-			print $t_rel_object->getWithTemplate("<div class='detailRelatedTitle'><l>^ca_objects.preferred_labels</l></div>");
-			if($vs_brief_description = $t_rel_object->get("ca_entities.brief_description")){
-				print $vs_brief_description;
-			}
-			print "</div></div><!-- end row -->";
-			$i++;
-		}
-	}
-	# related entities
 	$t_object_thumb = new ca_objects();
 	$va_entities = $t_item->get("ca_entities", array("returnWithStructure" => true, "checkAccess" => $va_access_values));
 	if(sizeof($va_entities)){
@@ -215,6 +159,28 @@
 			$i++;
 		}
 	}
+	$va_places = $t_item->get("ca_places", array("returnWithStructure" => true, "checkAccess" => $va_access_values));
+	if(sizeof($va_places)){
+		print "<div class='btn btn-default'>Related place".((sizeof($va_places) > 1) ? "s" : "")."</div>";
+		$t_rel_place = new ca_places();
+		$i = 0;
+		foreach($va_places as $va_place){
+			if($i > 0){
+				print "<HR/>";
+			}
+			$t_rel_place->load($va_place["place_id"]);
+			$t_object_thumb->load($t_rel_place->get("ca_objects.object_id", array("restrictToRelationshipTypes" => array("cover"), "checkAccess" => $va_access_values)));
+			$vs_thumb = $t_object_thumb->get("ca_object_representations.media.iconlarge", array("checkAccess" => $va_access_values, "limit" => 1));
+			print "<div class='row'><div class='col-sm-4 col-md-4 col-lg-4 detailRelatedThumb'>".$vs_thumb."</div>\n";
+			print "<div class='col-sm-8 col-md-8 col-lg-8'>\n";
+			print $t_rel_place->getWithTemplate("<div class='detailRelatedTitle'><l>^ca_places.preferred_labels.name</l></div>");
+			if($vs_brief_description = $t_rel_place->get("ca_places.brief_description")){
+				print $vs_brief_description;
+			}
+			print "</div></div><!-- end row -->";
+			$i++;
+		}
+	}
 	$va_occurrences = $t_item->get("ca_occurrences", array("returnWithStructure" => true, "checkAccess" => $va_access_values));
 	if(sizeof($va_occurrences)){
 		print "<div class='btn btn-default'>Related event".((sizeof($va_occurrences) > 1) ? "s" : "")."</div>";
@@ -232,6 +198,26 @@
 			print $t_rel_occurrence->getWithTemplate("<div class='detailRelatedTitle'><l>^ca_occurrences.preferred_labels.name</l></div>");
 			if($vs_brief_description = $t_rel_occurrence->get("ca_occurrences.brief_description")){
 				print $vs_brief_description;
+			}
+			print "</div></div><!-- end row -->";
+			$i++;
+		}
+	}
+	$va_related_object_ids = $t_item->get("ca_objects.related.object_id", array("returnWithStructure" => true, "checkAccess" => $va_access_values));
+	if(sizeof($va_related_object_ids)){
+		$q_related_objects = caMakeSearchResult('ca_objects', $va_related_object_ids);
+		print "<div class='btn btn-default'>Related object".((sizeof($va_related_object_ids) == 1) ? "" : "s")."</div>";
+		$i = 0;
+		while($q_related_objects->nextHit()){
+			if($i > 0){
+				print "<HR/>";
+			}
+			$vs_thumb = $q_related_objects->get("ca_object_representations.media.iconlarge", array("checkAccess" => $va_access_values, "limit" => 1));
+			print "<div class='row'><div class='col-sm-4 col-md-4 col-lg-4 detailRelatedThumb'>".$vs_thumb."</div>\n";
+			print "<div class='col-sm-8 col-md-8 col-lg-8'>\n";
+			print $q_related_objects->getWithTemplate("<div class='detailRelatedTitle'><l>^ca_objects.preferred_labels.name</l></div>");
+			if($vs_description = $q_related_objects->get("ca_objects.description")){
+				print $vs_description;
 			}
 			print "</div></div><!-- end row -->";
 			$i++;

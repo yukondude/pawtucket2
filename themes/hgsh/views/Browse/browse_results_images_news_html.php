@@ -47,7 +47,7 @@
 	
 	$va_options			= $this->getVar('options');
 	$vs_extended_info_template = caGetOption('extendedInformationTemplate', $va_options, null);
-	
+
 	$vb_ajax			= (bool)$this->request->isAjax();
 	
 
@@ -70,10 +70,15 @@
 		$vn_col_span_sm = 6;
 		$vn_col_span_xs = 6;
 		$vb_refine = false;
+		#if(is_array($va_facets) && sizeof($va_facets)){
+		#	$vb_refine = true;
+		#	$vn_col_span = 3;
+		#	$vn_col_span_sm = 6;
+		#	$vn_col_span_xs = 6;
+		#}
 		if ($vn_start < $qr_res->numHits()) {
 			$vn_c = 0;
 			$qr_res->seek($vn_start);
-			
 			
 			if ($vs_table != 'ca_objects') {
 				$va_ids = array();
@@ -86,23 +91,10 @@
 				$vn_c = 0;	
 				$qr_res->seek($vn_start);
 			}
+			
 			$t_list_item = new ca_list_items();
 			$vs_add_to_lightbox_msg = addslashes(_t('Add to %1', $vs_lightbox_displayname));
-			
 			while($qr_res->nextHit() && ($vn_c < $vn_hits_per_block)) {
-				if($vs_table == 'ca_objects' &&  $va_browse_info['restrictToTypes'][0] == 'newspaper' && $vn_c == 0){
-					print "
-					<div class='bResultItemCol col-xs-6 col-sm-3 col-md-3'>
-						<div class='bResult'>
-					";
-							print caDetailLink($this->request, caGetThemeGraphic($this->request, 'hp_images/collections.jpg')."<div class='bResultText'>News Index</div>", "", 'ca_collections', 84);
-						
-					print "
-						</div>
-					</div><!-- end col -->
-					";
-					$vn_c++;
-				}
 				$vn_id 					= $qr_res->get("{$vs_table}.{$vs_pk}");
 				$vs_idno_detail_link 	= caDetailLink($this->request, $qr_res->get("{$vs_table}.idno"), '', $vs_table, $vn_id);
 				$vs_label = "";
@@ -117,7 +109,6 @@
 					if(!($vs_thumbnail = $qr_res->getMediaTag('ca_object_representations.media', 'resultcrop', array("checkAccess" => $va_access_values)))){
 						$t_list_item->load($qr_res->get("type_id"));
 						$vs_typecode = $t_list_item->get("idno");
-						$vs_thumbnail = $vs_default_placeholder;
 					}
 					$vs_rep_detail_link 	= caDetailLink($this->request, $vs_thumbnail, '', $vs_table, $vn_id);				
 				} else {

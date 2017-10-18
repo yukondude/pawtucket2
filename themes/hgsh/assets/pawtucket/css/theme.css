@@ -446,6 +446,7 @@ nav, .navbar, .navbar-default{
 	width:100%;
 	height:auto;
 	max-width:235px;
+	max-height: 288px;
 	position:relative;
 }
 .bResultText, .detailCaptionText{
@@ -600,6 +601,9 @@ div.detailRelatedTitle{
 	height: auto;
 }
 
+.placeDetailImage p{
+	padding-top: 10px;
+}
 
 /* multisearch */
 .multisearch H3{
