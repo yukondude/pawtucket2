@@ -15,7 +15,7 @@
 	$va_parent_detail_image = caGetDisplayImagesForAuthorityItems('ca_places', [$vn_place_parent_id], array('version' => 'thumbnail', 'relationshipTypes' => caGetOption('selectMediaUsingRelationshipTypes', $va_options, null), 'checkAccess' => $va_access_values));
 	
 	# related items
-	$va_related_objects = $t_item->get("ca_objects.object_id", array("returnWithStructure" => true, "checkAccess" => $va_access_values));
+	$va_related_objects = $t_item->get("ca_objects.object_id", array("returnWithStructure" => true, "excludeRelationshipTypes" => array("cover"), "checkAccess" => $va_access_values));
 	$va_featured_collections = $t_item->get("ca_collections.collection_id", array("returnWithStructure" => true, "restrictToRelationshipTypes" => array("featured"), "checkAccess" => $va_access_values));
 	$va_detail_collections = $t_item->get("ca_collections.collection_id", array("returnWithStructure" => true, "restrictToRelationshipTypes" => array("history"), "checkAccess" => $va_access_values));
 ?>

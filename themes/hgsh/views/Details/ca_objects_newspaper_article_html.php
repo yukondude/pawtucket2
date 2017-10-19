@@ -7,14 +7,9 @@
 	if(is_array($va_rep_ids) && (sizeof($va_rep_ids) > 1)){
 		$vb_multiple_reps = true;
 	}
-<<<<<<< HEAD
-	$va_featured_collections = $t_item->get("ca_collections.collection_id", array("returnWithStructure" => true, "restrictToRelationshipTypes" => array("featured"), "checkAccess" => $va_access_values));
-	$va_detail_collections = $t_item->get("ca_collections.collection_id", array("returnWithStructure" => true, "restrictToRelationshipTypes" => array("history"), "checkAccess" => $va_access_values));
-=======
 	$va_featured_collections = $t_item->get("ca_collections.collection_id", array("returnWithStructure" => true, "restrictToTypes" => array("article_collection"), "checkAccess" => $va_access_values));
 	$va_detail_collections = $t_item->get("ca_collections.collection_id", array("returnWithStructure" => true, "restrictToRelationshipTypes" => array("history"), "checkAccess" => $va_access_values));
 	$vs_default_placeholder = caGetThemeGraphic($this->request, 'placeholder.jpg');
->>>>>>> develop
 ?>
 <div class="row">
 	<div class='col-xs-12'>
@@ -36,8 +31,11 @@
 <div class='col-sm-<?php print ($vb_multiple_reps) ? "7" : "8"; ?>'>
 	<div class="detailTitleSmall">{{{^ca_objects.preferred_labels.name}}}</div>
 	{{{representationViewer}}}
-	{{{representationViewer}}}
-	<p><em>To display in FULL SCREEN hover the cursor over the black box above ​and click the top left <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span> zoom button</em></p>
+	<div class="row">
+		<div class="col-xs-12">
+			{{{<ifdef code="ca_object_representations.media"><p><em>To display in FULL SCREEN hover the cursor over the black box above ​and click the top left <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span> zoom button</em></p></ifdef>}}}
+		</div>
+	</div>
 	{{{<ifdef code="ca_objects.author"><strong>by ^ca_objects.author<br/><br/></strong></ifdef>}}}
 	{{{^ca_objects.body_text}}}
 	{{{<ifdef code="ca_objects.description"><br/><p>^ca_objects.description</p></ifdef>}}}
@@ -70,7 +68,7 @@
 </div><!-- end col -->
 <div class='col-sm-4'>
 	<div class="detailTitle">{{{^ca_objects.preferred_labels.name}}}</div>
-	{{{<ifdef code="ca_objects.parent">
+	{{{<ifdef code="ca_objects.parent.idno">
 		<div class='btn btn-default'>Article From</div>
 		<unit relativeTo="ca_objects.parent.idno">
 			<div class='detailRelatedTitle'><l>^ca_objects.preferred_labels.name</l></div>

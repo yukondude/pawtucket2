@@ -27,6 +27,11 @@
 <div class='col-sm-<?php print ($vb_multiple_reps) ? "7" : "8"; ?>'>
 	<div class="detailTitleSmall">{{{ca_objects.preferred_labels.name}}}</div>
 	{{{representationViewer}}}
+	<div class="row">
+		<div class="col-xs-12">
+			{{{<ifdef code="ca_object_representations.media"><p><em>To display in FULL SCREEN hover the cursor over the black box above ​and click the top left <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span> zoom button</em></p></ifdef>}}}
+		</div>
+	</div>
 	{{{<ifdef code="ca_objects.description"><br/><p>^ca_objects.description</p></ifdef>}}}
 	{{{<ifdef code="ca_objects.additional_info">
 			<div class="detailMoreInfo" id="additional_info_link"><a href="#" onClick="jQuery('#additional_info').toggle(); jQuery('#additional_info_link').toggle(); return false;">Read More <span class="glyphicon glyphicon-arrow-down small"></span></a></div>

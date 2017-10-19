@@ -63,7 +63,7 @@
 	$o_icons_conf = caGetIconsConfig();
 	$va_object_type_specific_icons = $o_icons_conf->getAssoc("placeholders");
 	
-	$vs_default_placeholder = caGetThemeGraphic($this->request, 'placeholderMultisearch.jpg');
+	$vs_default_placeholder = caGetThemeGraphic($this->request, 'placeholder.jpg');
 	#k$vs_default_placeholder_tag = caGetThemeGraphic($this->request, 'placeholderMultisearch.jpg');
 	$va_browse_info = $this->getVar("browseInfo");
 
