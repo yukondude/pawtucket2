@@ -64,37 +64,8 @@ class View extends BaseObject {
 		$this->ops_character_encoding = $ps_character_encoding;
 		
 		if (!$pm_path) { $pm_path = array(); }
-<<<<<<< HEAD
 		
-		$vs_suffix = null;
-		if (!is_array($pm_path)) { 
-			$pm_path = array($pm_path);
-		}
-		foreach($pm_path as $ps_path) {
-			// Preserve any path suffix after "views"
-			// Eg. if path is /web/myinstall/themes/mytheme/views/bundles then we want to retain "/bundles" on the default path
-			$va_suffix_bits = array();
-			$va_tmp = array_reverse(explode("/", $ps_path));
-			foreach($va_tmp as $vs_path_element) {
-				if ($vs_path_element == 'views') { break; }
-				array_push($va_suffix_bits, $vs_path_element);
-			}
-			if ($vs_suffix = join("/", $va_suffix_bits)) { $vs_suffix = '/'.$vs_suffix; break;}
-		}
-		
-		if (caGetOption('includeDefaultThemePath', $pa_options, true)) {
-			$vs_default_theme_path = $po_request ? $po_request->getDefaultThemeDirectoryPath().'/views'.$vs_suffix : __CA_THEME_DIR__;
-			if (!in_array($vs_default_theme_path, $pm_path) && !in_array($vs_default_theme_path.'/', $pm_path)) {
-				array_unshift($pm_path, $vs_default_theme_path);
-			}
-		}
-		
-		if (((is_array($pm_path) && sizeof($pm_path) > 0)) || $pm_path) {
-			$this->setViewPath($pm_path, $pa_options);
-		}
-=======
 		$this->setViewPath($pm_path, $pa_options);
->>>>>>> develop
 	}
 	# -------------------------------------------------------
 	public function __get($ps_key) {
