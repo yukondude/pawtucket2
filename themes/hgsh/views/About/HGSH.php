@@ -1,2 +1,2 @@
-<H1>History of the Suburb</H1>
+<H1>About HGS Heritage</H1>
 {{{suburb_history}}}
