@@ -53,7 +53,7 @@
 					<?php print caGetThemeGraphic($this->request, 'spacer.png'); ?>
 				</div>
 				<div class="hpText">
-					Welcome to Hampstead Garden Suburb Heritage.  This site is currently under development and you may find that some links are not working and the information shown may change frequently.
+					Hampstead Garden Suburb, near London’s Hampstead Heath, is a vibrant community set within a unique mix of open spaces, planned street scene, and internationally recognised architecture. Welcome to our Virtual Museum.<br/><?php print caNavLink($this->request, 'See Guide', '', '', 'About', 'museum_help'); ?>
 				</div>
 			</div><!--end col-sm-8-->
 			</div>

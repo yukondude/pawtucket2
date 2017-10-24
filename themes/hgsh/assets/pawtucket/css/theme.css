@@ -367,6 +367,9 @@ nav, .navbar, .navbar-default{
 	line-height:1.4em;
 	padding:7px 30px 17px 17px;
 }
+.hpText a, .hpText a:hover{
+	color: #DDEAF3; 
+}
 @media (max-width: 1000px) {
 	.hpText{
 		font-size:18px;

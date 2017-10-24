@@ -103,7 +103,7 @@
 				<ul class="nav navbar-nav">
 					<li <?php print ($this->request->getController() == "Front") ? 'class="active"' : ''; ?>><?php print caNavLink($this->request, _t("Home"), "", "", "", ""); ?></li>
 
-					<li><?php print caNavLink($this->request, _("Using the Museum"), '', '', 'About', 'museum'); ?></li>
+					<li><?php print caNavLink($this->request, _("Museum Guide"), '', '', 'About', 'museum_help'); ?></li>
 <?php
 						print $this->render("pageFormat/browseMenu.php");
 ?>
