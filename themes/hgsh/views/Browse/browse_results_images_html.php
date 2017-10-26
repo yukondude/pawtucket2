@@ -66,7 +66,6 @@
 	$vs_default_placeholder = caGetThemeGraphic($this->request, 'placeholder.jpg');
 	#k$vs_default_placeholder_tag = caGetThemeGraphic($this->request, 'placeholderMultisearch.jpg');
 	$va_browse_info = $this->getVar("browseInfo");
-
 		$vn_col_span = 3;
 		$vn_col_span_sm = 6;
 		$vn_col_span_xs = 6;
@@ -82,8 +81,7 @@
 					$va_ids[] = $qr_res->get($vs_pk);
 					$vn_c++;
 				}
-				$va_images = caGetDisplayImagesForAuthorityItems($vs_table, $va_ids, array('version' => 'resultcrop', 'relationshipTypes' => caGetOption('selectMediaUsingRelationshipTypes', $va_options, null), 'checkAccess' => $va_access_values));
-			
+				$va_images = caGetDisplayImagesForAuthorityItems($vs_table, $va_ids, array('version' => 'resultcrop', 'relationshipTypes' => ['cover'], 'checkAccess' => $va_access_values));
 				$vn_c = 0;	
 				$qr_res->seek($vn_start);
 			}
