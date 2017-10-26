@@ -96,7 +96,8 @@
 					<div class='bResultItemCol col-xs-6 col-sm-3 col-md-3'>
 						<div class='bResult'>
 					";
-							print caDetailLink($this->request, caGetThemeGraphic($this->request, 'hp_images/collections.jpg')."<div class='bResultText'>News Index</div>", "", 'ca_collections', 84);
+							$vn_newsIndexID = ca_collections::find(['idno' => 'article_news_index'], ['returnAs' => 'firstId']);
+							print caDetailLink($this->request, caGetThemeGraphic($this->request, 'hp_images/collections.jpg')."<div class='bResultText'>News Index</div>", "", 'ca_collections', $vn_newsIndexID);
 						
 					print "
 						</div>
