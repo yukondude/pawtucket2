@@ -103,11 +103,11 @@
 				<ul class="nav navbar-nav">
 					<li <?php print ($this->request->getController() == "Front") ? 'class="active"' : ''; ?>><?php print caNavLink($this->request, _t("Home"), "", "", "", ""); ?></li>
 
-					<li><?php print caNavLink($this->request, _("Museum Guide"), '', '', 'About', 'museum_help'); ?></li>
+					<li><?php print caNavLink($this->request, _("Museum Guide"), '', '', 'About', 'museum_guide'); ?></li>
 <?php
 						print $this->render("pageFormat/browseMenu.php");
 ?>
-					<li><?php print caNavLink($this->request, _("About HGS Heritage"), '', '', 'About', 'heritage'); ?></li>
+					<li><?php print caNavLink($this->request, _("About HGS Heritage"), '', '', 'About', 'HGSH'); ?></li>
 					<li><?php print caNavLink($this->request, _("Contact Details"), '', '', 'About', 'contact_details'); ?></li>
 				</ul>
 			</div><!-- /.navbar-collapse -->
