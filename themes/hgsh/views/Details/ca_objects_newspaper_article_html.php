@@ -33,7 +33,7 @@
 	{{{representationViewer}}}
 	<div class="row">
 		<div class="col-xs-12">
-			{{{<ifdef code="ca_object_representations.media"><p><em>To display in FULL SCREEN hover the cursor over the black box above ​and click the top left <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span> zoom button</em></p></ifdef>}}}
+			{{{<ifdef code="ca_object_representations.media"><p><em>To display in FULL SCREEN hover the cursor over the image above ​and click the top left <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span> zoom button</em></p></ifdef>}}}
 		</div>
 	</div>
 	{{{<ifdef code="ca_objects.author"><strong>by ^ca_objects.author<br/><br/></strong></ifdef>}}}
