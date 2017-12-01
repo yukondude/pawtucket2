@@ -46,20 +46,32 @@
         "id": "<?php print $ps_id; ?>", 
         "layout": "1x1", 
         "mainMenuSettings" : {
-          "show" : false
-        },
+              "buttons": {
+                "bookmark": false,
+                "layout": false,
+                "options": false
+              },
+              "userButtons": [
+                {"label": "Close",
+                 "iconClass": "fa fa-times",
+                 "attributes": { "class": "help", "href": "#", "onclick": "caMediaPanel.hidePanel(); return false;", "title": "Close"}},
+              ]
+            },
         "data": [
           { "manifestUri": "<?php print $vs_data_url; ?>"}
         ],
         "windowObjects": [{
         	"loadedManifest" : "<?php print $vs_data_url; ?>",
-        	"viewType" : "ImageView",
+        	"canvasID": "<?php print $this->getVar('identifier').":".($this->getVar('index')+1); ?>",
+        	"viewType" : "BookView",
         	"displayLayout": false,
 			"bottomPanel" : false,
-			"sidePanel" : false,
+			"sidePanel" : true,
+			"sidePanelVisible" : false,
 			"metadataView": false,
 			"annotationLayer" : false,
 			"annotationCreation": false,
+			"fullScreen": false,
 			"overlay" : false,
 			"canvasControls": {
 				"annotations": {
@@ -72,6 +84,6 @@
       jQuery(".mirador-icon-metadata-view, .mirador-osd-annotation-controls").hide();
     });
   </script>
-  <div id="<?php print $ps_id; ?>" style="width: <?php print $vs_width; ?>; height: calc(<?php print $vs_height; ?> - 24px);">
+  <div id="<?php print $ps_id; ?>" style="width: <?php print $vs_width; ?>; height: calc(<?php print !$this->getVar('noControlBar') ? "{$vs_height} - 24px" : $vs_height; ?>);">
   
   </div>

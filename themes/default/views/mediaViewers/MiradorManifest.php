@@ -48,7 +48,7 @@
 	} else {
 		$va_resources = [0 => []];
 	}
-	$va_canvases = [];
+	$va_canvases = $va_toc = [];
 	$vn_page = 1;
 	
 	$vs_base_url = $vo_request->getBaseUrlPath();
@@ -104,6 +104,18 @@
 					]
 				]
 			];
+			
+			if (($vn_page % 10) == 0) { 
+                $va_toc[] = 
+                    [
+                      "@id" => "{$vs_identifer}/structure/s{$vn_page}",
+                      "@type" => "sc:Range",
+                      "label" => "Page {$vn_page}",
+                      "canvases" => [
+                        "{$vs_identifer}:{$vn_page}"
+                      ]
+                    ];
+            }
 			$vn_page++;
 	}
 	
@@ -128,7 +140,8 @@
 				"viewingHint" => "paged",
 				"canvases" => $va_canvases
 			]
-		]
+		],
+		'structures' => (sizeof($va_toc) > 1) ? $va_toc : null
 	];
 	
 	print caFormatJson(json_encode($va_manifest, JSON_UNESCAPED_SLASHES));

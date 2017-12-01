@@ -56,15 +56,54 @@
 				$va_params = ['identifier' => $ps_identifier, 'context' => caGetOption('context', $pa_options, $po_request->getAction())];
 				
 				// Pass subject key when getting viewer data
-				if ($pa_data['t_subject']) { $va_params[$pa_data['t_subject']->primaryKey()] = $pa_data['t_subject']->getPrimaryKey(); }
+				if ($pa_data['t_subject']) { 
+				    $va_params[$pa_data['t_subject']->primaryKey()] = $pa_data['t_subject']->getPrimaryKey(); 
+				    
+				    if ($pa_data['t_instance']) {
+                        $vn_rep_id = $pa_data['t_instance']->getPrimaryKey();
+                        $va_rep_ids = Mirador::getViewerRepresentationIDList($po_request, $ps_identifier, $pa_data, $pa_options);
+                        $o_view->setVar('index', $x=array_search($vn_rep_id, $va_rep_ids));
+                    } else {
+                         $o_view->setVar('index', 0);
+                    }
+				}
 				
 				$o_view->setVar('data_url', caNavUrl($po_request, '*', '*', 'GetMediaData', $va_params, ['absolute' => true]));
 				$o_view->setVar('viewer', 'Mirador');
 				$o_view->setVar('width', caGetOption('width', $pa_data['display'], null));
 				$o_view->setVar('height', caGetOption('height', $pa_data['display'], null));
+				$o_view->setVar('data', $pa_data);
 			}
 			
 			return BaseMediaViewer::prepareViewerHTML($po_request, $o_view, $pa_data, $pa_options);
+		}
+		# -------------------------------------------------------
+		/**
+		 *
+		 */
+		public static function getViewerRepresentationIDList($po_request, $ps_identifier, $pa_data=null, $pa_options=null) {
+            if ($t_instance = caGetOption('t_instance', $pa_data, null)) {
+            
+                $va_display = caGetOption('display', $pa_data, []);
+                
+                if(is_a($t_instance, "ca_object_representations") || is_a($t_instance, "ca_site_page_media")) {
+                    $vs_media_fld = 'media';
+                } elseif(is_a($t_instance, "ca_attribute_values")) {
+                    $vs_media_fld = 'value_blob';
+                } else {
+                    throw new ApplicationException(_t('Could not derive media dimensions'));
+                }
+                
+                $vn_use_mirador_for_image_list_length = caGetOption('use_mirador_for_image_list_length_at_least', $pa_data['display'], null);
+                if (is_a($t_instance, "ca_object_representations") && caGetOption('expand_hierarchically', $pa_data['display'], null) && $pa_data['t_subject'] && $pa_data['t_subject']->isHierarchical() && (is_array($va_ids = $pa_data['t_subject']->getHierarchy(null, ['idsOnly' => true, 'sort' => 'idno_sort']))) && sizeof($va_ids)) {  
+                    $vn_root_id = $pa_data['t_subject']->getHierarchyRootID();
+                    $va_ids = array_filter($va_ids, function($v) use ($vn_root_id) { return $v != $vn_root_id; });
+                    return array_values(array_map(function($v) { return $v['representation_id']; }, $pa_data['t_subject']->getPrimaryMediaForIDs($va_ids, ['small'])));
+                } elseif (is_a($t_instance, "ca_object_representations") && $pa_data['t_subject'] && $vn_use_mirador_for_image_list_length && ($va_reps = $pa_data['t_subject']->getRepresentations(['small'], null, [])) && (sizeof($va_reps) >= $vn_use_mirador_for_image_list_length)) {
+                    return array_values(array_map(function($v) { return $v['representation_id']; }, $va_reps));
+                }
+            }
+            return null;
 		}
 		# -------------------------------------------------------
 		/**

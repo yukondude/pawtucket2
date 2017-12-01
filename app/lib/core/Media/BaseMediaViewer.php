@@ -110,6 +110,7 @@
 			}
 			
 			$o_view->setVar('controls', $vs_controls);
+			$o_view->setVar('noControlBar', caGetOption('no_control_bar', $pa_data['display'], false));
 		
 			return $o_view->render(caGetOption('viewerWrapper', $pa_options, 'viewerWrapper').'.php');
 		}
