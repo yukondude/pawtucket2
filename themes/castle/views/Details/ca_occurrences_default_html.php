@@ -60,6 +60,7 @@
 					
 				</div><!-- end col -->
 				<div class='col-md-6 col-lg-6'>
+				{{{representationViewer}}}
 <?php
 				$vs_rel_doc = "";
 				if ($va_related_documents = $t_item->get('ca_occurrences.attachment', array('returnWithStructure' => true))) {
@@ -69,7 +70,7 @@
 						foreach ($va_related_document_t as $vn_doc_id => $va_related_document) {
 							$qr_res = $o_db->query('SELECT value_id FROM ca_attribute_values WHERE attribute_id = ? AND element_id = ?', array($vn_doc_id, $vn_media_element_id)) ;
 							if ($qr_res->nextRow()) {
-								$vs_rel_doc.= "<div class='col-sm-3' style='border:1px solid #eee;'><a href='#' onclick='caMediaPanel.showPanel(\"".caNavUrl($this->request, '', 'Detail', 'GetMediaInfo/ca_occurrences', array('occurrence_id' => $vn_id, 'value_id' => $qr_res->get('value_id')))."\"); return false;'>".$va_related_document['attachment']."</a></div>";
+								$vs_rel_doc.= "<div class='col-sm-3' style='border:1px solid #eee;'><a href='#' onclick='caMediaPanel.showPanel(\"".caNavUrl($this->request, 'Detail', 'GetMediaOverlay', 'ca_occurrences', array('context' => 'occurrences', 'id' => $vn_id, 'value_id' => $qr_res->get('value_id')))."\"); return false;'>".$va_related_document['attachment']."</a></div>";
 								#$vs_rel_doc.= "<div><a href='#' onclick='caMediaPanel.showPanel(\"/index.php/Detail/GetRepresentationInfo/object_id/".$vn_id."/representation_id/".$qr_res->get('value_id')."/overlay/1\"); return false;'>".$va_related_document['object_document_file']."</a></div>";
 							}	 		
 						}
