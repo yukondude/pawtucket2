@@ -7,7 +7,7 @@
  * ----------------------------------------------------------------------
  *
  * Software by Whirl-i-Gig (http://www.whirl-i-gig.com)
- * Copyright 2016 Whirl-i-Gig
+ * Copyright 2016-2018 Whirl-i-Gig
  *
  * For more information visit http://www.CollectiveAccess.org
  *
@@ -79,7 +79,7 @@
 				"@id" => $vs_canvas_id,
 				"@type" => "sc:Canvas",
 				"label" => (string)($vn_page),
-				"thumbnail" => $va_resource['preview_url'],
+				"thumbnail" => $va_resource['preview_url'] ? $va_resource['preview_url'] : $vs_thumb_url,
 				"seeAlso" => [],
 				"height" => $vn_height,
 				"width" => $vn_width,
