@@ -7,7 +7,7 @@
  * ----------------------------------------------------------------------
  *
  * Software by Whirl-i-Gig (http://www.whirl-i-gig.com)
- * Copyright 2008-2017 Whirl-i-Gig
+ * Copyright 2008-2018 Whirl-i-Gig
  *
  * For more information visit http://www.CollectiveAccess.org
  *
@@ -27,6 +27,7 @@
  */
 	define("__CA_APP_TYPE__", "PAWTUCKET");
 	define("__CA_MICROTIME_START_OF_REQUEST__", microtime());
+	define("__CA_BASE_MEMORY_USAGE__", memory_get_usage(true));
 	define("__CA_SEARCH_IS_FOR_PUBLIC_DISPLAY__", 1);
 	require("./app/helpers/errorHelpers.php");
 	
@@ -34,7 +35,8 @@
 		caDisplayException(new ApplicationException("No setup.php found"));
 		exit; 
 	}
-	require_once('./setup.php');
+	require('./setup.php');
+	require_once('./app/helpers/post-setup.php');
 	
 	try {
 		define("__CA_BASE_MEMORY_USAGE__", memory_get_usage(true));
