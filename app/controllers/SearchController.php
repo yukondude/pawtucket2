@@ -212,11 +212,12 @@
 			
 			if ((bool)$this->request->getParameter('clear', pInteger)) {
 				// Clear all refine critera but *not* underlying _search criterion
-				$va_criteria = $o_browse->getCriteria();
-				foreach($va_criteria as $vs_criterion => $va_criterion_info) {
-					if ($vs_criterion == '_search') { continue; }
-					$o_browse->removeCriteria($vs_criterion, array_keys($va_criterion_info));
-				}
+				if (is_array($va_criteria = $o_browse->getCriteria())) {
+                    foreach($va_criteria as $vs_criterion => $va_criterion_info) {
+                        if ($vs_criterion == '_search') { continue; }
+                        $o_browse->removeCriteria($vs_criterion, array_keys($va_criterion_info));
+                    }
+                }
 			}
 			
 				
@@ -280,7 +281,9 @@
  				}
  				
  			}else{
- 				$vb_sort_changed = true;
+ 				if($ps_sort != $this->opo_result_context->getCurrentSort()){
+ 					$vb_sort_changed = true;
+ 				}
  			}
  			if($vb_sort_changed){
 				# --- set the default sortDirection if available
