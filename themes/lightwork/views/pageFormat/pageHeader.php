@@ -72,6 +72,8 @@
 	
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,700,700i" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Chivo:400" rel="stylesheet" type="text/css">
+	<link rel="icon" href="<?php print $this->request->getThemeUrlPath();?>/assets/pawtucket/graphics/favicon.ico" type="image/x-icon"  sizes="16x16">
+
 <?php
 	if(Debug::isEnabled()) {		
 		//

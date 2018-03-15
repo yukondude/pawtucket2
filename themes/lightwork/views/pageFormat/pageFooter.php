@@ -38,7 +38,7 @@
 						<li class="rss"><a target="_blank" href="feed://feeds2.feedburner.com/lightworkblog">Subscribe to our RSS Feed</a></li>				
 					</ul>
 				</div>			
-				<div class="pull-left">Copyright © 1973-2017 - <a href='http://www.lightwork.org'>Light Work</a> — 316 Waverly Avenue Syracuse, NY 13244</div>
+				<div class="pull-left">Copyright © 1973-<?php print date("Y"); ?> - <a href='http://www.lightwork.org'>Light Work</a> — 316 Waverly Avenue Syracuse, NY 13244</div>
 				<div class="pull-left" style="clear:left;">
 					<small>powered by <a href="http://www.collectiveaccess.org">CollectiveAccess 2017</a></small>
 				</div>
