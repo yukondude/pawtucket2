@@ -71,6 +71,11 @@
 				{{{<ifcount code="ca_occurrences" min="1" max="1"><HR/><H6>Related exhibition</H6></ifcount>}}}
 				{{{<ifcount code="ca_occurrences" min="2"><HR/><H6>Related exhibitions</H6></ifcount>}}}
 				{{{<unit relativeTo="ca_occurrences" delimiter="<br/>"><l>^ca_occurrences.preferred_labels.name</l></unit>}}}
+<?php
+				if(!$vb_removed && $t_object->get("price")){
+					print "<HR/><H6>Price</H6>".$t_object->get("price")."<br/>";
+				}
+?>
 			</div><!-- end col -->
 			<div class='navLeftRight col-sm-2'>
 				<div class="detailNavBgRight">
