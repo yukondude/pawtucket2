@@ -6,6 +6,11 @@ body {
 	-webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
 }
+@media (max-width: 768px) {	
+	#footer {
+		margin-bottom:120px;
+	}
+}
 #pageArea {
 	margin-bottom:40px;
 }
@@ -66,6 +71,8 @@ a:hover, a:active, a:focus, a.readmore-js-toggle {
 .navbar-brand {
 	padding:0px;
 	padding-left:15px;
+	margin-top:28px;
+	width:270px;
 }
 .nav > li > a, .nav > li > a:hover, .nav > li > a:active, .nav > li > a:focus, .navbar .navbar-nav > .active > a {
 	font-family: "Chivo";
@@ -111,6 +118,7 @@ a:hover, a:active, a:focus, a.readmore-js-toggle {
 }
 .navbar .form-control {
 	padding-right:0px;
+	padding-left:10px;
 }
 .container > .navbar-collapse .btn-search {
 	top:0px;
@@ -121,14 +129,19 @@ a:hover, a:active, a:focus, a.readmore-js-toggle {
 	border: 1px solid #e1e1e1;
 	border-radius:0;
 	box-shadow:none;
+	border-right:0px;
 }
 .navbar .formOutline input {
 	font-size:14px;
-	letter-spacing:1px;
+	letter-spacing:0px;
 	font-weight:300;
+	padding-bottom:1px;
 }
 .navbar-default .navbar-form {
 	margin-top:20px;
+}
+.navbar-form .form-group {
+	width:169px;
 }
 .yamm .nav.navbar-right .dropdown-menu {
 	margin-top:10px;
@@ -139,6 +152,9 @@ a:hover, a:active, a:focus, a.readmore-js-toggle {
 .container.menuBar {
 	padding-top: 0px;
 } 
+ul.menuItems {
+	clear:both;
+}
 .container > .navbar-header {
 	margin-left:0px;
 }
@@ -187,8 +203,9 @@ a:hover, a:active, a:focus, a.readmore-js-toggle {
 .btn-search {
 	background-color:#777;
 	border-radius:0px;
-	height: 40px;
+	height: 39px;
     width: 40px;
+    padding-top:7px;
 }
 .btn-search .glyphicon{
 	color:#fff;
@@ -365,6 +382,11 @@ div.caMediaOverlayControls {
 	padding: inherit;
 	padding-top: 35px;
 }
+.nav > li.dropdown > a.icon.active {
+    border-bottom: 2px solid #777;
+    color: #111;
+    padding-bottom:3px;
+}
 .detail .setsButton {
 	font-size: 20px;
     padding-top: 15px;
@@ -472,5 +494,10 @@ div.caMediaOverlayControls .objectInfo {
 	display:none;
 }
 
+/* About */
 
+.staticPage .bodytext img {
+	width:22px !important;
+	height:auto !important;
+}
 	
