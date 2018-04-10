@@ -500,4 +500,26 @@ div.caMediaOverlayControls .objectInfo {
 	width:22px !important;
 	height:auto !important;
 }
-	
+.sImageWrapper {
+	min-height:125px;
+}
+.sImageWrapper img{
+	object-fit: contain;
+}
+.multisearch .multisearchResult img {
+	max-height:120px;
+}
+.multisearch .objects.blockResults {
+    height: 245px;
+}
+.objects .multisearchResult {
+    width: 200px;
+    height: 225px;
+}
+.multisearch .objects .scrollButtonNext, .multisearch .objects .scrollButtonPrevious {
+    height: 230px;
+    padding-top: 105px;
+}
+.multisearchImgPlaceholder{
+	padding: 45px;
+}

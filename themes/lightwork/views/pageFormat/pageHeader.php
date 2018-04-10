@@ -135,7 +135,8 @@
 					</div>
 				</form>
 				<ul class="nav navbar-nav navbar-right menuItems">
-					<li <?php print ($this->request->getController() == "About") ? 'class="active"' : ''; ?>><?php print caNavLink($this->request, _t("About"), "first", "", "About", "Index"); ?></li> 
+					<li><a href='http://www.lightwork.org' class='first' target='_blank'>lightwork.org</a></li>
+					<li <?php print ($this->request->getController() == "About") ? 'class="active"' : ''; ?>><?php print caNavLink($this->request, _t("About"), "", "", "About", "Index"); ?></li> 
 					<li <?php print (($this->request->getController() == "Browse") && ($this->request->getAction() == "artists")) ? 'class="active"' : ''; ?>><?php print caNavLink($this->request, _t("Artists"), "", "", "Browse", "artists"); ?></li>											
 					<li <?php print (($this->request->getController() == "Browse") && ($this->request->getAction() == "objects")) ? 'class="active"' : ''; ?>><?php print caNavLink($this->request, _t("Artworks"), "", "", "Browse", "objects"); ?></li>	
 					<li <?php print (($this->request->getController() == "Browse") && ($this->request->getAction() == "contact")) ? 'class="active"' : ''; ?>><?php print caNavLink($this->request, _t("Publications"), "", "", "Browse", "contact"); ?></li>						
