@@ -2135,7 +2135,7 @@ require_once(__CA_LIB_DIR__.'/core/Media/MediaInfoCoder.php');
 	 * @return array An array of tags, or an array of arrays when parseOptions option is set.
 	 */
 	function caGetTemplateTags($ps_template, $pa_options=null) {
-		$va_tags = caExtractTagsFromTemplate($ps_template);
+		$va_tags = caExtractTagsFromTemplate($ps_template, $pa_options);
 		
 		if (caGetOption('firstPartOnly', $pa_options, false)) {
 			foreach($va_tags as $vn_i => $vs_tag) {
@@ -3557,8 +3557,10 @@ require_once(__CA_LIB_DIR__.'/core/Media/MediaInfoCoder.php');
 					}
 					$va_rep_info[$vn_index] = array("rep_id" => $vn_rep_id, "tag" => $va_rep_tags[$vn_rep_id]);
 				}
-
 				ksort($va_rep_info);
+				
+				// reset rep_ids  to ensure same order as slides as order may change if primary is not in first location
+			    $o_view->setVar('representation_ids', $z=array_values(array_map(function($v) { return $v['rep_id']; }, $va_rep_info)));
 			
 				$vn_count = 0;
 			
@@ -3946,7 +3948,7 @@ require_once(__CA_LIB_DIR__.'/core/Media/MediaInfoCoder.php');
 					throw new ApplicationException(_t('Invalid viewer'));
 				}
 			
-				return $vs_viewer_name::getViewerData($po_request, $ps_identifier, ['t_subject' => $pt_subject, 't_instance' => $t_instance, 'display' => caGetMediaDisplayInfo($ps_display_type, $vs_mimetype), 'display_type' => $ps_display_type, 'context' => caGetOption('context', $pa_options, null)]);
+				return $vs_viewer_name::searchViewerData($po_request, $ps_identifier, ['t_subject' => $pt_subject, 't_instance' => $t_instance, 'display' => caGetMediaDisplayInfo($ps_display_type, $vs_mimetype), 'display_type' => $ps_display_type, 'context' => caGetOption('context', $pa_options, null)]);
 				break;
 		}
 		

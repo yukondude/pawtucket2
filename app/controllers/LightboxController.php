@@ -376,7 +376,7 @@
 			
 			$o_context->setParameter('key', $vs_key);
 			
-			if (($vn_key_start = $vn_start - 1000) < 0) { $vn_key_start = 0; }
+			if (($vn_key_start = (int)$vn_start - 1000) < 0) { $vn_key_start = 0; }
 			$qr_res->seek($vn_key_start);
 			$o_context->setResultList($qr_res->getPrimaryKeyValues(1000));
 			//if ($o_block_result_context) { $o_block_result_context->setResultList($qr_res->getPrimaryKeyValues(1000)); $o_block_result_context->saveContext();}
@@ -1168,7 +1168,6 @@
 				$vn_object_table_num = $t_object->tableNum();
 				$t_set->setMode(ACCESS_WRITE);
 				$t_set->set('access', (!is_null($vn_access = $this->request->config->get('lightbox_default_access'))) ? $vn_access : 1);
-				#$t_set->set('access', $this->request->getParameter('access', pInteger));
 				$t_set->set('table_num', $vn_object_table_num);
 				$t_set->set('type_id', $vn_set_type_user);
 				$t_set->set('user_id', $this->request->getUserID());
