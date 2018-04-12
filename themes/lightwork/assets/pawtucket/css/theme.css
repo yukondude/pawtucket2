@@ -7,7 +7,7 @@ body {
     -webkit-text-size-adjust: 100%;
 }
 @media (max-width: 768px) {	
-	#footer {
+	body {
 		margin-bottom:120px;
 	}
 }
@@ -522,4 +522,8 @@ div.caMediaOverlayControls .objectInfo {
 }
 .multisearchImgPlaceholder{
 	padding: 45px;
+}
+
+#app .headerPanel .options .rightOptions {
+	margin-right:50px !important;
 }
