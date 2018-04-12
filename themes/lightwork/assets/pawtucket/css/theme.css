@@ -350,8 +350,20 @@ div.caMediaOverlayControls .objectInfo {
 	width:80%;
 }
 div.caMediaOverlayControls {
-	top:0px;
-	bottom:inherit;
+    top: 0px;
+    bottom: inherit;
+    width: 40px;
+    float: right;
+    right: 0px;
+    left: auto;
+    opacity:1;
+    background-color:#211f1f;
+    padding-top:6px;
+    padding-bottom:6px;
+}
+div.caMediaOverlayControls:hover {
+	opacity:1;
+	background-color:#211f1f;
 }
 .tileviewer div.viewerControls {
 	top:48px;
@@ -522,8 +534,4 @@ div.caMediaOverlayControls .objectInfo {
 }
 .multisearchImgPlaceholder{
 	padding: 45px;
-}
-
-#app .headerPanel .options .rightOptions {
-	margin-right:50px !important;
 }
