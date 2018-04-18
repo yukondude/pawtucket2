@@ -35,6 +35,7 @@
 						<li class="mail"><a href="http://www.lightwork.org/contact/">Send us Mail</a></li>
 						<li class="twitter"><a target="_blank" href="http://twitter.com/lightworkorg">Follow us on Twitter</a></li>
 						<li class="facebook"><a target="_blank" href="http://facebook.com/lightworkorg">Join our Facebook Group</a></li>							
+						<li class="instagram"><a target="_blank" href="http://instagram.com/lightworkorg">Follow us on Instagram</a></li>
 						<li class="rss"><a target="_blank" href="feed://feeds2.feedburner.com/lightworkblog">Subscribe to our RSS Feed</a></li>				
 					</ul>
 				</div>			

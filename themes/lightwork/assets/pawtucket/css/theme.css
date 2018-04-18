@@ -268,6 +268,9 @@ ul.menuItems {
 .social_bookmarks .rss a {
     background: transparent url('../graphics/icon-rss.png') 0 0 no-repeat;
 }
+.social_bookmarks .instagram a {
+    background: transparent url('../graphics/icon-instagram.png') 0 0 no-repeat;
+}
 
 /* Front */
 
@@ -352,7 +355,7 @@ div.caMediaOverlayControls .objectInfo {
 div.caMediaOverlayControls {
     top: 0px;
     bottom: inherit;
-    width: 40px;
+    width: 50px;
     float: right;
     right: 0px;
     left: auto;
