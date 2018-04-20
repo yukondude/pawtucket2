@@ -36,7 +36,6 @@
 						<li class="twitter"><a target="_blank" href="http://twitter.com/lightworkorg">Follow us on Twitter</a></li>
 						<li class="facebook"><a target="_blank" href="http://facebook.com/lightworkorg">Join our Facebook Group</a></li>							
 						<li class="instagram"><a target="_blank" href="http://instagram.com/lightworkorg">Follow us on Instagram</a></li>
-						<li class="rss"><a target="_blank" href="feed://feeds2.feedburner.com/lightworkblog">Subscribe to our RSS Feed</a></li>				
 					</ul>
 				</div>			
 				<div class="pull-left">Copyright © 1973-<?php print date("Y"); ?> - <a href='http://www.lightwork.org' target='_blank'>Light Work</a> — 316 Waverly Avenue Syracuse, NY 13244</div>
