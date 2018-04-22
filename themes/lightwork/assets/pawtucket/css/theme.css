@@ -6,6 +6,11 @@ body {
 	-webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
 }
+@media (max-width: 768px) {	
+	body {
+		margin-bottom:120px;
+	}
+}
 #pageArea {
 	margin-bottom:40px;
 }
@@ -66,6 +71,8 @@ a:hover, a:active, a:focus, a.readmore-js-toggle {
 .navbar-brand {
 	padding:0px;
 	padding-left:15px;
+	margin-top:28px;
+	width:270px;
 }
 .nav > li > a, .nav > li > a:hover, .nav > li > a:active, .nav > li > a:focus, .navbar .navbar-nav > .active > a {
 	font-family: "Chivo";
@@ -111,6 +118,7 @@ a:hover, a:active, a:focus, a.readmore-js-toggle {
 }
 .navbar .form-control {
 	padding-right:0px;
+	padding-left:10px;
 }
 .container > .navbar-collapse .btn-search {
 	top:0px;
@@ -121,14 +129,19 @@ a:hover, a:active, a:focus, a.readmore-js-toggle {
 	border: 1px solid #e1e1e1;
 	border-radius:0;
 	box-shadow:none;
+	border-right:0px;
 }
 .navbar .formOutline input {
 	font-size:14px;
-	letter-spacing:1px;
+	letter-spacing:0px;
 	font-weight:300;
+	padding-bottom:1px;
 }
 .navbar-default .navbar-form {
 	margin-top:20px;
+}
+.navbar-form .form-group {
+	width:169px;
 }
 .yamm .nav.navbar-right .dropdown-menu {
 	margin-top:10px;
@@ -139,6 +152,9 @@ a:hover, a:active, a:focus, a.readmore-js-toggle {
 .container.menuBar {
 	padding-top: 0px;
 } 
+ul.menuItems {
+	clear:both;
+}
 .container > .navbar-header {
 	margin-left:0px;
 }
@@ -187,8 +203,9 @@ a:hover, a:active, a:focus, a.readmore-js-toggle {
 .btn-search {
 	background-color:#777;
 	border-radius:0px;
-	height: 40px;
+	height: 39px;
     width: 40px;
+    padding-top:7px;
 }
 .btn-search .glyphicon{
 	color:#fff;
@@ -204,7 +221,7 @@ a:hover, a:active, a:focus, a.readmore-js-toggle {
 	background-color:#cc9900;
 }
 .menuBar {
-	padding-right:0px;
+	/*padding-right:0px;*/
 }
 .front .jcarousel-wrapper {
     margin-top: 0px;
@@ -250,6 +267,9 @@ a:hover, a:active, a:focus, a.readmore-js-toggle {
 }
 .social_bookmarks .rss a {
     background: transparent url('../graphics/icon-rss.png') 0 0 no-repeat;
+}
+.social_bookmarks .instagram a {
+    background: transparent url('../graphics/icon-instagram.png') 0 0 no-repeat;
 }
 
 /* Front */
@@ -333,8 +353,20 @@ div.caMediaOverlayControls .objectInfo {
 	width:80%;
 }
 div.caMediaOverlayControls {
-	top:0px;
-	bottom:inherit;
+    top: 0px;
+    bottom: inherit;
+    width: 50px;
+    float: right;
+    right: 0px;
+    left: auto;
+    opacity:1;
+    background-color:#211f1f;
+    padding-top:6px;
+    padding-bottom:6px;
+}
+div.caMediaOverlayControls:hover {
+	opacity:1;
+	background-color:#211f1f;
 }
 .tileviewer div.viewerControls {
 	top:48px;
@@ -364,6 +396,11 @@ div.caMediaOverlayControls {
 	font-size: 13px;
 	padding: inherit;
 	padding-top: 35px;
+}
+.nav > li.dropdown > a.icon.active {
+    border-bottom: 2px solid #777;
+    color: #111;
+    padding-bottom:3px;
 }
 .detail .setsButton {
 	font-size: 20px;
@@ -472,5 +509,32 @@ div.caMediaOverlayControls .objectInfo {
 	display:none;
 }
 
+/* About */
 
-	
+.staticPage .bodytext img {
+	width:22px !important;
+	height:auto !important;
+}
+.sImageWrapper {
+	min-height:125px;
+}
+.sImageWrapper img{
+	object-fit: contain;
+}
+.multisearch .multisearchResult img {
+	max-height:120px;
+}
+.multisearch .objects.blockResults {
+    height: 245px;
+}
+.objects .multisearchResult {
+    width: 200px;
+    height: 225px;
+}
+.multisearch .objects .scrollButtonNext, .multisearch .objects .scrollButtonPrevious {
+    height: 230px;
+    padding-top: 105px;
+}
+.multisearchImgPlaceholder{
+	padding: 45px;
+}

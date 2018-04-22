@@ -176,9 +176,12 @@
 #							print "<a href='".$vs_website."' target='_blank'>".$vs_website."</a><br/>";
 #						}				
 #						print "</span></div>";
-#					}
+#	
+		if ($vs_bio = $t_entity->get('ca_entities.biography', array('delimiter' => '<hr class="dark">'))) {
+			print "<div class='unit'><h6>Biography</h6>".$vs_bio."</div>";
+		}				
 		if ($vs_essay = $t_entity->get('ca_entities.essays', array('delimiter' => '<hr>'))) {
-			print "<div class='unit'>".$vs_essay."</div>";
+			print "<div class='unit'><h6>Essays</h6>".$vs_essay."</div>";
 		}																																					
 	}
 		
