@@ -138,9 +138,9 @@
 					<li><a href='http://www.lightwork.org' class='first' target='_blank'>lightwork.org</a></li>
 					<li <?php print ($this->request->getController() == "About") ? 'class="active"' : ''; ?>><?php print caNavLink($this->request, _t("About"), "", "", "About", "Index"); ?></li> 
 					<li <?php print (($this->request->getController() == "Browse") && ($this->request->getAction() == "artists")) ? 'class="active"' : ''; ?>><?php print caNavLink($this->request, _t("Artists"), "", "", "Browse", "artists"); ?></li>											
-					<li <?php print (($this->request->getController() == "Browse") && ($this->request->getAction() == "objects")) ? 'class="active"' : ''; ?>><?php print caNavLink($this->request, _t("Artworks"), "", "", "Browse", "objects"); ?></li>	
-					<li <?php print (($this->request->getController() == "Browse") && ($this->request->getAction() == "contact")) ? 'class="active"' : ''; ?>><?php print caNavLink($this->request, _t("Publications"), "", "", "Browse", "contact"); ?></li>						
-					<li <?php print (($this->request->getController() == "Search") && ($this->request->getAction() == "advanced")) ? 'class="active"' : ''; ?>><?php print caNavLink($this->request, _t("Find"), "", "", "Search", "advanced/objects"); ?></li>	
+					<li <?php print (($this->request->getController() == "Browse") && ($this->request->getAction() == "objects")) ? 'class="active"' : ''; ?>><?php print caNavLink($this->request, _t("Artworks"), "", "", "Browse", "artworks"); ?></li>	
+					<li <?php print (($this->request->getController() == "Browse") && ($this->request->getAction() == "contact")) ? 'class="active"' : ''; ?>><?php print caNavLink($this->request, _t("Publications"), "", "", "Browse", "publications"); ?></li>						
+					<li <?php print (($this->request->getController() == "Search") && ($this->request->getAction() == "advanced")) ? 'class="active"' : ''; ?>><?php print caNavLink($this->request, _t("Find"), "", "", "Search", "advanced/artworks"); ?></li>	
 					<li <?php print ($this->request->getController() == "Gallery") ? 'class="active"' : ''; ?>><?php print caNavLink($this->request, _t("Gallery"), "", "", "Gallery", "Index"); ?></li>				
 									
 								
