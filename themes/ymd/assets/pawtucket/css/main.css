@@ -83,6 +83,7 @@ label {
 }	
 .container {
 	max-width:5000px;
+	font-size: 12px;
 }
 .form-control{
 	font-size:12px;

@@ -5,7 +5,7 @@
 	$vn_sum = $vn_num1 + $vn_num2;
 ?>
 <div class="row"><div class="col-sm-12">
-<H1><?php print _t("Contact"); ?></H1>
+<H1><?php print _t("Contact The Museums Unit"); ?></H1>
 <?php
 	if(sizeof($va_errors["display_errors"])){
 		print "<div class='alert alert-danger'>".implode("<br/>", $va_errors["display_errors"])."</div>";

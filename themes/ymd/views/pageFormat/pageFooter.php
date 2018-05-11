@@ -29,20 +29,22 @@
 		<div style="clear:both; height:1px;"><!-- empty --></div>
 		</div><!-- end pageArea --></div><!-- end col --></div><!-- end row --></div><!-- end container -->
 		<footer id="footer">
-			<ul class="list-inline pull-right social">
-				<li><i class="fa fa-twitter"></i></li>
-				<li><i class="fa fa-facebook-square"></i></li>
-				<li><i class="fa fa-youtube-play"></i></li>
-			</ul>
-			<div>
-				Footer text here
-			</div>
+<?php
+#			<ul class="list-inline pull-right social">
+#				<li><i class="fa fa-twitter"></i></li>
+#				<li><i class="fa fa-facebook-square"></i></li>
+#				<li><i class="fa fa-youtube-play"></i></li>
+#			</ul>
+#			<div>
+#				Footer text here
+#			</div>
+?>
 			<ul class="list-inline">
-				<li><a href="#">Link 1</a></li>
-				<li><a href="#">Link 2</a></li>
-				<li><a href="#">Link 3</a></li>
+				<li><a href="http://www.yukonmuseums.ca/" target="_blank">Yukon Museum Guide</a></li>
+                <li><a href="https://www.travelyukon.com/" target="_blank">Travel Yukon</a></li>
+				<li><a href="http://www.tc.gov.yk.ca/museums.html" target="_blank">Museums Unit, Yukon Department of Tourism &amp; Culture</a></li>
 			</ul>
-			<div><small>powered by <a href="http://www.collectiveaccess.org">CollectiveAccess 2017</a></small></div>
+			<div><small>powered by <a href="http://www.collectiveaccess.org" target="_blank">CollectiveAccess</a></small></div>
 		</footer><!-- end footer -->
 <?php
 	//

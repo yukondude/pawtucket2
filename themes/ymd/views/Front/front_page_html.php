@@ -33,7 +33,10 @@
 ?>
 	<div class="row">
 		<div class="col-sm-8">
-			<H1>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vulputate, orci quis vehicula eleifend, metus elit laoreet elit.</H1>
+			<h1>Yukon Museums Public Collections</h1>
+            <p>Welcome to the public collections of several museums and cultural centres from around Canada's Yukon Territory.</p>
+            <p>Feel free to browse through our collections.
+                Don't forget to plan a trip to the Yukon so that you can visit these museums in person.</p>
 		</div><!--end col-sm-8-->
 		<div class="col-sm-4">
 <?php
