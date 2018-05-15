@@ -152,11 +152,11 @@ class Configuration {
 			if(!$vb_setup_has_changed && isset(self::$s_config_cache[$vs_path_as_md5])) {
 				$vb_cache_is_invalid = false;
 
-				$vs_config_mtime = caGetFileMTime($this->ops_config_file_path);
-				if($vs_config_mtime != self::$s_config_cache['mtime_'.$vs_path_as_md5]) { // config file has changed
-					self::$s_config_cache['mtime_'.$vs_path_as_md5] = $vs_config_mtime;
-					$vb_cache_is_invalid = true;
-				}
+//				$vs_config_mtime = caGetFileMTime($this->ops_config_file_path);
+//				if($vs_config_mtime != self::$s_config_cache['mtime_'.$vs_path_as_md5]) { // config file has changed
+//					self::$s_config_cache['mtime_'.$vs_path_as_md5] = $vs_config_mtime;
+//					$vb_cache_is_invalid = true;
+//				}
 
 				if ($vs_local_conf_file_path) {
 					$vs_local_config_mtime = caGetFileMTime($vs_local_conf_file_path);
